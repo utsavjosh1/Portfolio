@@ -10,9 +10,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "lint": "eslint .",
-    "prestart": "npm run lint",
-    "build": "npm run build"
+    "lint": "eslint --fix .",
+    "prestart": "npm run lint"
   },
   "keywords": [],
   "author": "",

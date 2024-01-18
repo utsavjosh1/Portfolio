@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "module": "",
+  "type": "module",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -14,7 +14,8 @@
     "prestart": "npm run lint",
     "start:prod": "NODE_ENV=production node index.js",
     "start:dev": "NODE_ENV=development nodemon index.js",
-    "start:debug": "DEBUG=myapp:* nodemon --inspect index.js"
+    "start:debug": "DEBUG=myapp:* nodemon --inspect index.js",
+    "build": "npm run build"
   },
   "keywords": [],
   "author": "",

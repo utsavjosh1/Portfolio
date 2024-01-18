@@ -7,7 +7,7 @@
     "start": "ts-node src/index.ts",
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
-    "prod": "ts-node src/index.ts"
+    "prod": "ts-node dist/index.ts"
   },
   "keywords": [],
   "author": "Utsav",

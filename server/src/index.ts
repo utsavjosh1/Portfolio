@@ -4,7 +4,6 @@ import http from "http";
 const app = express();
 const server = http.createServer(app);
 
-
 const PORT = process.env.PORT || 80;
 
 app.get("/", (req, res) => {

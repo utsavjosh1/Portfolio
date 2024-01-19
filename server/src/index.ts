@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 80;
 
 app.get("/", (req, res) => {
-  res.send("listening");
+  res.send("Server is running on port " + PORT);
 });
 
 server.listen(PORT, () => {

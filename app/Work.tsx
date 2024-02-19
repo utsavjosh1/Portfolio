@@ -1,7 +1,12 @@
 import React, { Fragment } from "react";
 import Link from "next/link";
 
-const SkillsUsed = ({ name, img }) => {
+interface SkillsUsedProps {
+  name: string;
+  img: string;
+}
+
+const SkillsUsed: React.FC<SkillsUsedProps> = ({ name, img }) => {
   return (
     <div className="text-slate-300 cursor-pointer rounded-lg border-[0.5px] border-opacity-40  border-gray-400 w-[130px] flex justify-around gap-2 items-center m-3 flex-wrap hover:bg-slate-800 p-2 transition-all duration-200 ">
       <div className="rounded-md ">

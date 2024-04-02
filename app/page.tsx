@@ -38,7 +38,7 @@ export default function Home() {
                       <div>
                         <Link
                           target="blank"
-                          href={"https://twitter.com/twt_joshi"}
+                          href={"https://twitter.com/joshi__utsav"}
                         >
                           <img
                             src="/twitterWhite.png"
@@ -86,7 +86,7 @@ export default function Home() {
         </div>
         <div className=" flex-col hidden md:flex h-screen justify-center m-5 gap-6  mt-28">
           <div>
-            <Link target="blank" href={"https://twitter.com/twt_joshi"}>
+            <Link target="blank" href={"https://twitter.com/joshi__utsav"}>
               <img
                 src="/twitterWhite.png"
                 className="cursor-pointer"

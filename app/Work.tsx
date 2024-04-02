@@ -36,7 +36,7 @@ const Work = () => {
           <div className="text-[17px] text-slate-300 p-4 pb-2 text-center flex justify-center gap-2 ">
             <span>Apna College Clone </span>
             <span>
-              <a target="blank" href="https://apnacollege-clone.vercel.app/">
+              <a target="blank" href="https://github.com/JoshiUtsav/apnacollege-frontend">
                 <img className="pt-1" width={18} src="link.png" alt="" />
               </a>
             </span>

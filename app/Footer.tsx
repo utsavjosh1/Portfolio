@@ -3,7 +3,7 @@ import React from "react";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <div className="text-slate-400 my-5 mb-9 text-md w-[375px] md:w-[720px] text-center">
+    <div className="text-slate-100 bg-slate-800 p-5 my-5 mb-7 text-mg w-[350px] md:w-[720px] rounded-lg text-center">
       © {currentYear} Utsav Joshi All Rights Reserved -- utsavjoshi602@gmail.com
     </div>
   );

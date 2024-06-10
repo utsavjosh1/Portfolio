@@ -2,11 +2,6 @@ import React, { Fragment } from "react";
 import Link from "next/link";
 import ProjectCard from "../components/ProjectCard";
 
-interface SkillsUsedProps {
-  name: string;
-  img: string;
-}
-
 const Work = () => {
   const projects = [
     {

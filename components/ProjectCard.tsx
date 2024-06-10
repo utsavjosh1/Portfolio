@@ -1,4 +1,4 @@
-import Skills from "./Skills";
+import SkillsUsedInProjects from "./Skills";
 
 interface ProjectsCardsProps {
   p_name: string;
@@ -34,7 +34,7 @@ const ProjectCard: React.FC<ProjectsCardsProps> = ({
       <div className="m-2 text-lg ml-4 text-slate-300 mt-8">TECH USED </div>
       <div className="flex flex-wrap w-[400px]">
         {techUsed.map((tech, key) => (
-          <Skills key={key} name={tech.name} img={tech.img} />
+          <SkillsUsedInProjects key={key} name={tech.name} img={tech.img} />
         ))}
       </div>
     </div>

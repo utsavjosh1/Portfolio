@@ -1,25 +1,44 @@
 import React, { Fragment } from "react";
 import Link from "next/link";
+import ProjectCard from "../components/ProjectCard";
 
 interface SkillsUsedProps {
   name: string;
   img: string;
 }
 
-const SkillsUsed: React.FC<SkillsUsedProps> = ({ name, img }) => {
-  return (
-    <div className="text-slate-300 cursor-pointer rounded-lg border-[0.5px] border-opacity-40  border-gray-400 w-[130px] flex justify-around gap-2 items-center m-3 flex-wrap hover:bg-slate-800 p-2 transition-all duration-200 ">
-      <div className="rounded-md ">
-        <img src={img} width={24} alt={name} />
-      </div>
-      <div>{name}</div>
-    </div>
-  );
-};
-
 const Work = () => {
+  const projects = [
+    {
+      p_name: "Course App",
+      link: "https://github.com/JoshiUtsav/courseapp-frontend",
+      img: "/project1.png",
+      techUsed: [
+        { name: "React JS", img: "/react.png" },
+        { name: "Vercel", img: "/vercel.png" },
+        { name: "Tailwind", img: "/tailwind.png" },
+        { name: "MongoDB", img: "/mongodb.png" },
+        { name: "Nodejs", img: "/node-js.png" },
+        { name: "Express", img: "/express.png" },
+      ],
+    },
+    {
+      p_name: "Chat App",
+      link: "https://github.com/JoshiUtsav/ChatApp",
+      img: "/project1.png",
+      techUsed: [
+        { name: "HTML", img: "/react.png" },
+        { name: "Vercel", img: "/vercel.png" },
+        { name: "Tailwind", img: "/tailwind.png" },
+        { name: "MongoDB", img: "/mongodb.png" },
+        { name: "Nodejs", img: "/node-js.png" },
+        { name: "Express", img: "/express.png" },
+      ],
+    },
+  ];
+
   return (
-    <div className="mt-[5rem] h-[auto] w-[360px]  md:w-[720px] ">
+    <div className="mt-[5rem] h-[auto] w-[360px]  md:w-[720px]">
       <div
         className="stroke-yellow-300 text-[5rem] md:text-[6rem] font-extrabold z-0 opacity-80  text-transparent"
         style={{
@@ -28,35 +47,19 @@ const Work = () => {
           WebkitTextStrokeColor: "yellow",
         }}
       >
-        {"<"}Work {"/>"}
+        {"<"}Work{" />"}
       </div>
       <div className="flex flex-col  justify-center m-auto md:flex-row">
-        {/* PROJECT 1 */}
-        <div className="border-slate-700   border w-[330px] min-h-[300px] h-[505px] m-3 p-1 hover:bg-slate-900 duration-300 transition-all cursor-pointer  ">
-          <div className="text-[17px] text-slate-300 p-4 pb-2 text-center flex justify-center gap-2 ">
-            <span>Apna College Clone </span>
-            <span>
-              <a target="blank" href="https://github.com/JoshiUtsav/apnacollege-frontend">
-                <img className="pt-1" width={18} src="link.png" alt="" />
-              </a>
-            </span>
-          </div>
-          <hr className="w-[70%] mb-4 text-center m-auto text-slate-400 bg-slate-700  border-slate-600 " />
-          <div className="w-[95%] object-cover h-[auto] m-auto  ">
-            <img
-              src="/project1.png"
-              className="cursor-pointer opacity-75 hover:opacity-100 h-[10rem] object-cover transition-all duration-200 "
-              alt=""
-            />
-          </div>
-          <div className="m-2 text-lg ml-4 text-slate-300 mt-8">TECH USED </div>
-          <div className="flex flex-wrap w-[400px]">
-            <SkillsUsed name="React JS" img={"/react.png"} />
-            <SkillsUsed name="Vercel" img={"/vercel.png"} />
-            <SkillsUsed name="Tailwind" img={"/tailwind.png"} />
-            <SkillsUsed name="Typescript" img={"/typescript.png"} />
-          </div>
-        </div>
+        {/* PROJECTs*/}
+        {projects.map((project, index) => (
+          <ProjectCard
+            key={index}
+            p_name={project.p_name}
+            link={project.link}
+            img={project.img}
+            techUsed={project.techUsed}
+          />
+        ))}
       </div>
     </div>
   );

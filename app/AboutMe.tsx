@@ -16,7 +16,7 @@ const AboutMe = () => {
         {"<"}About Me {"/>"}
       </div>
 
-      <div className="w-[85%]  mt-10  m-auto border md:p-2 border-opacity-70 rounded-md border-slate-500 ">
+      <div className="w-[85%]  mt-10  m-auto border md:p-2 border-opacity-70 rounded-md border-slate-500ch">
         <div className="">
           <Tabs defaultValue="1" className="max-w-[500px] ">
             <TabsList className="tabs-content bg-transparent  text-slate-400">

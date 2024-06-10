@@ -66,7 +66,6 @@ export default function Home() {
                           target="blank"
                           href={"https://www.linkedin.com/in/joshi-utsav/"}
                         >
-                          {" "}
                           <img
                             src="/linkedinwhite.png"
                             className="cursor-pointer"

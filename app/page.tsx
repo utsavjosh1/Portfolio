@@ -14,7 +14,7 @@ export default function Home() {
     <div className="w-screen h-screen ">
       <div className="overlay"></div>
       <video
-        src="/bg.mp4"
+        src="/video/bg.mp4"
         loop
         autoPlay
         muted
@@ -109,7 +109,6 @@ export default function Home() {
               target="blank"
               href={"https://www.linkedin.com/in/joshi-utsav/"}
             >
-              {" "}
               <img
                 src="/linkedinwhite.png"
                 className="cursor-pointer"

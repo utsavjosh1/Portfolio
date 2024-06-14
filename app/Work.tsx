@@ -1,37 +1,8 @@
 import React, { Fragment } from "react";
-import Link from "next/link";
-import ProjectCard from "../components/ProjectCard";
+import ProjectCard from "@/components/ProjectCard";
+import { projects } from "@/lib/data";
 
 const Work = () => {
-  const projects = [
-    {
-      p_name: "Course App",
-      link: "https://github.com/JoshiUtsav/courseapp-frontend",
-      img: "/project1.png",
-      techUsed: [
-        { name: "React JS", img: "/react.png" },
-        { name: "Vercel", img: "/vercel.png" },
-        { name: "Tailwind", img: "/tailwind.png" },
-        { name: "MongoDB", img: "/mongodb.png" },
-        { name: "Nodejs", img: "/node-js.png" },
-        { name: "Express", img: "/express.png" },
-      ],
-    },
-    {
-      p_name: "Chat App",
-      link: "https://github.com/JoshiUtsav/ChatApp",
-      img: "/project1.png",
-      techUsed: [
-        { name: "HTML", img: "/react.png" },
-        { name: "Vercel", img: "/vercel.png" },
-        { name: "Tailwind", img: "/tailwind.png" },
-        { name: "MongoDB", img: "/mongodb.png" },
-        { name: "Nodejs", img: "/node-js.png" },
-        { name: "Express", img: "/express.png" },
-      ],
-    },
-  ];
-
   return (
     <div className="mt-[5rem] h-[auto] w-[360px]  md:w-[720px]">
       <div

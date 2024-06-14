@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import React, { Suspense, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 
@@ -22,8 +23,8 @@ const FramerMotionComponent = () => {
   const isInView = useInView(ref, { amount: 0.5 });
 
   return (
-    <div className="  pt-0 h-[auto] px-5 font-bold Name-color  ">
-      <h2 className={`text-7xl md:8xl `}>
+    <div className="pt-0 h-auto px-5 font-bold Name-color">
+      <h2 className="text-7xl md:text-8xl">
         <span className="sr-only">{name}</span>
         <motion.span
           initial="hidden"
@@ -32,15 +33,15 @@ const FramerMotionComponent = () => {
           ref={ref}
           transition={{ staggerChildren: 0.1 }}
         >
-          {name.split(" ").map((word) => (
-            <span className="inline-block">
-              {word.split("").map((char) => (
+          {name.split(" ").map((word, key) => (
+            <span key={key} className="inline-block">
+              {word.split("").map((char, index) => (
                 <motion.span
+                  key={index}
                   className="inline-block"
                   variants={defaultAnimations}
                 >
-                  {" "}
-                  {char}{" "}
+                  {char}
                 </motion.span>
               ))}
               <span className="inline-block"> &nbsp; </span>

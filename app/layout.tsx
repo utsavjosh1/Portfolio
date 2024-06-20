@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter , Raleway } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { Inter, Raleway } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-const raleway = Raleway({ subsets: [ "latin"] });
+const raleway = Raleway({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Utsav Joshi",
@@ -20,7 +21,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="image/logo.png" />
       </head>
-      <body className={raleway.className}>{children}</body>
+      <body className={raleway.className}>
+        {children}
+        <Analytics mode={"production"} />;
+      </body>
     </html>
   );
 }

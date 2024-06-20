@@ -60,10 +60,10 @@ const AboutMe = () => {
                   ></img>
                 </div>
                 <div className="m-auto  text-center items-center flex justify-center ">
-                  <a href="RESUME.pdf" target="blank" download={true}>
+                  <a href="PDF/RESUME.pdf" target="blank" download={true}>
                     <img
                       className="h-[500px] w-[350px] "
-                      src="Iresume.png"
+                      src="PDF/Iresume.png"
                       alt=""
                     />
                   </a>

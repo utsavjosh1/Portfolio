@@ -5,7 +5,7 @@ interface SkillsUsedProps {
 
 const SkillsUsedInProjects: React.FC<SkillsUsedProps> = ({ name, img }) => {
   return (
-    <div className="text-black-300 bg-slate-100 opacity-80 rounded-lg w-[130px] flex justify-around items-center m-3 p-2">
+    <div className="text-black-300 bg-slate-100 text-sm opacity-80 rounded-lg w-[130px] flex justify-around items-center m-3 p-2">
       <div className="rounded-md ">
         <img src={img} width={20} alt={name} />
       </div>

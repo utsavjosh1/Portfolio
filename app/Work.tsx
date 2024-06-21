@@ -15,7 +15,7 @@ const Work = () => {
       >
         {"<"}Work{" />"}
       </div>
-      <div className="flex flex-col  justify-center m-auto md:flex-row">
+      <div className="flex flex-col justify-center m-auto md:flex-row">
         {/* PROJECTs*/}
         {projects.map((project, index) => (
           <ProjectCard

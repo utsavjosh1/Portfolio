@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { Typewriter, Cursor } from "react-simple-typewriter";
+import { Typewriter } from "react-simple-typewriter";
 
 const TypeWriterComponent = () => {
   return (
@@ -15,8 +14,7 @@ const TypeWriterComponent = () => {
       />
       into
       <span className="text-green-500 ml-3">
-        <Typewriter typeSpeed={60} words={[`<Code />`]} loop={false} />
-        <Cursor />
+        <Typewriter typeSpeed={60} words={[`<Code />`]} loop={1} />
       </span>
     </div>
   );

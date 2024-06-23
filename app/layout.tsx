@@ -24,7 +24,7 @@ export default function RootLayout({
       </head>
       <body className={raleway.className}>
         {children}
-        <Analytics />;
+        <Analytics />
         <SpeedInsights />
       </body>
     </html>

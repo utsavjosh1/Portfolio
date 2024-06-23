@@ -87,7 +87,20 @@ export const projects = [
     p_name: "Chat App",
     link: "https://github.com/JoshiUtsav/ChatApp",
     img: "/image/projects/projects2.png",
-    techUsed:  [
+    techUsed: [
+      { name: "HTML", img: "/image/skills/react.png" },
+      { name: "Render", img: "/image/skills/vercel.png" },
+      { name: "Tailwind", img: "/image/skills/tailwind.png" },
+      { name: "MongoDB", img: "/image/skills/mongodb.png" },
+      { name: "Nodejs", img: "/image/skills/node-js.png" },
+      { name: "Express", img: "/image/skills/express.png" },
+    ],
+  },
+  {
+    p_name: "Vector Search",
+    link: "https://github.com/JoshiUtsav/vector-search",
+    img: "/image/projects/projects2.png",
+    techUsed: [
       { name: "HTML", img: "/image/skills/react.png" },
       { name: "Render", img: "/image/skills/vercel.png" },
       { name: "Tailwind", img: "/image/skills/tailwind.png" },

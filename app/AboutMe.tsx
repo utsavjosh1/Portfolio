@@ -2,23 +2,14 @@
 
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TitleTag from "@/components/Title";
 import Skills from "./Skills";
 
 const AboutMe = () => {
   return (
-    <div className="mt-[5rem] h-[auto] w-[375px] md:m-0 md:w-[720px]">
-      <div
-        className="stroke-yellow-300  text-[3.50rem] md:text-[6rem] font-extrabold z-0 opacity-80  text-transparent"
-        style={{
-          strokeWidth: "1.5px",
-          WebkitTextStrokeWidth: "1.9px",
-          WebkitTextStrokeColor: "yellow",
-        }}
-      >
-        {"<"}About Me {"/>"}
-      </div>
-
-      <div className="mt-10 border md:p-2 rounded-md border-slate-500 items-center justify-center">
+    <div className="mt-[5rem] h-[auto] md:m-0 md:w-[100%]">
+      <TitleTag tagName={"About Me"} />
+      <div className="mt-10 border w-[100%] md:p-2 rounded-md border-slate-500 items-center justify-center">
         <div className="">
           <Tabs defaultValue="1">
             <TabNav />

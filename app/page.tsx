@@ -21,7 +21,7 @@ export default function Home() {
         playsInline
         className="h-[100%] w-[100%] object-cover "
       ></video>
-      <div className="content flex  ">
+      <div className="content flex">
         <div className="w-[640px]  m-auto border-[0.05px] border-opacity-5 border-white  h-[auto] ">
           <div className="px-4 pt-2 absolute text-white md:hidden">
             <Sheet>

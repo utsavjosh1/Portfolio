@@ -1,4 +1,3 @@
-import React from "react";
 import SkillsU from "@/components/Skills";
 import Skills from "@/lib/data";
 

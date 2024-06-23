@@ -1,21 +1,14 @@
 import React, { Fragment } from "react";
 import ProjectCard from "@/components/ProjectCard";
+import TitleTag from "@/components/Title";
+
 import { projects } from "@/lib/data";
 
 const Work = () => {
   return (
-    <div className="mt-[5rem] h-[auto] w-[360px]  md:w-[720px]">
-      <div
-        className="stroke-yellow-300 text-[5rem] md:text-[6rem] font-extrabold z-0 opacity-80  text-transparent"
-        style={{
-          strokeWidth: "1.5px",
-          WebkitTextStrokeWidth: "1.9px",
-          WebkitTextStrokeColor: "yellow",
-        }}
-      >
-        {"<"}Work{" />"}
-      </div>
-      <div className="flex flex-col justify-center m-auto md:flex-row">
+    <div className="mt-[5rem] h-[auto] md:w-[100%]">
+      <TitleTag tagName={"Projects"} />
+      <div className="flex md:flex-row overflow-x-auto no-scrollbar">
         {/* PROJECTs*/}
         {projects.map((project, index) => (
           <ProjectCard

@@ -7,7 +7,7 @@ import Footer from "./Footer";
 
 const Body = () => {
   return (
-    <div className="h-screen overflow-y-auto no-scrollbar flex flex-col items-center">
+    <div className="w-[70%] h-screen overflow-y-auto no-scrollbar flex flex-col items-center">
       <div className="p-3 px-5 mt-12 font-bold text-xl text-color">Hi,I'm</div>
       <FramerMotionComponent />
       <TypeWriterComponent />

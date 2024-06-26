@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TitleTag from "@/components/Title";
+import Image from "next/image";
 import SkillsCard from "./Skills";
 
 const AboutMe = () => {
@@ -32,14 +33,15 @@ const AboutMe = () => {
               <a href="PDF/RESUME.pdf" target="blank" download={true}>
                 <div className="text-slate-300 px-4 py-2 flex gap-2">
                   <div>Download Resume</div>
-                  <img
+                  <Image
                     src="/download.png"
                     width={20}
                     className="cursor-pointer"
-                  ></img>
+                    alt="resume-image"
+                  ></Image>
                 </div>
                 <div className="m-auto  text-center items-center flex justify-center ">
-                  <img
+                  <Image
                     className="h-full w-full md:h-[500px] md:w-[400px]"
                     src="PDF/Iresume.png"
                     alt="resume"

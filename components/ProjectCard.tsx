@@ -1,5 +1,6 @@
 import SkillsUsedInProjects from "./Skills";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProjectsCardsProps {
   p_name: string;
@@ -20,13 +21,18 @@ const ProjectCard: React.FC<ProjectsCardsProps> = ({
         <div className="text-[17px] text-slate-300 p-4 pb-2 text-center flex justify-center gap-2 ">
           <span>{p_name}</span>
           <span>
-            <img className="pt-1" width={18} src="link.png" alt="uprightarrow" />
+            <Image
+              className="pt-1"
+              width={18}
+              src="link.png"
+              alt="uprightarrow"
+            />
           </span>
         </div>
       </Link>
       <hr className="w-[90%] mb-4 text-center m-auto text-slate-400 bg-slate-700  border-slate-600 " />
       <div className="w-[95%] object-cover h-[auto] m-auto">
-        <img
+        <Image
           src={img}
           className="cursor-pointer rounded-md opacity-75 hover:opacity-100 h-[10rem] object-cover transition-all duration-200 "
           alt="img"

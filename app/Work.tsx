@@ -1,12 +1,11 @@
-import React, { Fragment } from "react";
+import React from "react";
 import ProjectCard from "@/components/ProjectCard";
 import TitleTag from "@/components/Title";
-
 import { projects } from "@/lib/data";
 
 const Work = () => {
   return (
-    <div className="mt-[5rem] h-[auto] md:w-[100%]">
+    <div className="mt-[5rem] p-4 md:w-[100%] md:h-full">
       <TitleTag tagName={"Projects"} />
       <div className="flex md:flex-row overflow-x-auto no-scrollbar">
         {/* PROJECTs*/}

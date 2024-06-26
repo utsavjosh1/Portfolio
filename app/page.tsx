@@ -20,15 +20,10 @@ const Home = () => {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover"
       ></video>
-      <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-65"></div>
-      <DrawerComponent />
-      <div className="relative flex flex-row-reverse text-center items-center justify-center z-10">
-        <div className="flex-1 flex justify-center items-center">
-          <IconLinkLogo />
-        </div>
-        <div className="flex-1 flex justify-center items-center">
-          <Content />
-        </div>
+      <div className="absolute w-full h-full bg-black bg-opacity-65"></div>
+      <div className={"absolute top-0 left-0 w-full h-full overflow-auto"}>
+        <DrawerComponent />
+        <Content />
       </div>
     </div>
   );
@@ -36,13 +31,13 @@ const Home = () => {
 
 const DrawerComponent = () => {
   return (
-    <div className="md:hidden h-full">
-      <div className="m-5 absolute text-white">
+    <div className="md:hidden">
+      <div className="p-2 absolute right-0 text-white">
         <Sheet>
           <SheetTrigger>
             <img src="/burger.png" alt="MenuButton" />
           </SheetTrigger>
-          <SheetContent className="bg-slate-950 bg-opacity-40 border-none text-slate-400">
+          <SheetContent className="bg-slate-950 bg-opacity-40 w-full text-slate-400">
             <SheetHeader>
               <SheetTitle className="text-slate-400 text-center mt-10 text-3xl">
                 CONNECT WITH ME

@@ -1,5 +1,6 @@
 "use client";
 import { Typewriter } from "react-simple-typewriter";
+import Image from "next/image";
 
 const TypeWriterComponent = () => {
   return (
@@ -7,7 +8,7 @@ const TypeWriterComponent = () => {
       <span className="min-w-[223px]">
         I Transform <span className="text-yellow-700">Caffeine</span>
       </span>
-      <img
+      <Image
         src="/coffee-cup.png"
         className="mx-3 w-[30px] h-[30px]"
         alt="Coffee cup"

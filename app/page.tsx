@@ -11,7 +11,8 @@ import {
 
 const Home = () => {
   return (
-    <div className="relative h-screen w-screen">
+    <div className="h-screen w-screen overflow-hidden flex flex-row items-center justify-center">
+      {/* Background Video */}
       <video
         src="/video/bg.mp4"
         loop
@@ -56,7 +57,7 @@ const DrawerComponent = () => {
 const IconLinkLogo = () => {
   return (
     <div className="flex flex-col items-center text-slate-200 gap-6 mt-5">
-      <Link target="_blank" href={"https://twitter.com/joshi__utsav"}>
+      <Link target="_blank" href="https://twitter.com/joshi__utsav">
         <img
           src="/twitterWhite.png"
           className="cursor-pointer"
@@ -64,7 +65,7 @@ const IconLinkLogo = () => {
           alt="twitter"
         />
       </Link>
-      <Link target="_blank" href={"https://github.com/joshiUtsav"}>
+      <Link target="_blank" href="https://github.com/joshiUtsav">
         <img
           src="/githubwhite.png"
           className="cursor-pointer"
@@ -72,7 +73,7 @@ const IconLinkLogo = () => {
           alt="github"
         />
       </Link>
-      <Link target="_blank" href={"https://www.linkedin.com/in/joshi-utsav/"}>
+      <Link target="_blank" href="https://www.linkedin.com/in/joshi-utsav/">
         <img
           src="/linkedinwhite.png"
           className="cursor-pointer"

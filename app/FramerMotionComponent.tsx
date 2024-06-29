@@ -3,10 +3,25 @@
 import React, { Suspense, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 
-const FramerMotionComponent = () => {
-  const name = `Utsav Joshi`;
+/**
+ * Renders a Framer Motion component that displays the name "Utsav Joshi" with a cool animation.
+ * @returns {React.ReactElement} The rendered Framer Motion component.
+ */
+const FramerMotionComponent = (): React.ReactElement => {
+  const name: string = `Utsav Joshi`;
 
-  const defaultAnimations = {
+  const defaultAnimations: {
+    hidden: {
+      opacity: number;
+    };
+    visible: {
+      opacity: number;
+      y: number;
+      transition: {
+        duration: number;
+      };
+    };
+  } = {
     hidden: {
       opacity: 0,
     },
@@ -19,7 +34,7 @@ const FramerMotionComponent = () => {
     },
   };
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { amount: 0.5 });
 
   return (
@@ -33,9 +48,9 @@ const FramerMotionComponent = () => {
           ref={ref}
           transition={{ staggerChildren: 0.1 }}
         >
-          {name.split(" ").map((word, key) => (
+          {name.split(" ").map((word: string, key: number) => (
             <span key={key} className="inline-block">
-              {word.split("").map((char, index) => (
+              {word.split("").map((char: string, index: number) => (
                 <motion.span
                   key={index}
                   className="inline-block"

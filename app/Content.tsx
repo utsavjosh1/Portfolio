@@ -5,7 +5,11 @@ import TypeWriterComponent from "./TypeWriterComponent";
 import FramerMotionComponent from "./FramerMotionComponent";
 import Footer from "./Footer";
 
-const Body = () => {
+/**
+ * Renders the main body of the page.
+ * @returns {React.ReactElement} The rendered body.
+ */
+const Body = (): React.ReactElement => {
   return (
     <div className="md:w-[50%] h-full mt-5">
       <div className="p-3 px-5 mt-12 font-bold text-xl text-color">Hi,I&apos;m</div>

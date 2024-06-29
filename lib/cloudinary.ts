@@ -1,4 +1,4 @@
-import { CldImage, CldConfig } from "next-cloudinary";
+import { CldImage } from "next-cloudinary";
 
 const cloudinaryConfig = {
   cloud: {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Content from "./Content";
 import {
   Sheet,
@@ -11,7 +12,8 @@ import {
 
 const Home = () => {
   return (
-    <div className="relative h-screen w-screen">
+    <div className="h-screen w-screen overflow-hidden flex flex-row items-center justify-center">
+      {/* Background Video */}
       <video
         src="/video/bg.mp4"
         loop
@@ -35,7 +37,7 @@ const DrawerComponent = () => {
       <div className="p-2 absolute right-0 text-white">
         <Sheet>
           <SheetTrigger>
-            <img src="/burger.png" alt="MenuButton" />
+            <Image src="/burger.png" alt="MenuButton" />
           </SheetTrigger>
           <SheetContent className="bg-slate-950 bg-opacity-40 w-full text-slate-400">
             <SheetHeader>
@@ -56,24 +58,24 @@ const DrawerComponent = () => {
 const IconLinkLogo = () => {
   return (
     <div className="flex flex-col items-center text-slate-200 gap-6 mt-5">
-      <Link target="_blank" href={"https://twitter.com/joshi__utsav"}>
-        <img
+      <Link target="_blank" href="https://twitter.com/joshi__utsav">
+        <Image
           src="/twitterWhite.png"
           className="cursor-pointer"
           width={37}
           alt="twitter"
         />
       </Link>
-      <Link target="_blank" href={"https://github.com/joshiUtsav"}>
-        <img
+      <Link target="_blank" href="https://github.com/joshiUtsav">
+        <Image
           src="/githubwhite.png"
           className="cursor-pointer"
           width={37}
           alt="github"
         />
       </Link>
-      <Link target="_blank" href={"https://www.linkedin.com/in/joshi-utsav/"}>
-        <img
+      <Link target="_blank" href="https://www.linkedin.com/in/joshi-utsav/">
+        <Image
           src="/linkedinwhite.png"
           className="cursor-pointer"
           width={37}

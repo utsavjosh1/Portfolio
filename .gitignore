@@ -9,6 +9,9 @@
 # testing
 /coverage
 
+.turbo
+tsconfig.tsbuildinfo
+
 # next.js
 /.next/
 /out/

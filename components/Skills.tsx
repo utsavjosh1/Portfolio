@@ -13,7 +13,7 @@ interface SkillsUsedProps {
 const SkillsUsedInProjects = ({ name, img }: { name: string; img: string }) => (
   <div className="text-black-300 bg-slate-100 text-sm opacity-80 rounded-lg w-[130px] flex justify-around items-center m-3 p-2">
     <div className="rounded-md ">
-      <Image src={img} alt={name} className="w-[20px] h-[20px]" />
+      <Image src={img} alt={name} width={20} height={20} />
     </div>
     <div>{name}</div>
   </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Head from "next/head";
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter, Raleway } from "next/font/google";
 import "./globals.css";
 
@@ -13,22 +14,28 @@ export const metadata: Metadata = {
 };
 
 /**
- * RootLayout is a strongly typed layout component for Next.js apps.
+ * Root layout component for the application.
  *
- * @param {Object} props - The component props.
- * @param {React.ReactNode} props.children - The child components.
- * @return {React.ReactElement} The rendered layout.
+ * @param props - The properties for the component.
+ * @param props.children - The child components to render.
+ * @returns The root layout component.
  */
-export default function RootLayout({children}: {children: React.ReactNode}): JSX.Element {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>): JSX.Element {
   return (
     <html lang="en">
       <head>
         <link rel="icon" href="/image/logo.png" />
       </head>
       <body className={raleway.className}>
-        {children}
-        <Analytics />
-        <SpeedInsights />
+        <>
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </>
       </body>
     </html>
   );

@@ -25,14 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>): JSX.Element {
-=======
- * RootLayout is a strongly typed layout component for Next.js apps.
- *
- * @param {Object} props - The component props.
- * @param {React.ReactNode} props.children - The child components.
- * @return {React.ReactElement} The rendered layout.
- */
-export default function RootLayout({children}: {children: React.ReactNode}): JSX.Element {
   return (
     <html lang="en">
       <head>

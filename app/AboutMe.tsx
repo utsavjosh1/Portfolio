@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TitleTag from "@/components/Title";
 import Image from "next/image";
 import SkillsCard from "./Skills";
 
-const AboutMe = () => {
+/**
+ * Renders the About Me section of the page.
+ * @returns {React.ReactElement} The rendered About Me section.
+ */
+const AboutMe = (): React.ReactElement => {
   return (
     <div className="mt-[5rem] h-[auto] p-4">
       <TitleTag tagName={"About Me"} />
@@ -36,15 +40,17 @@ const AboutMe = () => {
                   <Image
                     src="/download.png"
                     width={20}
+                    height={20}
                     className="cursor-pointer"
                     alt="resume-image"
-                  ></Image>
+                  />
                 </div>
                 <div className="m-auto  text-center items-center flex justify-center ">
                   <Image
-                    className="h-full w-full md:h-[500px] md:w-[400px]"
-                    src="PDF/Iresume.png"
+                    src="/PDF/Iresume.png"
                     alt="resume"
+                    width={400}
+                    height={500}
                   />
                 </div>
               </a>
@@ -56,41 +62,32 @@ const AboutMe = () => {
   );
 };
 
-const TabNav = () => {
-  const [activeTab, setActiveTab] = useState("1");
+/**
+ * Renders the tab navigation component for the About Me section.
+ * @returns {React.ReactElement} The rendered tab navigation component.
+ */
+const TabNav: React.FC = (): React.ReactElement => {
+  const [activeTab, setActiveTab] = useState<string>("1");
+
+  const handleTabClick = useCallback((value: string): void => {
+    setActiveTab(value);
+  }, []);
 
   return (
-    <>
-      <TabsList className="tabs-content bg-transparent transition duration-300  text-slate-400 text-[15px]">
+    <TabsList className="tabs-content bg-transparent transition duration-300  text-slate-400 text-[15px]">
+      {["1", "2", "3"].map((value) => (
         <TabsTrigger
-          value="1"
-          className={`tabs-content  ${
-            activeTab === "1" ? "border-b-2 border-yellow-500" : ""
-          }`}
-          onClick={() => setActiveTab("1")}
-        >
-          Skills
-        </TabsTrigger>
-        <TabsTrigger
-          value="2"
+          key={value}
+          value={value}
           className={`tabs-content ${
-            activeTab === "2" ? "border-b-2 border-yellow-500" : ""
+            activeTab === value ? "border-b-2 border-yellow-500" : ""
           }`}
-          onClick={() => setActiveTab("2")}
+          onClick={() => handleTabClick(value)}
         >
-          Education
+          {value === "1" ? "Skills" : value === "2" ? "Education" : "Resume"}
         </TabsTrigger>
-        <TabsTrigger
-          value="3"
-          className={`tabs-content ${
-            activeTab === "3" ? "border-b-2 border-yellow-500" : ""
-          }`}
-          onClick={() => setActiveTab("3")}
-        >
-          Resume
-        </TabsTrigger>
-      </TabsList>
-    </>
+      ))}
+    </TabsList>
   );
 };
 

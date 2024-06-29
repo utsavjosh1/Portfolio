@@ -5,15 +5,18 @@ interface SkillsUsedProps {
   img: string;
 }
 
-const SkillsUsedInProjects: React.FC<SkillsUsedProps> = ({ name, img }) => {
-  return (
-    <div className="text-black-300 bg-slate-100 text-sm opacity-80 rounded-lg w-[130px] flex justify-around items-center m-3 p-2">
-      <div className="rounded-md ">
-        <Image src={img} width={20} alt={name} />
-      </div>
-      <div>{name}</div>
+/**
+ * Renders a component that displays the name and image of a skill used in a project.
+ * @param props - An object containing the name and image URL of the skill.
+ * @returns A React functional component that displays the name and image of the skill.
+ */
+const SkillsUsedInProjects = ({ name, img }: { name: string; img: string }) => (
+  <div className="text-black-300 bg-slate-100 text-sm opacity-80 rounded-lg w-[130px] flex justify-around items-center m-3 p-2">
+    <div className="rounded-md ">
+      <Image src={img} alt={name} className="w-[20px] h-[20px]" />
     </div>
-  );
-};
+    <div>{name}</div>
+  </div>
+);
 
 export default SkillsUsedInProjects;

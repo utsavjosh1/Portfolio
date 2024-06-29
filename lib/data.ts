@@ -73,7 +73,7 @@ export const projects = [
   {
     p_name: "Course App",
     link: "https://github.com/JoshiUtsav/courseapp-frontend",
-    img: "image/projects/project1.png",
+    img: "/image/projects/project1.png",
     techUsed: [
       { name: "React JS", img: "/image/skills/react.png" },
       { name: "Vercel", img: "/image/skills/vercel.png" },

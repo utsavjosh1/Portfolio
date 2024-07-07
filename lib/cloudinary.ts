@@ -23,7 +23,7 @@ const getAllImages = async () => {
     await getAllFolders();
 
     // Extract URLs from the response
-    const imageUrls = response.resources.map((resource) => resource.public_id);
+    const imageUrls = response.resources.map((resource:string) => resource.public_id);
     console.log(response);
     return imageUrls;
   } catch (error) {

@@ -20,11 +20,10 @@ const getAllImages = async () => {
       resource_type: "image",
     });
 
-    await getAllFolders();
 
     // Extract URLs from the response
-    const imageUrls = response.resources.map((resource:string) => resource.public_id);
-    console.log(response);
+    const imageUrls = response.resources.map((resource:object[]) => resource);
+    console.log(imageUrls);
     return imageUrls;
   } catch (error) {
     console.error("Error fetching images from Cloudinary:", error);
@@ -32,19 +31,18 @@ const getAllImages = async () => {
   }
 };
 
-const getAllFolders = async () => {
-  try {
-    const response = await cloudinary.api.root_folders();
-    const folders = response.folders.map((folder) => folder.path);
+// const getAllFolders = async () => {
+//   try {
+//     const response = await cloudinary.api.root_folders();
+//     const folders = response.folders.map((folder) => folder);
+//     console.log(folders);
     
-    console.log(folders);
-    
-
-    return folders;
-  } catch (error) {
-    console.error("Error fetching folders from Cloudinary:", error);
-    throw new Error("Failed to fetch folders");
-  }
-};
+        
+//     return folders;
+//   } catch (error) {
+//     console.error("Error fetching folders from Cloudinary:", error);
+//     throw new Error("Failed to fetch folders");
+//   }
+// };
 
 export default getAllImages;

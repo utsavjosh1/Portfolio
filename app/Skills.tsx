@@ -1,12 +1,16 @@
-import SkillsU from "@/components/Skills";
-import Skills from "@/lib/data";
+"use client";
 
-const SkillsCard = () => (
-  <div className="flex flex-wrap items-center justify-center">
-    {Skills.map(({ Name, imgURL }, key) => (
-      <SkillsU key={key} name={Name} img={imgURL} />
-    ))}
-  </div>
-);
+import { Skills_Details } from "@/lib/data";
+import { SkillsUsed } from "@/components/ProjectCard";
+
+const SkillsCard = () => {
+  return (
+    <div className="flex flex-wrap items-center justify-center">
+      {Skills_Details.map((skill, index) => (
+        <SkillsUsed key={index} name={skill.Name} img={skill.imgURL} />
+      ))}
+    </div>
+  );
+};
 
 export default SkillsCard;

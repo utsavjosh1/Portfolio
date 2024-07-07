@@ -12,10 +12,10 @@ interface Project {
 }
 
 /**
- * Renders the "Work" section of the page.
- * @returns {React.ReactElement} The rendered "Work" section.
+ * Renders the "Project" section of the page.
+ * @returns {React.ReactElement} The rendered "Project" section.
  */
-const Work = (): React.ReactElement => {
+const Project = (): React.ReactElement => {
   const projectElements = projects.map((project: Project, index: number) => (
     <ProjectCard
       key={index}
@@ -33,4 +33,4 @@ const Work = (): React.ReactElement => {
   );
 };
 
-export default Work;
+export default Project;

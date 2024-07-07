@@ -1,4 +1,4 @@
-const Skills = [
+export const Skills_Details = [
   {
     imgURL: "/image/skills/js.png",
     Name: "JavaScript",
@@ -110,5 +110,3 @@ export const projects = [
     ],
   },
 ];
-
-export default Skills;

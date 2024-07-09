@@ -23,7 +23,6 @@ const getAllImages = async () => {
 
     // Extract URLs from the response
     const imageUrls = response.resources.map((resource:object[]) => resource);
-    console.log(imageUrls);
     return imageUrls;
   } catch (error) {
     console.error("Error fetching images from Cloudinary:", error);

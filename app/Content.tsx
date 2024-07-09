@@ -3,6 +3,7 @@ import Work from "./Work";
 import GitHubCalendarComponent from "./GitHubCalendar";
 import TypeWriterComponent from "./TypeWriterComponent";
 import FramerMotionComponent from "./FramerMotionComponent";
+import Experience from "./Experience"
 import Footer from "./Footer";
 
 /**
@@ -22,6 +23,7 @@ const Body = (): React.ReactElement => {
       </div>
       <GitHubCalendarComponent />
       <AboutMe />
+      <Experience />
       <Work />
       <Footer />
     </div>

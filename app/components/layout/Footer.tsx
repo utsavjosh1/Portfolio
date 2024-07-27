@@ -1,4 +1,4 @@
-import getAllImages from "@/lib/cloudinary";
+import getAllImages from "@/app/lib/cloudinary";
 
 /**
  * Renders the footer of the website.

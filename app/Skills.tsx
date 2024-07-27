@@ -1,7 +1,7 @@
 "use client";
 
-import { Skills_Details } from "@/lib/data";
-import { SkillsUsed } from "@/components/ProjectCard";
+import { Skills_Details } from "@/app/lib/data";
+import { SkillsUsed } from "@/app/components/ProjectCard";
 
 const SkillsCard = () => {
   return (

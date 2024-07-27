@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import React, { Suspense, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 /**
  * Renders a Framer Motion component that displays the name "Utsav Joshi" with a cool animation.
  * @returns {React.ReactElement} The rendered Framer Motion component.
  */
-const FramerMotionComponent = (): React.ReactElement => {
+const FramerMotionComponent: React.FC = (): React.ReactElement => {
   const name: string = `Utsav Joshi`;
 
   const defaultAnimations: {

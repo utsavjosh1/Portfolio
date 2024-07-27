@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TitleTag from "@/components/Title";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/lib/ui/tabs";
+import TitleTag from "@/app/components/Title";
 import Image from "next/image";
-import SkillsCard from "./Skills";
+import SkillsCard from "@/app/Skills";
 
 /**
  * Renders the About Me section of the page.

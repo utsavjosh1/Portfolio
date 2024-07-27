@@ -1,14 +1,12 @@
-import Link from "next/link";
-import Image from "next/image";
-import Content from "./Content";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import DrawerComponent from "./components/Drawer";
+import { Logo } from "./components/Socialicon";
+import AboutMe from "@/app/AboutMe";
+import Work from "@/app/Work";
+import GitHubCalendarComponent from "@/app/lib/GitHubCalendar";
+import TypeWriterComponent from "@/app/lib/TypeWriter";
+import FramerMotionComponent from "@/app/lib/FramerMotion";
+import Experience from "@/app/Experience";
+import Footer from "@/app/components/layout/Footer";
 
 const Home = () => (
   <div className="h-screen w-screen overflow-hidden flex flex-row items-center justify-center">
@@ -23,67 +21,28 @@ const Home = () => (
     <div className="absolute w-full h-full bg-black bg-opacity-65" />
     <div className="absolute top-0 left-0 w-full h-full overflow-auto">
       <DrawerComponent />
-      <Content />
-      <div className="fixed bottom-5 right-10 hidden md:block">
-        <Logo />
+      <div className="md:w-[50%] h-full mt-5">
+        <div className="p-3 px-5 mt-12 font-bold text-xl text-color">
+          Hi, I&apos;m
+        </div>
+        <FramerMotionComponent />
+        <TypeWriterComponent />
+        <div className="max-w-[100%] text-slate-200 px-5 p-2 desc-color md:text-[17px] my-4">
+          A Full-Stack Developer based in Delhi. I always aim for the best code
+          quality and smooth coding. I&apos;m excited about using new technologies
+          in my projects.
+        </div>
+        <GitHubCalendarComponent />
+        <AboutMe />
+        <Experience />
+        <Work />
+        <Footer />
+        <div className="fixed bottom-5 right-10 hidden md:block">
+          <Logo />
+        </div>
       </div>
     </div>
   </div>
-);
-
-const DrawerComponent = () => (
-  <div className="md:hidden">
-    <div className="p-2 absolute right-0 text-white">
-      <Sheet>
-        <SheetTrigger>
-          <Image src="/burger.png" alt="MenuButton" width={30} height={30} />
-        </SheetTrigger>
-        <SheetContent className="bg-slate-950 bg-opacity-40 w-full text-slate-400">
-          <SheetHeader>
-            <SheetTitle className="text-slate-400 text-center mt-10 text-3xl">
-              CONNECT WITH ME
-            </SheetTitle>
-            <SheetDescription>
-              <Logo />
-            </SheetDescription>
-          </SheetHeader>
-        </SheetContent>
-      </Sheet>
-    </div>
-  </div>
-);
-
-const Logo: React.FC = (): React.ReactElement => (
-  <div className="flex flex-col items-center text-slate-200 gap-6 mt-5">
-    {iconLinks.map(({ link, alt, src }) => (
-      <IconLink key={link} link={link} alt={alt} src={src} />
-    ))}
-    <div className="h-[100px] bg-white w-[1px] hidden sm:block"></div>
-  </div>
-);
-
-const iconLinks = [
-  {
-    link: "https://twitter.com/joshi__utsav",
-    alt: "twitter",
-    src: "/twitterWhite.png",
-  },
-  {
-    link: "https://github.com/joshiUtsav",
-    alt: "github",
-    src: "/githubwhite.png",
-  },
-  {
-    link: "https://www.linkedin.com/in/joshi-utsav/",
-    alt: "linkedIn",
-    src: "/linkedinwhite.png",
-  },
-];
-
-const IconLink = ({ link, alt, src }: { link: string; alt: string; src: string }) => (
-  <Link target="_blank" href={link}>
-    <Image src={src} className="cursor-pointer" width={37} height={37} alt={alt} />
-  </Link>
 );
 
 export default Home;

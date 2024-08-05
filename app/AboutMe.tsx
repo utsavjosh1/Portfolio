@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/lib/ui/tabs";
-import TitleTag from "@/app/components/Title";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TitleTag from "@/components/Title";
 import Image from "next/image";
 import SkillsCard from "@/app/Skills";
 

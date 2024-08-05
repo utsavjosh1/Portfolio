@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useRef } from "react";
-import ProjectCard from "@/app/components/ProjectCard";
-import TitleTag from "@/app/components/Title";
-import { projects } from "@/app/lib/data";
+import ProjectCard from "@/components/ProjectCard";
+import TitleTag from "@/components/Title";
+import { projects } from "@/lib/data";
 
 interface Project {
   p_name: string;

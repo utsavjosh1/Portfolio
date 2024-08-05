@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@800&display=swap");
 
 
@@ -60,6 +61,8 @@ body {
 .Name-color {
   color: rgb(230, 235, 255);
   font-family: "Raleway", sans-serif;
+  font-size: 6rem;
+  line-height: 1;
 }
 .text-color {
   color: rgb(136 145 176);

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Head from "next/head";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter, Raleway } from "next/font/google";
@@ -32,8 +31,8 @@ export default function RootLayout({
       </head>
       <body className={raleway.className}>
         <>
-          {children}
           <Analytics />
+          {children}
           <SpeedInsights />
         </>
       </body>

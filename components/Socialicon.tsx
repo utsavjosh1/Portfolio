@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { icon_Links as icon } from "@/app/lib/data";
+import { icon_Links as icon } from "@/lib/data";
 
 export const Logo: React.FC = (): React.ReactElement => (
   <div className="flex flex-col items-center text-slate-200 gap-6 mt-5">

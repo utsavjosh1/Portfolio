@@ -5,7 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/app/lib/ui/sheet";
+} from "@/components/ui/sheet";
 import Image from "next/image";
 
 const DrawerComponent = () => (

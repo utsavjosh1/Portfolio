@@ -1,4 +1,4 @@
-import TitleTag from "@/app/components/Title";
+import TitleTag from "@/components/Title";
 
 const Experience = () => {
   return (

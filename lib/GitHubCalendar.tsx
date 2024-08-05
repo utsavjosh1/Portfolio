@@ -1,8 +1,7 @@
-"use client";
 import GitHubCalendar from "react-github-calendar";
 
 const GitHubCalendarComponent = () => (
-  <div className="styles-module_scrollContainer__-bJC8 p-4 md:overflow-scroll mt-7 text-slate-300">
+  <div className="styles-module_scrollContainer__-bJC8 p-4 mt-7 text-slate-300">
     <GitHubCalendar username={"joshiUtsav"} blockSize={10} />
   </div>
 );

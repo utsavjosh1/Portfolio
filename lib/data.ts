@@ -98,7 +98,7 @@ export const projects = [
   },
   {
     p_name: "Vector Search",
-    link: "https://github.com/JoshiUtsav/vector-search",
+    link: "https://github.com/JoshiUtsav/vector-frontend",
     img: "/image/projects/projects2.png",
     techUsed: [
       { name: "HTML", img: "/image/skills/react.png" },

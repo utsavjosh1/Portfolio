@@ -21,9 +21,7 @@
 body {
   color: rgb(var(--foreground-rgb));
   font-family: monospace !important;
-  overflow-y: hidden;
   scroll-behavior: smooth;
-  overflow-x: hidden;
   background: linear-gradient(
       to bottom,
       transparent,
@@ -35,9 +33,6 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
   }
 }
 
@@ -70,16 +65,11 @@ body {
   background-color: transparent !important;
 }
 
-.styles-module_scrollContainer__-bJC8 {
-  overflow: hidden !important;
-}
-
 /* Ensure the video container is positioned correctly */
 .video-container {
-  position: relative;
+  position: fixed;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 }
 
 /* Style the video to cover the entire container */
@@ -102,7 +92,7 @@ body {
   height: 100%;
   background: rgba(0, 0, 0, 0.5); /* Adjust the opacity for darkness */
   pointer-events: none; /* Ensures that clicks pass through */
-  z-index: .1; /* Make sure it is above the video */
+  z-index: 0.1; /* Make sure it is above the video */
 }
 
 /* Media queries for responsiveness */
@@ -129,4 +119,22 @@ body {
       0.3
     ); /* Even lighter overlay for very small screens */
   }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  border: 8px solid #fff; /* White border for the loader */
+  border-top: 8px solid #000; /* Black top border for the spinning effect */
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  animation: spin 1.5s linear infinite;
 }

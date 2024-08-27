@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter, Raleway } from "next/font/google";
-import "./globals.css";
+import "@/styles/globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 const raleway = Raleway({ subsets: ["latin"] });
@@ -30,11 +31,16 @@ export default function RootLayout({
         <link rel="icon" href="/image/logo.png" />
       </head>
       <body className={raleway.className}>
-        <>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <Analytics />
           {children}
           <SpeedInsights />
-        </>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,16 +1,14 @@
 "use client";
 
-import { Skills_Details } from "@/lib/data";
+import Skills_Details from "@/data/Skills-details";
 import { SkillsUsed } from "@/components/ProjectCard";
 
-const SkillsCard = () => {
+export default function SkillsCard() {
   return (
-    <div className="flex flex-wrap items-center justify-center">
-      {Skills_Details.map((skill, index) => (
-        <SkillsUsed key={index} name={skill.Name} img={skill.imgURL} />
+    <div className="grid grid-cols-4">
+      {Skills_Details.map((skills) => (
+        <SkillsUsed key={skills._id} name={skills.Name} img={skills.imgURL} />
       ))}
     </div>
   );
-};
-
-export default SkillsCard;
+}

@@ -26,13 +26,13 @@ const TypeWriterComponent: React.FC =
     };
 
     return (
-      <div className="text-xl md:text-2xl my-4 font-bold px-5 p-3 flex flex-wrap text-color w-auto">
+      <div className="text-xl md:text-2xl my-4 font-bold px-5 p-3 flex flex-wrap text-color w-auto ">
         <span className="min-w-[223px]">
           I Transform <span className="text-yellow-700">Caffeine</span>
         </span>
         <Image {...coffeeCupImageProps} alt="Coffee cup" />
         into
-        <span className="text-green-500">
+        <span className="text-green-500 ml-2">
           <Typewriter {...typeWriterProps} />
         </span>
       </div>

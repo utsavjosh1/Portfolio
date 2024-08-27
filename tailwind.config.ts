@@ -5,8 +5,10 @@ const config = {
   content: [
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
     "./lib/**/*.{ts,tsx}",
+    "./types/**/*.{ts,tsx}",
+    "./data/**/*.{ts,tsx}",
+    "./public/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {

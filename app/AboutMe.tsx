@@ -1,28 +1,47 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React from "react";
 import TitleTag from "@/components/Title";
 import Image from "next/image";
+import Link from "next/link";
 import SkillsCard from "@/app/Skills";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 /**
  * Renders the About Me section of the page.
  * @returns {React.ReactElement} The rendered About Me section.
  */
-const AboutMe = (): React.ReactElement => {
+export default function AboutMe(): React.ReactElement {
   return (
-    <div className="mt-[5rem] h-[auto] p-4">
+    <div className="mt-[5rem] w-full h-full">
       <TitleTag tagName={"About Me"} />
-      <div className="border w-[100%] md:p-2 rounded-md border-slate-500 items-center justify-center">
-        <Tabs defaultValue="1">
-          <TabNav />
-          <TabsContent value="1">
+      <div className="w-ful h-[75vh] p-2 border rounded-md border-slate-500 items-center justify-center">
+        <Tabs defaultValue="Skills">
+          <TabsList className="bg-transparent text-white">
+            <TabsTrigger
+              value="Skills"
+              className=" data-[state=active]:bg-transparent data-[state=active]:border-b-4"
+            >
+              Skills
+            </TabsTrigger>
+            <TabsTrigger
+              value="Education"
+             className=" data-[state=active]:bg-transparent data-[state=active]:border-b-4"
+            >
+              🧑‍💻 Education
+            </TabsTrigger>
+            <TabsTrigger
+              value="Resume"
+            className=" data-[state=active]:bg-transparent data-[state=active]:border-b-4"
+            >
+              🧑‍💻 Resume
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="Skills">
             <SkillsCard />
           </TabsContent>
-          <TabsContent value="2">
+          <TabsContent value="Education">
             <div className="border-slate-700 border text-slate-300 bg-slate-800 bg-opacity-65 m-4 p-2  text-sm">
-              <div className="p-3"> 🧑‍💻 Education</div>
               <div className="px-4 py-2">
                 <ul>
                   <li> Bachelor of Computer Applications | 2023-2026</li>
@@ -31,64 +50,40 @@ const AboutMe = (): React.ReactElement => {
               <div className="px-4 py-2">IGNOU | Rajdhani College</div>
             </div>
           </TabsContent>
-          <TabsContent value="3">
-            <div className="border-slate-700 border bg-slate-800 bg-opacity-70 p-3 md:m-4 md:p-2 text-sm">
-              <div className="p-3 text-white"> 🧑‍💻 Resume</div>
-              <a href="PDF/RESUME.pdf" target="blank" download={true}>
-                <div className="text-slate-300 px-4 py-2 flex gap-2">
+          <TabsContent value="Resume">
+            <div className="relative flex p-3 md:m-4 md:p-2 text-sm items-center justify-between">
+              <Link href="PDF/RESUME.pdf" target="_blank" download={true}>
+                <div className=" p-4 text-black flex bg-white justify-between ">
                   <div>Download Resume</div>
                   <Image
                     src="/download.png"
                     width={20}
                     height={20}
+                    alt="download-icon"
                     className="cursor-pointer"
-                    alt="resume-image"
                   />
                 </div>
-                <div className="m-auto  text-center items-center flex justify-center ">
+                <div className="p-4 text-white flex bg-black justify-between mt-4 border">
+                  <div>Drive Link</div>
                   <Image
-                    src="/PDF/Iresume.png"
-                    alt="resume"
-                    width={400}
-                    height={500}
+                    src="/link.png"
+                    width={20}
+                    height={20}
+                    alt="download-icon"
+                    className="cursor-pointer"
                   />
                 </div>
-              </a>
+              </Link>
+              <Image
+                src="/PDF/Iresume.png"
+                alt="resume"
+                width={350}
+                height={450}
+              />
             </div>
           </TabsContent>
         </Tabs>
       </div>
     </div>
   );
-};
-
-/**
- * Renders the tab navigation component for the About Me section.
- * @returns {React.ReactElement} The rendered tab navigation component.
- */
-const TabNav: React.FC = (): React.ReactElement => {
-  const [activeTab, setActiveTab] = useState<string>("1");
-
-  const handleTabClick = useCallback((value: string): void => {
-    setActiveTab(value);
-  }, []);
-
-  return (
-    <TabsList className="tabs-content bg-transparent transition duration-300  text-slate-400 text-[15px]">
-      {["1", "2", "3"].map((value) => (
-        <TabsTrigger
-          key={value}
-          value={value}
-          className={`tabs-content ${
-            activeTab === value ? "border-b-2 border-yellow-500" : ""
-          }`}
-          onClick={() => handleTabClick(value)}
-        >
-          {value === "1" ? "Skills" : value === "2" ? "Education" : "Resume"}
-        </TabsTrigger>
-      ))}
-    </TabsList>
-  );
-};
-
-export default AboutMe;
+}

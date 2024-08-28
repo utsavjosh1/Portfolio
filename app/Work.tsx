@@ -36,7 +36,7 @@ const Project = (): React.ReactElement => {
 
   return (
     <>
-      <div className="mt-[5rem] w-full h-full ">
+      <div className="mt-[5rem] w-[10%] border border-purple-600">
         <TitleTag tagName="Projects" />
         <Carousel>
           <CarouselContent>{project_items}</CarouselContent>

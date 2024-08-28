@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import DrawerComponent from "../components/Drawer";
 import { Logo } from "../components/Socialicon";
-import AboutMe from "@/app/AboutMe";
+import AboutMe from "@/components/aboutme/main";
 import Work from "@/app/Work";
 import GitHubCalendarComponent from "@/lib/GitHubCalendar";
 import Video from "@/components/bg-video";
@@ -25,8 +25,10 @@ export default function Home() {
         <div className="absolute items-center h-full">
           {/* Hero section */}
           <HeroSection />
+
           {/* GitHub Calendar */}
           {/* <GitHubCalendarComponent /> */}
+
           {/* About Me */}
           <AboutMe />
           {/* Work */}

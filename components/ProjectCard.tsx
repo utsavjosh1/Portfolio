@@ -54,7 +54,7 @@ export default function ProjectCard({
  * @returns A React functional component that displays the name and image of the skill.
  */
 export const SkillsUsed: React.FC<TechUsedType> = ({ name, img }) => (
-  <div className="bg-slate-100 text-sm rounded-lg w-[160px] flex justify-around items-center m-2 p-2">
+  <div className="bg-slate-100 text-sm rounded-lg w-[150px] flex justify-around items-center m-2 p-2">
     <div className="rounded-md ">
       <Image src={img} alt={name} width={25} height={25} />
     </div>

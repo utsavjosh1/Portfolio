@@ -2,7 +2,7 @@
 
 import React from "react";
 import TitleTag from "@/components/Title";
-import TabsButton from "@/components/aboutme/drawer";
+import TabsButton from "@/components/about/drawer";
 
 /**
  * Renders the About Me section of the page.

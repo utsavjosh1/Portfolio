@@ -6,6 +6,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { IconLink } from "@tabler/icons-react";
 
+const LinkData = [
+  {
+    name: "Email(General)",
+    url: "mailto:utsavjohshi602@gmail.com",
+  },
+  {
+    name: "Instagram",
+    url: "https://www.instagram.com/joshi___utsav/",
+  },
+  {
+    name: "Github",
+    url: "https://github.com/utsav-joshi",
+  },
+];
+
 const SocialLink = () => {
   return (
     <div className="relative flex flex-col items-center justify-center mt-4 dark:text-white bg-white dark:bg-[#111111]">
@@ -42,12 +57,8 @@ const SocialLink = () => {
         </motion.span>
 
         <div className="mb-28 w-full">
-          {[...Array(4)].map((_, index) => (
-            <Link
-              href={"https://github.com/joshiUtsav/"}
-              key={index} 
-              className="hover:underline"
-            >
+          {LinkData.map((link, index) => (
+            <Link href={link.url} key={index} className="hover:underline">
               <motion.div
                 className="flex items-center justify-between bg-gray-200 dark:bg-[#222222] rounded-md w-full text-black dark:text-white mt-4 p-5 hover:bg-gray-300 dark:hover:bg-[#333333] transition-colors duration-200"
                 initial={{ opacity: 0, y: -20 }}
@@ -58,7 +69,7 @@ const SocialLink = () => {
                   delay: 0.3 + index * 0.1,
                 }}
               >
-                Email(General)
+                {link.name}
                 <IconLink />
               </motion.div>
             </Link>

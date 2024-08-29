@@ -5,61 +5,60 @@ import { FloatingDock } from "@/components/ui/floating-dock";
 import {
   IconBrandGithub,
   IconBrandX,
-  IconExchange,
-  IconHome,
-  IconNewSection,
-  IconTerminal2,
+  IconBriefcase2,
+  IconBrandLinkedin,
+  IconTournament,
+  IconUserCircle,
 } from "@tabler/icons-react";
-import Image from "next/image";
 
 export function FloatingDockDemo() {
   const links = [
     {
-      title: "Home",
+      title: "Work",
       icon: (
-        <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconBriefcase2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      href: "/work",
     },
     {
-      title: "Terminal",
+      title: "Content",
       icon: (
-        <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconTournament className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      href: "/content",
     },
     {
-      title: "Components",
+      title: "Me",
       icon: (
-        <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconUserCircle className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
-    },
-    {
-      title: "Blogs",
-      icon: (
-        <IconExchange className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "/blogs",
+      href: "/about",
     },
     {
       title: "Twitter",
       icon: (
         <IconBrandX className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      href: "https://twitter.com/joshi__utsav/",
+    },
+    {
+      title: "LinkedIn",
+      icon: (
+        <IconBrandLinkedin className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "https://www.linkedin.com/in/joshi-utsav/",
     },
     {
       title: "GitHub",
       icon: (
         <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "#",
+      href: "https://github.com/joshiUtsav/",
     },
   ];
   return (
     <div className="flex items-center justify-center">
-      <FloatingDock mobileClassName="translate-y-20" items={links} />
+      <FloatingDock mobileClassName="translate-y-0" items={links} />
     </div>
   );
 }

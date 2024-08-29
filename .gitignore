@@ -9,9 +9,6 @@
 # testing
 /coverage
 
-.turbo
-tsconfig.tsbuildinfo
-
 # next.js
 /.next/
 /out/
@@ -37,6 +34,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-.turbo
-.env

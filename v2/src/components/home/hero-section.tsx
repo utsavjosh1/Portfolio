@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <div className="relative flex flex-col items-center md:items-start justify-start p-6 md:p-10 h-full w-full md:w-[50%] dark:bg-[#111111] dark:text-white">
+    <div className="relative flex flex-col items-center md:items-start justify-start w-full md:w-[50%] dark:bg-[#111111] dark:text-white">
       {/* Name Section */}
       <motion.div
         className="text-2xl md:text-3xl font-bold"
@@ -30,11 +30,11 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeInOut", delay: 0.2 }}
       >
-        <span>Delhi</span>
+        <span>Diligence</span>
         <span>&#8226;</span>
         <span>Developer</span>
         <span>&#8226;</span>
-        <span>Disorder</span>
+        <span>Dynamism </span>
       </motion.div>
 
       {/* Image and Stats Section */}
@@ -45,7 +45,7 @@ const HeroSection = () => {
         transition={{ duration: 0.6, ease: "easeInOut", delay: 0.4 }}
       >
         <Image
-          src="https://avatars.githubusercontent.com/u/98454866?v=4"    
+          src="https://avatars.githubusercontent.com/u/98454866?v=4"
           alt="logo"
           width={100}
           height={100}
@@ -72,13 +72,13 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeInOut", delay: 0.6 }}
       >
-        <blockquote className="text-lg italic border-l-4 pl-4 border-gray-300">
-          Coding since birth, now, till death
+        <blockquote className="text-lg italic border-l-4 pl-4 mt-2 border-gray-300 dark:bg-gray-800 p-3">
+          Coding since birth, now, till death.
         </blockquote>
         <Link href={"/links"}>
-          <span className="flex mt-4 gap-2 justify-center md:justify-start">
+          <span className="inline-flex items-center gap-2 mt-5 rounded-md transition-colors duration-300">
             <IconExternalLink />
-            <span>More ways to connect</span>
+            <span className="text-lg">More ways to connect</span>
           </span>
         </Link>
       </motion.div>

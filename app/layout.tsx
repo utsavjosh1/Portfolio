@@ -26,9 +26,7 @@ export default function RootLayout({
 }>): JSX.Element {
   return (
     <html lang="en">
-      <head>
-        {/* <link rel="icon" href="/image/logo.png" /> */}
-      </head>
+      <head>{/* <link rel="icon" href="/image/logo.png" /> */}</head>
       <body className={raleway.className}>
         <ThemeProvider
           attribute="class"

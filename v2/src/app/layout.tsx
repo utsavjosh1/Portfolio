@@ -38,7 +38,7 @@ export default function RootLayout({
             <div className="flex items-center gap-5 md:gap-2">
               <Link href={"/"}>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage src="https://avatars.githubusercontent.com/u/98454866?v=4" />
                   <AvatarFallback>
                     <IconHome className="h-6 w-6 text-neutral-500 dark:text-neutral-300" />
                   </AvatarFallback>

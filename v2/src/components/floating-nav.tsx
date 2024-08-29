@@ -9,7 +9,9 @@ import {
   IconBrandLinkedin,
   IconTournament,
   IconUserCircle,
+  IconMusic,
 } from "@tabler/icons-react";
+import NotOpen from "./not-open";
 
 export function FloatingDockDemo() {
   const links = [
@@ -26,6 +28,13 @@ export function FloatingDockDemo() {
         <IconTournament className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "/content",
+    },
+    {
+      title: "Music",
+      icon: (
+        <IconMusic className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "/music",
     },
     {
       title: "Me",

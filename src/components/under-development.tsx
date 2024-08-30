@@ -22,7 +22,7 @@ export function SpotlightPreview({ text }: { text: string }) {
 
   return (
     <motion.div
-      className="h-screen w-full rounded-md flex md:items-center md:justify-center bg-white dark:bg-[#111111] antialiased bg-grid-white/[0.02] relative overflow-hidden text-black dark:text-white"
+      className="h-screen w-full rounded-md flex items-center justify-center bg-white dark:bg-[#111111] antialiased bg-grid-white/[0.02] relative text-black dark:text-white"
       initial="hidden"
       animate="visible"
       variants={containerVariants}

@@ -37,13 +37,6 @@ export function FloatingDockDemo() {
       href: "/music",
     },
     {
-      title: "Me",
-      icon: (
-        <IconUserCircle className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "/about",
-    },
-    {
       title: "Twitter",
       icon: (
         <IconBrandX className="h-full w-full text-neutral-500 dark:text-neutral-300" />
@@ -58,11 +51,11 @@ export function FloatingDockDemo() {
       href: "https://www.linkedin.com/in/joshi-utsav/",
     },
     {
-      title: "GitHub",
+      title: "Me",
       icon: (
-        <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconUserCircle className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "https://github.com/joshiUtsav/",
+      href: "/about",
     },
   ];
   return (

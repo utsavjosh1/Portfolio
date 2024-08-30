@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import { SpotlightPreview } from "@/components/under-development";
 
 const Work = () => {
   return (
-    <div>Work</div>
-  )
-}
+    <div>
+      <SpotlightPreview text="Under Development"/>
+    </div>
+  );
+};
 
-export default Work
+export default Work;

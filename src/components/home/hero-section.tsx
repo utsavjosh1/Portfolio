@@ -12,20 +12,19 @@ import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <div className="relative flex flex-col items-center md:items-start justify-start w-full md:w-[50%] dark:bg-[#111111] dark:text-white">
+    <div className="relative flex flex-col items-start pt-14 justify-start h-full w-full max-w-screen-lg mx-auto dark:bg-[#111111] dark:text-white px-4 sm:px-6 lg:px-8">
       {/* Name Section */}
       <motion.div
-        className="text-2xl md:text-3xl font-bold"
+        className="text-2xl md:text-3xl font-bold text-left w-full"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeInOut" }}
       >
         Utsav Joshi
       </motion.div>
-
       {/* Subtitle Section */}
       <motion.div
-        className="flex justify-center md:justify-start items-center space-x-2 mt-2"
+        className="flex flex-wrap justify-start items-center w-full space-x-2 mt-2 text-left"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeInOut", delay: 0.2 }}
@@ -34,12 +33,11 @@ const HeroSection = () => {
         <span>&#8226;</span>
         <span>Developer</span>
         <span>&#8226;</span>
-        <span>Dynamism </span>
+        <span>Dynamism</span>
       </motion.div>
-
       {/* Image and Stats Section */}
       <motion.div
-        className="flex lg:flex-row md:flex-col items-center justify-center mt-10"
+        className="flex flex-col lg:flex-row items-start lg:items-center justify-start w-full mt-5 text-left lg:text-left"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeInOut", delay: 0.4 }}
@@ -49,16 +47,16 @@ const HeroSection = () => {
           alt="logo"
           width={100}
           height={100}
-          className="rounded-full border mb-5 md:mb-0"
+          className="rounded-full border mb-5 lg:mb-0"
           quality={100}
           loading="lazy"
         />
-        <div className="flex flex-col items-center md:items-start justify-start gap-5 md:ml-7">
-          <div className="flex gap-4 items-start justify-center md:justify-start">
+        <div className="flex flex-col items-start gap-5 lg:ml-7">
+          <div className="flex gap-4 items-center text-sm md:text-base">
             <IconBrandGithub stroke={2} />
-            <span>41 repository on GitHub</span>
+            <span>41 repositories on GitHub</span>
           </div>
-          <div className="flex gap-4 items-start justify-center md:justify-start">
+          <div className="flex gap-4 items-center text-sm md:text-base">
             <IconGraph stroke={2} />
             <span>500 views on blogs</span>
           </div>
@@ -67,18 +65,18 @@ const HeroSection = () => {
 
       {/* Quote and Links Section */}
       <motion.div
-        className="mt-5 text-center md:text-left"
+        className="mt-5 text-left w-full"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeInOut", delay: 0.6 }}
       >
-        <blockquote className="text-lg italic border-l-4 pl-4 mt-2 border-gray-300 dark:bg-gray-800 p-3">
+        <blockquote className="text-lg italic border-l-4 pl-4 mt-2 border-gray-300 dark:border-gray-700 p-3">
           Coding since birth, now, till death.
         </blockquote>
         <Link href={"/links"}>
-          <span className="inline-flex items-center gap-2 mt-5 rounded-md transition-colors duration-300">
+          <span className="inline-flex items-center gap-2 mt-5 rounded-md transition-colors duration-300 text-sm md:text-lg">
             <IconExternalLink />
-            <span className="text-lg">More ways to connect</span>
+            <span>More ways to connect</span>
           </span>
         </Link>
       </motion.div>

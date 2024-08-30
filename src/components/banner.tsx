@@ -18,7 +18,7 @@ const Banner = ({ text }: { text: string  }) => {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -50, opacity: 0 }}
         transition={{ duration: 0.5, delay: 1.2 }}
-        className="fixed top-0 left-0 w-full bg-black text-white text-center flex items-center"
+        className="fixed top-0 left-0 w-full bg-black text-white text-center flex items-center justify-center"
       >
         <span className="flex-grow">{text}</span>
         <button

@@ -1,8 +1,11 @@
 import React from 'react'
+import { SpotlightPreview } from '@/components/under-development'
 
 const AboutMe = () => {
   return (
-    <div>AboutMe</div>
+    <div>
+      <SpotlightPreview text='Working on this page'/>
+    </div>
   )
 }
 

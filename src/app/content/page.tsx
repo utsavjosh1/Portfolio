@@ -1,8 +1,11 @@
 import React from "react";
+import { SpotlightPreview } from "@/components/under-development";
 
 const Blogs = () => {
   return (
-    <div className="relative w-screen h-screen dark:bg-[#111111] dark:text-white">Blogs</div>
+    <div>
+      <SpotlightPreview text="Under Development"/>
+    </div>
   );
 };
 

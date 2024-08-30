@@ -22,7 +22,7 @@ export function SpotlightPreview({ text }: { text: string }) {
 
   return (
     <motion.div
-      className="h-screen w-full rounded-md flex items-center justify-center bg-white dark:bg-[#111111] antialiased bg-grid-white/[0.02] relative text-black dark:text-white"
+      className="h-screen w-full flex items-center justify-center bg-white dark:bg-[#111111] antialiased relative text-black dark:text-white"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -31,9 +31,9 @@ export function SpotlightPreview({ text }: { text: string }) {
         className="-top-40 left-0 md:left-60 md:-top-20"
         fill="currentColor" // Adjusting the fill color for light/dark mode
       />
-      <div className="p-4 max-w-7xl mx-auto relative z-10 w-full pt-20 md:pt-0 text-center">
+      <div className="p-4 max-w-7xl mx-auto relative z-10 w-full flex flex-col items-center justify-center">
         <motion.h1
-          className="text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-black dark:from-neutral-50 to-gray-400 dark:to-neutral-400 bg-opacity-50"
+          className="text-4xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-black dark:from-neutral-50 to-gray-400 dark:to-neutral-400 bg-opacity-50 text-center"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}

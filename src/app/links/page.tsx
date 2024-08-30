@@ -60,7 +60,7 @@ const SocialLink = () => {
           {LinkData.map((link, index) => (
             <Link href={link.url} key={index} className="hover:underline">
               <motion.div
-                className="flex items-center justify-between bg-gray-200 dark:bg-[#222222] rounded-md w-full text-black dark:text-white mt-4 p-5 hover:bg-gray-300 dark:hover:bg-[#333333] transition-colors duration-200"
+                className="flex items-center justify-between bg-gray-200 dark:bg-[#222222] rounded-md text-black dark:text-white m-4 p-5 hover:bg-gray-300 dark:hover:bg-[#333333] transition-colors duration-200"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{

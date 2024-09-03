@@ -13,7 +13,7 @@ const work = () => {
     >
       <h2 className="text-xl font-semibold mb-4 text-left">Work</h2>
       <p className="mb-6 text-left">
-        I started my career freelancing for client's, building web apps.
+        I started my career freelancing for client&apos;s, building web apps.
       </p>
       <div className="flex flex-col gap-4">
         <div className="flex items-center">

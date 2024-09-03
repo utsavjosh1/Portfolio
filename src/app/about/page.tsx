@@ -21,7 +21,7 @@ const AboutMe = () => (
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeInOut", delay: 0.4 }}
     >
-      <h2 className="text-4xl font-bold mb-4 text-left">Hey, I'm Utsav!</h2>
+      <h2 className="text-4xl font-bold mb-4 text-left">Hey, I&apos;m Utsav!</h2>
       <p className="text-gray-600 mb-6 text-left">
         <span className="font-semibold">IPA /ʊt̪.səʋ/ •</span>
         <span className="mx-2">ಉತ್ಸವ •</span>
@@ -29,11 +29,11 @@ const AboutMe = () => (
         <span className="mx-2">ウツァフ</span>
       </p>
       <p className="mb-4 text-left">
-        But I go by joKeR for short. joKeR is my favorite movie. You’ll
+        But I go by joKeR for short. joKeR is my favorite movie. You&apos;ll
         probably remember it.
       </p>
       <p className="mb-4 text-left">
-        I love building cool things with code, and I'm passionate about
+        I love building cool things with code, and I&apos;m passionate about
         engineering, history, and hardware.
       </p>
       <p className="mb-4 text-left">
@@ -44,11 +44,11 @@ const AboutMe = () => (
         about computers, life, and anything that piques my interest.
       </p>
       <p className="text-left">
-        When I'm not at my desk, I'm probably listening to{" "}
+        When I&apos;m not at my desk, I&apos;m probably listening to{" "}
         <Link href="/music" className="underline text-blue-500">
-          music
+          music,
         </Link>
-        , reading books, or exploring with no specific destination in mind{" "}
+        reading books, or exploring with no specific destination in mind{" "}
         {":)"}
       </p>
     </motion.section>

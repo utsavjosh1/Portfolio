@@ -16,8 +16,8 @@ const LinkData = [
     url: "https://www.instagram.com/joshi___utsav/",
   },
   {
-    name: "Github",
-    url: "https://github.com/utsav-joshi",
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/in/joshi-utsav/",
   },
 ];
 

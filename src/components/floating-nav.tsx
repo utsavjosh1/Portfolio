@@ -6,12 +6,10 @@ import {
   IconBrandGithub,
   IconBrandX,
   IconBriefcase2,
-  IconBrandLinkedin,
   IconTournament,
   IconUserCircle,
   IconMusic,
 } from "@tabler/icons-react";
-import NotOpen from "./not-open";
 
 export function FloatingDockDemo() {
   const links = [
@@ -44,11 +42,11 @@ export function FloatingDockDemo() {
       href: "https://twitter.com/joshi__utsav/",
     },
     {
-      title: "LinkedIn",
+      title: "Github",
       icon: (
-        <IconBrandLinkedin className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "https://www.linkedin.com/in/joshi-utsav/",
+      href: "https://github.com/joshiUtsav/",
     },
     {
       title: "Me",

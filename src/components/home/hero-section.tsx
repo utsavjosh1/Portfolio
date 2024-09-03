@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <div className="relative flex flex-col items-start pt-14 justify-start h-full w-full max-w-screen-lg mx-auto dark:bg-[#111111] dark:text-white px-4 sm:px-6 lg:px-8">
+    <div className="relative flex flex-col items-start pt-14 justify-start h-full w-full max-w-screen-lg mx-auto text-black dark:bg-[#111111] dark:text-white px-4 sm:px-6 lg:px-8">
       {/* Name Section */}
       <motion.div
         className="text-2xl md:text-3xl font-bold text-left w-full"

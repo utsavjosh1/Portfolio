@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ModeToggle } from "@/components/ui/darkmode";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IconHome } from "@tabler/icons-react";
+import Banner from "@/components/banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,9 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* <link rel="icon" href="/image/logo.png" /> */}
-      </head>
+      <head>{/* <link rel="icon" href="/image/logo.png" /> */}</head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -33,6 +32,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Banner text={"This website is still under development"} />
+
           {children}
           <div className="fixed bottom-5 inset-x-0 flex items-center justify-center gap-2 px-4 md:px-8 lg:px-24">
             <div className="flex items-center gap-5 md:gap-2">

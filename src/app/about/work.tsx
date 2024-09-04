@@ -6,7 +6,7 @@ import Image from "next/image";
 const work = () => {
   return (
     <motion.section
-      className="mb-12 w-full"
+      className="mb-12 w-full text-black dark:text-white"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeInOut", delay: 0.6 }}

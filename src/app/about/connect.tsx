@@ -6,13 +6,13 @@ import {
   IconBrandTwitch,
   IconBrandInstagram,
   IconMail,
-  IconBrandGithub,
+  IconBrandLinkedin,
 } from "@tabler/icons-react";
 import Link from "next/link";
 
 const ConnectSection = () => (
   <motion.section
-    className="mt-8 w-full mb-24"
+    className="mt-8 w-full mb-24 text-black dark:text-white"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, ease: "easeInOut", delay: 0.8 }}
@@ -28,7 +28,7 @@ const ConnectSection = () => (
       </Link>
       . Try finding me anywhere else at @joshiUtsav.
     </p>
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4 hover:text-black">
       <Link
         href="mailto:utsavjoshi602@gmail.com"
         className="flex items-center justify-center p-3 border rounded-lg hover:bg-gray-100 transition"
@@ -36,10 +36,10 @@ const ConnectSection = () => (
         <IconMail className="mr-2" /> Email
       </Link>
       <Link
-        href="https://github.com/joshiUtsav/"
+        href="https://www.linkedin.com/in/joshi-utsav/"
         className="flex items-center justify-center p-3 border rounded-lg hover:bg-gray-100 transition"
       >
-        <IconBrandGithub className="mr-2" /> GitHub
+        <IconBrandLinkedin className="mr-2" /> LinkedIn
       </Link>
       <Link
         href="https://instagram.com/joshi___utsav/"

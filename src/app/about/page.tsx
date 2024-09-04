@@ -10,7 +10,7 @@ import Work from "@/app/about/work";
 
 
 const AboutMe = () => (
-  <div className="relative flex flex-col items-start pt-14 w-full max-w-screen-lg mx-auto dark:bg-[#111111] dark:text-white transition-colors duration-300 px-4 sm:px-6 lg:px-8">
+  <div className="relative flex flex-col items-start pt-14 w-full max-w-screen-lg mx-auto text-black dark:text-white dark:bg-[#111111] transition-colors duration-300 px-4 sm:px-6 lg:px-8">
     {/* Image Grid Section */}
     <ImageGridSection />
 

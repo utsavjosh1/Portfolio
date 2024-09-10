@@ -1,9 +1,27 @@
 import React from "react";
 import { motion } from "framer-motion";
-import IITMLogo from "../../../public/IITM.png";
 import Image from "next/image";
+import IITMLogo from "../../../public/IITM.png"; // Example image import
+import NextbillLogo from "../../../public/NextbillIcon.ico";
 
-const work = () => {
+const workExperiences = [
+  {
+    id: 1,
+    title: "Backend Intern",
+    company: "IIT Madras",
+    logo: IITMLogo,
+    period: "3 months",
+  },
+  {
+    id: 2,
+    title: "Frontend intern",
+    company: "Nextbill",
+    logo: NextbillLogo, 
+    period: "Present",
+  },
+];
+
+const Work = () => {
   return (
     <motion.section
       className="mb-12 w-full text-black dark:text-white"
@@ -13,20 +31,26 @@ const work = () => {
     >
       <h2 className="text-xl font-semibold mb-4 text-left">Work</h2>
       <p className="mb-6 text-left">
-        I started my career freelancing for client&apos;s, building web apps.
+        I started my career freelancing for clients, building web apps.
       </p>
       <div className="flex flex-col gap-4">
-        <div className="flex items-center">
-          <Image src={IITMLogo} alt="IITM Logo" className="w-8 h-8 mr-4" />
-          <div className="flex-1">
-            <p className="font-semibold">Backend Intern</p>
-            <p className="text-sm text-gray-500">IIT Madras</p>
+        {workExperiences.map((work) => (
+          <div key={work.id} className="flex items-center">
+            <Image
+              src={work.logo}
+              alt={`${work.company} Logo`}
+              className="w-8 h-8 mr-4"
+            />
+            <div className="flex-1">
+              <p className="font-semibold">{work.title}</p>
+              <p className="text-sm text-gray-500">{work.company}</p>
+            </div>
+            <p className="text-gray-400">{work.period}</p>
           </div>
-          <p className="text-gray-400"> Present</p>
-        </div>
+        ))}
       </div>
     </motion.section>
   );
 };
 
-export default work;
+export default Work;

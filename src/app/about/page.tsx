@@ -7,10 +7,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Work from "@/app/about/work";
 
-
-
 const AboutMe = () => (
-  <div className="relative flex flex-col items-start pt-14 w-full max-w-screen-lg mx-auto text-black dark:text-white dark:bg-[#111111] transition-colors duration-300 px-4 sm:px-6 lg:px-8">
+  <div className="relative flex flex-col items-start justify-start pt-14 h-full w-full mx-auto text-black dark:bg-[#111111] dark:text-white px-4 sm:px-6 lg:px-8 max-w-3xl">
     {/* Image Grid Section */}
     <ImageGridSection />
 
@@ -21,7 +19,9 @@ const AboutMe = () => (
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeInOut", delay: 0.4 }}
     >
-      <h2 className="text-4xl font-bold mb-4 text-left">Hey, I&apos;m Utsav!</h2>
+      <h2 className="text-4xl font-bold mb-4 text-left">
+        Hey, I&apos;m Utsav!
+      </h2>
       <p className="text-gray-600 mb-6 text-left">
         <span className="font-semibold">IPA /ʊt̪.səʋ/ •</span>
         <span className="mx-2">ಉತ್ಸವ •</span>
@@ -48,8 +48,7 @@ const AboutMe = () => (
         <Link href="/music" className="underline text-blue-500">
           music,
         </Link>
-        reading books, or exploring with no specific destination in mind{" "}
-        {":)"}
+        reading books, or exploring with no specific destination in mind {":)"}
       </p>
     </motion.section>
 

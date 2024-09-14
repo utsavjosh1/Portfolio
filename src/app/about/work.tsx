@@ -14,7 +14,7 @@ const workExperiences = [
   },
   {
     id: 2,
-    title: "Frontend intern",
+    title: "Software Engineer intern",
     company: "Nextbill",
     logo: NextbillLogo, 
     period: "Present",

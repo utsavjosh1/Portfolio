@@ -23,7 +23,7 @@ const LinkData = [
 
 const SocialLink = () => {
   return (
-    <div className="relative flex flex-col items-center justify-center pt-14 h-full w-full mx-auto text-black dark:bg-[#111111] dark:text-white px-4 sm:px-6 lg:px-8 max-w-3xl">
+    <div className="relative flex flex-col items-center justify-center pt-10 h-full w-full mx-auto text-black dark:bg-[#111111] dark:text-white px-4 sm:px-6 lg:px-8 max-w-2xl">
       <motion.div
         className="flex flex-col items-center max-w-md"
         initial={{ opacity: 0, y: -20 }}

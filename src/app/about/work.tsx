@@ -24,7 +24,7 @@ const workExperiences = [
 const Work = () => {
   return (
     <motion.section
-      className="mb-12 w-full text-black dark:text-white"
+      className="mb-12 w-full text-black dark:text-[#E0E0E0]"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeInOut", delay: 0.6 }}

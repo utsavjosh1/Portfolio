@@ -29,13 +29,13 @@ const AboutMe = () => (
         <span className="mx-2">ウツァフ</span>
       </p>
       <p className="mb-4 text-left">
-        Online, I go by <span className="font-semibold">joKeR</span>. It’s been
-        my online persona for a while, and yes, it's partly inspired by my
-        favorite movie! Chances are, you’ll remember it too.
+        Online, I go by <span className="font-semibold">joKeR</span>. It&lsquo;s been
+        my online persona for a while, and yes, it&lsquo;s partly inspired by my
+        favorite movie! Chances are, you&lsquo;ll remember it too.
       </p>
       <p className="mb-4 text-left">
-        I’m passionate about building cool things with code, exploring
-        cutting-edge technology, and diving deep into GenAI. It’s what drives me
+        I&lsquo;m passionate about building cool things with code, exploring
+        cutting-edge technology, and diving deep into GenAI. It&lsquo;s what drives me
         every day.
       </p>
       <p className="mb-4 text-left">
@@ -47,7 +47,7 @@ const AboutMe = () => (
         curiosity.
       </p>
       <p className="text-left">
-        When I’m not coding, you’ll find me listening to{" "}
+        When I&lsquo;m not coding, you&lsquo;ll find me listening to{" "}
         <Link href="/music" className="underline text-blue-500">
           music
         </Link>{" "}

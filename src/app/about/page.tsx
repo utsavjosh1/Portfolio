@@ -8,7 +8,7 @@ import Link from "next/link";
 import Work from "@/app/about/work";
 
 const AboutMe = () => (
-  <div className="relative flex flex-col items-start justify-start pt-14 h-full w-full mx-auto text-black dark:bg-[#111111] dark:text-white px-4 sm:px-6 lg:px-8 max-w-3xl">
+  <div className="relative flex flex-col items-start justify-start pt-14 h-full w-full mx-auto text-black dark:bg-[#111111] dark:text-[#E0E0E0] px-4 sm:px-6 lg:px-8 max-w-2xl">
     {/* Image Grid Section */}
     <ImageGridSection />
 
@@ -29,26 +29,30 @@ const AboutMe = () => (
         <span className="mx-2">ウツァフ</span>
       </p>
       <p className="mb-4 text-left">
-        But I go by joKeR for short. joKeR is my favorite movie. You&apos;ll
-        probably remember it.
+        Online, I go by <span className="font-semibold">joKeR</span>. It’s been
+        my online persona for a while, and yes, it's partly inspired by my
+        favorite movie! Chances are, you’ll remember it too.
       </p>
       <p className="mb-4 text-left">
-        I love building cool things with code, and I&apos;m passionate about
-        engineering, history, and hardware.
+        I’m passionate about building cool things with code, exploring
+        cutting-edge technology, and diving deep into GenAI. It’s what drives me
+        every day.
       </p>
       <p className="mb-4 text-left">
-        I write on my{" "}
+        On my{" "}
         <Link href="/content" className="underline text-blue-500">
           blog
-        </Link>{" "}
-        about computers, life, and anything that piques my interest.
+        </Link>
+        , I share my thoughts on technology, life, and anything that sparks my
+        curiosity.
       </p>
       <p className="text-left">
-        When I&apos;m not at my desk, I&apos;m probably listening to{" "}
+        When I’m not coding, you’ll find me listening to{" "}
         <Link href="/music" className="underline text-blue-500">
-          music,
-        </Link>
-        reading books, or exploring with no specific destination in mind {":)"}
+          music
+        </Link>{" "}
+        with a scenic view, reading a good book, or wandering without a specific
+        destination in mind. {":)"}
       </p>
     </motion.section>
 

@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <div className="relative flex flex-col items-start justify-start pt-14 h-full w-full mx-auto text-black dark:bg-[#111111] dark:text-white px-4 sm:px-6 lg:px-8 max-w-3xl">
+    <div>
       {/* Name Section */}
       <motion.div
         className="text-2xl md:text-3xl font-bold text-left w-full"
@@ -74,7 +74,7 @@ const HeroSection = () => {
           Coding since birth, now, till death.
         </blockquote>
         <Link href={"/links"}>
-          <span className="inline-flex items-center gap-2 mt-5 rounded-md transition-colors duration-300 text-sm md:text-lg">
+          <span className="inline-flex items-center gap-2 mt-5 rounded-md transition-colors duration-300 md:text-lg lg:text-base">
             <IconExternalLink />
             <span>More ways to connect</span>
           </span>

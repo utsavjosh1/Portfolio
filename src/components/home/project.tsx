@@ -2,13 +2,12 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 // import { Card, CardContent } from "@/components/ui/card";
-import ImageA from "../../../public/Me.jpg" 
+import ImageA from "../../../public/Me.jpg";
 
 interface Project {
   title: string;
   year: string;
   description: string;
-  imageUrl: string;
 }
 
 const projects: Project[] = [
@@ -16,7 +15,6 @@ const projects: Project[] = [
     title: "Hydra",
     year: "2024",
     description: "A robust distributed task scheduler",
-    imageUrl: ImageA,
   },
 ];
 
@@ -37,7 +35,7 @@ export const ProjectShowcase: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        Here are some of the projects I've worked on.
+        Here are some of the projects I&lsquo;ve worked on.
       </motion.p>
 
       <div className="space-y-12">
@@ -52,7 +50,7 @@ export const ProjectShowcase: React.FC = () => {
               <div className="p-0 flex flex-col md:flex-row">
                 <div className="w-full md:w-1/2 h-48 relative rounded-lg">
                   <Image
-                    src={project.imageUrl}
+                    src={ImageA}
                     alt={project.title}
                     layout="fill"
                     objectFit="cover"
@@ -73,4 +71,3 @@ export const ProjectShowcase: React.FC = () => {
     </div>
   );
 };
-

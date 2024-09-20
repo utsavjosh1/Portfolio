@@ -12,9 +12,45 @@ import Banner from "@/components/banner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Utsav Joshi ",
+  title: "Utsav Joshi | Developer and Tech Enthusiast",
   description:
-    "The portfolio of Utsav Joshi, a skilled web developer with expertise in Next.js, TypeScript, and modern web technologies. Discover projects, skills, and contact information.",
+    "Discover Utsav Joshi's portfolio, showcasing skills in JavaScript, TypeScript, web development, and innovative tech projects.",
+  keywords: [
+    "Utsav Joshi",
+    "Developer Portfolio",
+    "JavaScript",
+    "TypeScript",
+    "Web Development",
+    "Tech Enthusiast",
+    "Projects",
+    "Frontend",
+    "Backend",
+  ],
+  openGraph: {
+    title: "Utsav Joshi | Developer and Tech Enthusiast",
+    description: "Explore Utsav Joshi's portfolio, projects, skills, and more.",
+    url: "https://joshiutsav.vercel.app",
+    type: "website",
+    images: [
+      {
+        url: "https://your-portfolio-url.com/og-image.jpg", // Replace with actual image URL
+        width: 1200,
+        height: 630,
+        alt: "Utsav Joshi Portfolio Image",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Utsav Joshi | Developer and Tech Enthusiast",
+    description:
+      "Portfolio of Utsav Joshi, showcasing tech projects and skills.",
+    // image: "https://your-portfolio-url.com/og-image.jpg", // Replace with actual image URL
+  },
+  robots: "index, follow",
+  alternates: {
+    canonical: "https://your-portfolio-url.com",
+  },
 };
 
 export default function RootLayout({
@@ -24,7 +60,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>{/* <link rel="icon" href="/image/logo.png" /> */}</head>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/* <link rel="icon" href="/public/Me.jpg" /> */}
+        <meta name="robots" content="index, follow" />
+        <meta
+          name="google-site-verification"
+          content="your-google-verification-code"
+        />
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -35,23 +79,27 @@ export default function RootLayout({
           <Banner text={"This website is still under development"} />
 
           {children}
-          <div className="fixed bottom-5 inset-x-0 flex items-center justify-center gap-2 px-4 md:px-8 lg:px-24">
-            <div className="flex items-center gap-5 md:gap-2">
-              <Link href={"/"}>
-                <Avatar>
-                  <AvatarImage
-                    src="https://avatars.githubusercontent.com/u/98454866?v=4"
-                    className="border-1 shadow-sm"
-                  />
-                  <AvatarFallback>
-                    <IconHome className="h-6 w-6 text-neutral-500 dark:text-neutral-300" />
-                  </AvatarFallback>
-                </Avatar>
-              </Link>
-              <FloatingDockDemo />
-              <ModeToggle />
+
+          <footer>
+            <div className="fixed bottom-5 inset-x-0 flex items-center justify-center gap-2 px-4 md:px-8 lg:px-24">
+              <div className="flex items-center gap-5 md:gap-2">
+                <Link href="/">
+                  <Avatar>
+                    <AvatarImage
+                      src="https://avatars.githubusercontent.com/u/98454866?v=4"
+                      className="border-1 shadow-sm"
+                      alt="Utsav Joshi"
+                    />
+                    <AvatarFallback>
+                      <IconHome className="h-6 w-6 text-neutral-500 dark:text-neutral-300" />
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
+                <FloatingDockDemo />
+                <ModeToggle />
+              </div>
             </div>
-          </div>
+          </footer>
         </ThemeProvider>
       </body>
     </html>

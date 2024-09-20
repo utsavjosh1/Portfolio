@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Work from "@/app/about/work";
 
+
 const AboutMe = () => (
   <div className="relative flex flex-col items-start justify-start pt-14 h-full w-full mx-auto text-black dark:bg-[#111111] dark:text-[#E0E0E0] px-4 sm:px-6 lg:px-8 max-w-2xl">
     {/* Image Grid Section */}

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   IconBrandGithub,
@@ -9,8 +9,21 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { getImages } from "@/config/firebase";
 
 const HeroSection = () => {
+  const [Logo, setLogo] = useState("");
+
+  useEffect(() => {
+    getImages("Me.jpg")
+      .then((url) => {
+        setLogo(url);
+      })
+      .catch((error) => {
+        console.error("Error fetching image:", error);
+      });
+  }, []);
+
   return (
     <div>
       {/* Name Section */}
@@ -22,6 +35,7 @@ const HeroSection = () => {
       >
         Utsav Joshi
       </motion.div>
+
       {/* Subtitle Section */}
       <motion.div
         className="flex flex-wrap justify-start items-center w-full space-x-2 mt-2 text-left"
@@ -35,6 +49,7 @@ const HeroSection = () => {
         <span>&#8226;</span>
         <span>Dynamism</span>
       </motion.div>
+
       {/* Image and Stats Section */}
       <motion.div
         className="flex flex-col lg:flex-row items-start lg:items-center justify-start w-full mt-5 text-left lg:text-left"
@@ -42,14 +57,15 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeInOut", delay: 0.4 }}
       >
+        {/* Render the image only if the URL is available */}
         <Image
-          src="https://avatars.githubusercontent.com/u/98454866?v=4"
+          src={Logo}
           alt="logo"
           width={100}
           height={100}
-          className="rounded-full border mb-5 lg:mb-0"
+          className="rounded-full mb-5 lg:mb-0"
           quality={100}
-          loading="lazy"
+          priority={true}
         />
         <div className="flex flex-col items-start gap-5 lg:ml-7">
           <div className="flex gap-4 items-center text-sm md:text-base">

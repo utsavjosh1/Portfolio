@@ -8,11 +8,12 @@ import { ModeToggle } from "@/components/ui/darkmode";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IconHome } from "@tabler/icons-react";
 import Banner from "@/components/banner";
+import { getImages } from "@/config/firebase";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Utsav Joshi | Developer and Tech Enthusiast",
+  title: "Utsav Joshi | Developer",
   description:
     "Discover Utsav Joshi's portfolio, showcasing skills in JavaScript, TypeScript, web development, and innovative tech projects.",
   keywords: [
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://your-portfolio-url.com/og-image.jpg", // Replace with actual image URL
+        url: "https://your-portfolio-url.com/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Utsav Joshi Portfolio Image",
@@ -45,24 +46,26 @@ export const metadata: Metadata = {
     title: "Utsav Joshi | Developer and Tech Enthusiast",
     description:
       "Portfolio of Utsav Joshi, showcasing tech projects and skills.",
-    // image: "https://your-portfolio-url.com/og-image.jpg", // Replace with actual image URL
+    // image: "https://your-portfolio-url.com/og-image.jpg",
   },
   robots: "index, follow",
   alternates: {
-    canonical: "https://your-portfolio-url.com",
+    canonical: "https://joshiutsav.vercel.app/",
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const images = await getImages("logo.png");
+
   return (
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {/* <link rel="icon" href="/public/Me.jpg" /> */}
+        <link rel="icon" href={images} />
         <meta name="robots" content="index, follow" />
         <meta
           name="google-site-verification"

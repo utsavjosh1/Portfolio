@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getImages } from "@/config/firebase";
+import { getImages } from "@/app/api/firebase/index";
 
 const HeroSection = () => {
   const [Logo, setLogo] = useState("");

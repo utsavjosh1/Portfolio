@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { memo } from "react";
+"use client";
+
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { getImages } from "@/config/firebase";
 
 // Animation variants for the parent container
 const containerVariants = {
@@ -10,7 +10,7 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2, // Slightly reduce stagger to improve perception of speed
+      staggerChildren: 0.2,
     },
   },
 };
@@ -21,29 +21,53 @@ const imageVariants = {
     rotate: -5,
     x: -200,
     opacity: 0,
-    willChange: "transform, opacity", 
+    willChange: "transform, opacity",
   },
   visible: {
     rotate: 0,
     x: 0,
     opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" }, 
+    transition: { duration: 0.6, ease: "easeOut" },
   },
 };
 
-const ImageGrid = () => {
-  const [Logo, setLogo] = useState("");
+// ImageComponent to fetch individual images
+const ImageComponent = ({ imageName }: { imageName: string }) => {
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getImages("Me.jpg")
-      .then((url) => {
-        setLogo(url);
-      })
-      .catch((error) => {
-        console.error("Error fetching image:", error);
-      });
-  }, []);
+  console.log("Image name:", imageName);
+  
 
+  return (
+    <div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <motion.div
+          className="relative overflow-hidden rounded-xl shadow-lg"
+          variants={imageVariants}
+          whileHover={{ scale: 1.05, rotate: 5, x: 0, y: -5 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Image
+            src={"https://portfolio-1825f.appspot.com/Images/" + imageName}
+            alt={imageName}
+            width={300}
+            height={300}
+            className="rounded-xl"
+            priority={true}
+          />
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+function ImageGrid() {
   return (
     <motion.div
       className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-2"
@@ -51,25 +75,9 @@ const ImageGrid = () => {
       initial="hidden"
       animate="visible"
     >
-      <motion.div
-        className="relative overflow-hidden rounded-xl shadow-lg"
-        variants={imageVariants}
-        whileHover={{ scale: 1.05, rotate: 5, x: 0, y: -5 }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Image
-          src={Logo}
-          alt={`Logo`}
-          width={300}
-          height={300}
-          className="rounded-xl"
-          priority={true}
-        />
-      </motion.div>
-      {/* ))} */}
+      <ImageComponent imageName={"Me.jpg"} />
     </motion.div>
   );
-};
+}
 
-export default memo(ImageGrid);
+export default ImageGrid;

@@ -8,7 +8,6 @@ import { ModeToggle } from "@/components/ui/darkmode";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IconHome } from "@tabler/icons-react";
 import Banner from "@/components/banner";
-import { getImages } from "@/config/firebase";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -59,13 +58,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const images = await getImages("logo.png");
-
   return (
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href={images} />
+        <link rel="icon" href={""} />
         <meta name="robots" content="index, follow" />
         <meta
           name="google-site-verification"

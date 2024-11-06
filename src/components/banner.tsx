@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { IconX } from "@tabler/icons-react";
+import { Icon } from "@/components/icons.svgs";
 
 const Banner = ({ text }: { text: string }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -26,7 +26,7 @@ const Banner = ({ text }: { text: string }) => {
           className="text-white bg-transparent border-none p-2 ml-4"
           aria-label="Close"
         >
-          <IconX />
+          <Icon name="x" />
         </button>
       </motion.div>
     )

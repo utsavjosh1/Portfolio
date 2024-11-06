@@ -18,4 +18,4 @@ node_modules/
 # Lock files
 package-lock.json
 yarn.lock
-TODO.md
+todo.md

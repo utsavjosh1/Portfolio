@@ -2,102 +2,131 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import {
-  IconBrandGithub,
-  IconGraph,
-  IconExternalLink,
-} from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getImages } from "@/app/api/firebase/index";
+import { Icon } from "@/components/icons.svgs";
+import { getImage } from "@/app/api/firebase";
+import gs from "github-scraper";
 
-const HeroSection = () => {
-  const [Logo, setLogo] = useState("");
+const ANIMATION_DURATION = 0.6;
+const ANIMATION_DELAY_INCREMENT = 0.2;
+
+interface SelectedData {
+  name: string;
+  avatar: string;
+  repos: number;
+}
+
+const HeroSection: React.FC = () => {
+  const [obj, setObj] = useState<SelectedData>({
+    name: "",
+    avatar: "",
+    repos: 0,
+  });
+
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getImages("Me.jpg")
-      .then((url) => {
-        setLogo(url);
-      })
-      .catch((error) => {
-        console.error("Error fetching image:", error);
-      });
+    const url = "joshiutsav";
+    gs(url, function (err, data) {
+      if (err) {
+        console.error(err);
+      } else {
+        const { name, avatar, repos } = data;
+        setObj({ name, avatar, repos });
+      }
+    });
   }, []);
 
+  const renderAnimatedSection = (
+    content: React.ReactNode,
+    delay: number = 0
+  ) => (
+    <motion.div
+      className="w-full"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: ANIMATION_DURATION, ease: "easeInOut", delay }}
+    >
+      {content}
+    </motion.div>
+  );
+
   return (
-    <div>
-      {/* Name Section */}
-      <motion.div
-        className="text-2xl md:text-3xl font-bold text-left w-full"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-      >
-        Utsav Joshi
-      </motion.div>
+    <div className="space-y-5">
+      {renderAnimatedSection(
+        <h1 className="text-2xl md:text-3xl font-bold">{obj.name}</h1>
+      )}
 
-      {/* Subtitle Section */}
-      <motion.div
-        className="flex flex-wrap justify-start items-center w-full space-x-2 mt-2 text-left"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut", delay: 0.2 }}
-      >
-        <span>Diligence</span>
-        <span>&#8226;</span>
-        <span>Developer</span>
-        <span>&#8226;</span>
-        <span>Dynamism</span>
-      </motion.div>
+      {renderAnimatedSection(
+        <div className="flex flex-wrap items-center space-x-2 text-sm md:text-base">
+          {["Diligent", "Developer", "Dynamism"].map((trait, index) => (
+            <React.Fragment key={trait}>
+              {index > 0 && <span aria-hidden="true">•</span>}
+              <span>{trait}</span>
+            </React.Fragment>
+          ))}
+        </div>,
+        ANIMATION_DELAY_INCREMENT
+      )}
 
-      {/* Image and Stats Section */}
-      <motion.div
-        className="flex flex-col lg:flex-row items-start lg:items-center justify-start w-full mt-5 text-left lg:text-left"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut", delay: 0.4 }}
-      >
-        {/* Render the image only if the URL is available */}
-        <Image
-          src={Logo}
-          alt="logo"
-          width={100}
-          height={100}
-          className="rounded-full mb-5 lg:mb-0"
-          quality={100}
-          priority={true}
-        />
-        <div className="flex flex-col items-start gap-5 lg:ml-7">
-          <div className="flex gap-4 items-center text-sm md:text-base">
-            <IconBrandGithub stroke={2} />
-            <span>41 repositories on GitHub</span>
+      {renderAnimatedSection(
+        <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-5 lg:space-y-0 lg:space-x-7">
+          {obj.avatar ? (
+            <Image
+              src={obj.avatar}
+              alt="Utsav Joshi"
+              width={100}
+              height={100}
+              className="rounded-full"
+              quality={100}
+              priority
+            />
+          ) : error ? (
+            <div className="w-[100px] h-[100px] bg-gray-200 rounded-full flex items-center justify-center text-red-500">
+              Error
+            </div>
+          ) : (
+            <div className="w-[100px] h-[100px] bg-gray-200 rounded-full animate-pulse" />
+          )}
+          <div className="space-y-3">
+            <StatItem
+              icon={<Icon name="github" />}
+              text={`${obj.repos} repositories on GitHub`}
+            />
+            <StatItem icon={<Icon name="graph" />} text="500 views on blogs" />
           </div>
-          <div className="flex gap-4 items-center text-sm md:text-base">
-            <IconGraph stroke={2} />
-            <span>500 views on blogs</span>
-          </div>
-        </div>
-      </motion.div>
+        </div>,
+        ANIMATION_DELAY_INCREMENT * 2
+      )}
 
-      {/* Quote and Links Section */}
-      <motion.div
-        className="mt-5 text-left w-full"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut", delay: 0.6 }}
-      >
-        <blockquote className="text-lg italic border-l-4 pl-4 mt-2 border-gray-300 dark:border-gray-700 p-3">
-          Coding since birth, now, till death.
-        </blockquote>
-        <Link href={"/links"}>
-          <span className="inline-flex items-center gap-2 mt-5 rounded-md transition-colors duration-300 md:text-lg lg:text-base">
-            <IconExternalLink />
+      {renderAnimatedSection(
+        <>
+          <blockquote className="text-lg italic border-l-4 pl-4 border-gray-300 dark:border-gray-700 p-3">
+            Coding since birth, now, till death.
+          </blockquote>
+          <Link
+            href="/links"
+            className="inline-flex items-center gap-2 mt-5 text-base md:text-lg transition-colors duration-300 hover:text-blue-500"
+          >
+            <Icon name="external-link" />
             <span>More ways to connect</span>
-          </span>
-        </Link>
-      </motion.div>
+          </Link>
+        </>,
+        ANIMATION_DELAY_INCREMENT * 3
+      )}
     </div>
   );
 };
+
+const StatItem: React.FC<{ icon: React.ReactNode; text: string }> = ({
+  icon,
+  text,
+}) => (
+  <div className="flex items-center space-x-4 text-sm md:text-base">
+    {icon}
+    <span>{text}</span>
+  </div>
+);
 
 export default HeroSection;

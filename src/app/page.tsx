@@ -4,12 +4,11 @@ import { useEffect, useState, Suspense } from "react";
 import HeroSection from "@/components/home/hero-section";
 import { ProjectCard } from "@/components/project-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchGithubData, fetchProjectData } from "@/lib/github";
-import { GithubData, ProjectData } from "@/types/github";
+import { fetchGithubData } from "@/lib/github";
+import { GithubData } from "@/types/github";
 
 export default function Home() {
   const [githubData, setGithubData] = useState<GithubData | null>(null);
-  const [projectData, setProjectData] = useState<ProjectData | null>(null);
 
   useEffect(() => {
     const loadGithubData = async () => {
@@ -23,21 +22,6 @@ export default function Home() {
 
     loadGithubData();
   }, []);
-
-  useEffect(() => {
-    const loadProjectData = async () => {
-      if (githubData?.pinned[3]?.url) {
-        try {
-          const data = await fetchProjectData(githubData.pinned[3].url);
-          setProjectData(data);
-        } catch (error) {
-          console.error("Failed to fetch project data:", error);
-        }
-      }
-    };
-
-    loadProjectData();
-  }, [githubData]);
 
   return (
     <main className="min-h-screen w-full bg-gradient-to-b from-background to-background/80 text-foreground antialiased">

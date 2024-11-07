@@ -5,21 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Icon } from "@/components/icons.svgs";
-import { getImage } from "@/app/api/firebase";
-import gs from "github-scraper";
+import { fetchGithubData } from "@/lib/github";
+import { GithubData } from "@/types/github";
 
 const ANIMATION_DURATION = 0.6;
 const ANIMATION_DELAY_INCREMENT = 0.2;
 
-interface SelectedData {
-  name: string;
-  avatar: string;
-  repos: number;
-}
-
 const HeroSection: React.FC = () => {
-  const [obj, setObj] = useState<SelectedData>({
+  const [data, setData] = useState<GithubData>({
     name: "",
+    pinned: [],
     avatar: "",
     repos: 0,
   });
@@ -27,15 +22,15 @@ const HeroSection: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const url = "joshiutsav";
-    gs(url, function (err, data) {
-      if (err) {
-        console.error(err);
-      } else {
-        const { name, avatar, repos } = data;
-        setObj({ name, avatar, repos });
+    const loadGithubData = async () => {
+      try {
+        const data = await fetchGithubData();        
+        setData(data);
+      } catch (error) {
+        setError("Failed to fetch GitHub data");
       }
-    });
+    };
+    loadGithubData()
   }, []);
 
   const renderAnimatedSection = (
@@ -55,7 +50,7 @@ const HeroSection: React.FC = () => {
   return (
     <div className="space-y-5">
       {renderAnimatedSection(
-        <h1 className="text-2xl md:text-3xl font-bold">{obj.name}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">{data.name}</h1>
       )}
 
       {renderAnimatedSection(
@@ -72,10 +67,10 @@ const HeroSection: React.FC = () => {
 
       {renderAnimatedSection(
         <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-5 lg:space-y-0 lg:space-x-7">
-          {obj.avatar ? (
+          {data.avatar ? (
             <Image
-              src={obj.avatar}
-              alt="Utsav Joshi"
+              src={data.avatar}
+              alt="Logo"
               width={100}
               height={100}
               className="rounded-full"
@@ -92,7 +87,7 @@ const HeroSection: React.FC = () => {
           <div className="space-y-3">
             <StatItem
               icon={<Icon name="github" />}
-              text={`${obj.repos} repositories on GitHub`}
+              text={`${data.repos} repositories on GitHub`}
             />
             <StatItem icon={<Icon name="graph" />} text="500 views on blogs" />
           </div>

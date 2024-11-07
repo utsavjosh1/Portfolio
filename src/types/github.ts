@@ -10,5 +10,5 @@ export interface GithubData {
 }
 
 export interface ProjectData {
-  // Add project-specific fields here
+ name: string;
 }

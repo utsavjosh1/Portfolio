@@ -1,33 +1,15 @@
 import type { Metadata } from "next";
+import { JsonLd } from "react-schemaorg";
+import { Person } from "schema-dts";
+import { SITE_CONFIG } from "@/config/site";
+import { META_DEFAULTS } from "@/config/meta";
+import { getSeoMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About me | Developer",
+export const metadata: Metadata = getSeoMetadata({
+  title: "About Utsav Joshi | Developer, GPU Enthusiast, Tech Lover",
   description:
-    "Utsav Joshi, a GPU enthusiast who loves computer science, hardware, retro tech, and biking. Explore my portfolio and journey in tech.",
-  openGraph: {
-    title: "Utsav Joshi | Developer, Optimist, and Tech Enthusiast",
-    description:
-      "Very GPU-poor optimist, loves CS, hardware, retro, and bikes.",
-    type: "website",
-    url: "https://joshiutsav.vercel.app/",
-    images: [
-      {
-        url: "https://your-portfolio-url.com/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Utsav Joshi Portfolio",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Utsav Joshi | Developer, Optimist, and Tech Enthusiast",
-    description:
-      "GPU-poor optimist, loves CS, hardware, retro tech, and biking.",
-    site: "@joshi__utsav",
-    // image: "", 
-  },
-  robots: "index, follow",
+    "Utsav Joshi: A GPU enthusiast passionate about computer science, hardware, retro tech, and biking. Explore my journey and projects in software development and technology.",
+  path: "/about",
   keywords: [
     "Utsav Joshi",
     "developer portfolio",
@@ -38,16 +20,28 @@ export const metadata: Metadata = {
     "software engineering",
     "Next.js portfolio",
     "web developer",
+    "tech optimist",
   ],
-  alternates: {
-    canonical: "https://joshiutsav.vercel.app/",
-  },
-};
+});
 
-export default function AboutLayout({
-  children,
-}: Readonly<{
+interface AboutLayoutProps {
   children: React.ReactNode;
-}>) {
-  return <>{children}</>;
+}
+
+export default function AboutLayout({ children }: Readonly<AboutLayoutProps>) {
+  return (
+    <>
+      <JsonLd<Person>
+        item={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: SITE_CONFIG.author.name,
+          url: SITE_CONFIG.url,
+          jobTitle: SITE_CONFIG.author.jobTitle,
+          sameAs: SITE_CONFIG.author.socialProfiles,
+        }}
+      />
+      <main id="main-content">{children}</main>
+    </>
+  );
 }

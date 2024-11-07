@@ -2,10 +2,10 @@
 
 import React from "react";
 import ImageGridSection from "@/components/image-grid";
-import ConnectSection from "@/app/about/connect";
+import ConnectSection from "@/components/about/connect";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Work from "@/app/about/work";
+import { WorkExperience } from "@/components/about/work";
 
 const AboutMe = () => {
   return (
@@ -52,13 +52,13 @@ const AboutMe = () => {
           .
         </p>
         <p className="text-lg text-left leading-relaxed">
-          When I'm not coding, you&#39;ll find me immersed in music, a good book, or
-          exploring new places. <span className="text-sm">🙂</span>
+          When I'm not coding, you&#39;ll find me immersed in music, a good
+          book, or exploring new places. <span className="text-sm">🙂</span>
         </p>
       </motion.section>
 
       {/* Work Section */}
-      <Work />
+      <WorkExperience />
 
       {/* Connect Section */}
       <ConnectSection />

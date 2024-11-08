@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { StaticImageData } from "next/image";
 
 export interface WorkExperienceItemProps {
   id: number;
   title: string;
   company: string;
-  logo: string;
+  logo: string | StaticImageData;
   period: string;
 }
 

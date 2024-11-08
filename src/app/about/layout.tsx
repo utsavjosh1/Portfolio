@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { JsonLd } from "react-schemaorg";
 import { Person } from "schema-dts";
 import { SITE_CONFIG } from "@/config/site";
-import { META_DEFAULTS } from "@/config/meta";
 import { getSeoMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = getSeoMetadata({

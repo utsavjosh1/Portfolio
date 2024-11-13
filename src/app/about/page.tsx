@@ -52,7 +52,7 @@ const AboutMe = () => {
           .
         </p>
         <p className="text-lg text-left leading-relaxed">
-          When I'm not coding, you&#39;ll find me immersed in music, a good
+          When I&apos;m not coding, you&#39;ll find me immersed in music, a good
           book, or exploring new places. <span className="text-sm">🙂</span>
         </p>
       </motion.section>

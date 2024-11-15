@@ -5,7 +5,7 @@ export interface PinnedRepo {
 export interface GithubData {
   name: string;
   pinned: PinnedRepo[];
-  avatar: string;
+  avatar: string | null;
   repos: number;
 }
 

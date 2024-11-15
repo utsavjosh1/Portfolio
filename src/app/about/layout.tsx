@@ -1,26 +1,29 @@
 import type { Metadata } from "next";
 import { JsonLd } from "react-schemaorg";
-import { Person } from "schema-dts";
+import { Person, WithContext } from "schema-dts";
 import { SITE_CONFIG } from "@/config/site";
 import { getSeoMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = getSeoMetadata({
-  title: "About Utsav Joshi | Developer, GPU Enthusiast, Tech Lover",
+  title: "Utsav Joshi | Developer",
   description:
-    "Utsav Joshi: A GPU enthusiast passionate about computer science, hardware, retro tech, and biking. Explore my journey and projects in software development and technology.",
+    "Learn about Utsav Joshi, a developer passionate about creating innovative web solutions.",
   path: "/about",
-  keywords: [
-    "Utsav Joshi",
-    "developer portfolio",
-    "GPU enthusiast",
-    "hardware developer",
-    "retro tech",
-    "biking",
-    "software engineering",
-    "Next.js portfolio",
-    "web developer",
-    "tech optimist",
-  ],
+  keywords: ["backend developer", "web development", "portfolio"],
+  openGraph: {
+    images: [
+      {
+        url: `${SITE_CONFIG.url}/images/utsav-joshi-profile.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Utsav Joshi - Developer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [`${SITE_CONFIG.url}/images/utsav-joshi-profile.jpg`],
+  },
 });
 
 interface AboutLayoutProps {
@@ -28,19 +31,30 @@ interface AboutLayoutProps {
 }
 
 export default function AboutLayout({ children }: Readonly<AboutLayoutProps>) {
+  const jsonLd: WithContext<Person> = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: SITE_CONFIG.author.name,
+    url: SITE_CONFIG.url,
+    jobTitle: SITE_CONFIG.author.jobTitle,
+    sameAs: SITE_CONFIG.author.socialProfiles,
+    description:
+      "A developer with expertise in web development and a passion for creating innovative solutions.",
+    image: `${SITE_CONFIG.url}/images/utsav-joshi-profile.jpg`,
+    alumniOf: {
+      "@type": "EducationalOrganization",
+      name: "Your University Name",
+    },
+    knowsAbout: ["Web Development", "JavaScript", "React", "Next.js", "SEO"],
+  };
+
   return (
     <>
-      <JsonLd<Person>
-        item={{
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: SITE_CONFIG.author.name,
-          url: SITE_CONFIG.url,
-          jobTitle: SITE_CONFIG.author.jobTitle,
-          sameAs: SITE_CONFIG.author.socialProfiles,
-        }}
-      />
-      <main id="main-content">{children}</main>
+      <JsonLd<Person> item={jsonLd} />
+      <main id="main-content">
+        <h1 className="sr-only">Utsav Joshi</h1>
+        {children}
+      </main>
     </>
   );
 }

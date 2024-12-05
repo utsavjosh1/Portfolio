@@ -16,7 +16,7 @@ export function ProjectsGrid({
   description,
 }: ProjectsGridProps) {
   return (
-    <section className="w-full py-8">
+    <section className="w-full py-8 mb-10">
       <motion.div
         className="space-y-8"
         initial={{ opacity: 0 }}

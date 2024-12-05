@@ -3,11 +3,29 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 import { Icon } from "@/components/icons.svgs";
 import fetchGithubData from "@/components/githubProfile";
 import { GithubData } from "@/types/github";
 import HeroSectionLoader from "@/components/home/hero-section-loader";
+import { Button } from "@/components/ui/button";
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
 
 const HeroSection: React.FC = () => {
   const [githubData, setGithubData] = useState<GithubData | null>(null);
@@ -34,52 +52,101 @@ const HeroSection: React.FC = () => {
   }
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-center space-x-2 text-sm md:text-base">
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-10"
+    >
+      {/* Traits Section */}
+      <motion.div
+        variants={item}
+        className="flex flex-wrap items-center gap-2 text-base font-medium tracking-tight"
+      >
         {["Diligent", "Developer", "Dynamism"].map((trait, index) => (
           <React.Fragment key={trait}>
-            {index > 0 && <span aria-hidden="true">•</span>}
-            <span>{trait}</span>
+            {index > 0 && (
+              <span
+                aria-hidden="true"
+                className="text-muted-foreground/60 select-none"
+              >
+                •
+              </span>
+            )}
+            <span className="hover:text-primary transition-colors duration-200">
+              {trait}
+            </span>
           </React.Fragment>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-5 lg:space-y-0 lg:space-x-7">
+      {/* Profile Section */}
+      <motion.div
+        variants={item}
+        className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8"
+      >
         {githubData?.avatar ? (
-          <Image
-            src={githubData.avatar}
-            alt="Avatar"
-            width={100}
-            height={100}
-            className="rounded-full"
-            quality={100}
-            priority
-          />
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+            className="relative group"
+          >
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-primary/50 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500" />
+            <Image
+              src={githubData.avatar}
+              alt="Avatar"
+              width={100}
+              height={100}
+              className="rounded-full border-2 border-background relative"
+              quality={100}
+              priority
+            />
+          </motion.div>
         ) : (
-          <div className="w-[100px] h-[100px] bg-gray-200 rounded-full flex items-center justify-center text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+          <div className="w-[100px] h-[100px] bg-muted rounded-full flex items-center justify-center text-muted-foreground">
             No Image
           </div>
         )}
-        <div className="space-y-3">
+        <div className="space-y-4">
           <StatItem
-            icon={<Icon name="github" />}
+            icon={<Icon name="github" className="w-5 h-5" />}
             text={`${githubData?.repos || 0} repositories on GitHub`}
           />
-          <StatItem icon={<Icon name="graph" />} text="500 views on blogs" />
+          <StatItem
+            icon={<Icon name="graph" className="w-5 h-5" />}
+            text="500 views on blogs"
+          />
         </div>
-      </div>
+      </motion.div>
 
-      <blockquote className="text-lg italic border-l-4 pl-4 border-gray-300 dark:border-gray-700 p-3">
-        Coding since birth, now, till death.
-      </blockquote>
-      <Link
-        href="/links"
-        className="inline-flex items-center gap-2 mt-5 text-base md:text-lg transition-colors duration-300 hover:text-blue-500"
-      >
-        <Icon name="external-link" />
-        <span>More ways to connect</span>
-      </Link>
-    </div>
+      {/* Quote Section */}
+      <motion.div variants={item}>
+        <blockquote className="pl-4 border-l-2 border-primary/50 italic text-lg font-medium text-muted-foreground">
+          Coding since birth, now, till death.
+        </blockquote>
+      </motion.div>
+
+      {/* Connect Button */}
+      <motion.div variants={item}>
+        <Button
+          asChild
+          variant="outline"
+          className="group hover:bg-primary/5 transition-all duration-300"
+        >
+          <Link
+            href="/socials"
+            className="inline-flex items-center gap-3 text-base"
+          >
+            <Icon
+              name="external-link"
+              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5"
+            />
+            <span className="font-medium">More ways to connect</span>
+          </Link>
+        </Button>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -87,10 +154,18 @@ const StatItem: React.FC<{ icon: React.ReactNode; text: string }> = ({
   icon,
   text,
 }) => (
-  <div className="flex items-center space-x-4 text-sm md:text-base">
-    {icon}
-    <span>{text}</span>
-  </div>
+  <motion.div
+    className="group flex items-center gap-3 text-sm"
+    whileHover={{ x: 4 }}
+    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+  >
+    <span className="text-muted-foreground group-hover:text-primary transition-colors duration-200">
+      {icon}
+    </span>
+    <span className="font-medium group-hover:text-primary transition-colors duration-200">
+      {text}
+    </span>
+  </motion.div>
 );
 
 export default HeroSection;

@@ -7,6 +7,8 @@ const projects: Project[] = [
     year: "2024",
     description: "A robust distributed task scheduler",
     imageUrl: "/placeholder.svg?height=400&width=800",
+    github: "https://github.com/yourusername/hydra",
+    demo: "https://hydra-demo.vercel.app",
     pinned: true,
   },
   {

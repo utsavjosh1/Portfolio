@@ -1,40 +1,36 @@
-import React from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const HeroSectionLoader: React.FC = () => {
   return (
-    <div className="space-y-5 animate-pulse">
-      <div className="w-2/4 h-8 bg-gray-200 rounded-md dark:bg-gray-700" />
-
-      <div className="flex flex-wrap items-center space-x-2">
-        {[1, 2, 3].map((index) => (
-          <React.Fragment key={index}>
-            {index > 1 && (
-              <span className="text-gray-300 dark:text-gray-600">•</span>
-            )}
-            <div className="w-20 h-4 bg-gray-200 rounded-md dark:bg-gray-700" />
-          </React.Fragment>
+    <div className="space-y-10">
+      {/* Traits Loader */}
+      <div className="flex items-center gap-2">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-6 w-24" />
         ))}
       </div>
 
-      <div className="flex flex-col lg:flex-row items-start lg:items-center space-y-5 lg:space-y-0 lg:space-x-7">
-        <div className="w-[100px] h-[100px] bg-gray-200 rounded-full dark:bg-gray-700" />
-        <div className="space-y-3 flex-grow">
-          <div className="flex items-center space-x-4">
-            <div className="w-6 h-6 bg-gray-200 rounded-full dark:bg-gray-700" />
-            <div className="w-1/2 h-4 bg-gray-200 rounded-md dark:bg-gray-700" />
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="w-6 h-6 bg-gray-200 rounded-full dark:bg-gray-700" />
-            <div className="w-1/2 h-4 bg-gray-200 rounded-md dark:bg-gray-700" />
-          </div>
+      {/* Profile Loader */}
+      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8">
+        <Skeleton className="w-[100px] h-[100px] rounded-full" />
+        <div className="space-y-4">
+          <Skeleton className="h-5 w-48" />
+          <Skeleton className="h-5 w-40" />
         </div>
       </div>
 
-      <div className="w-full h-16 bg-gray-200 rounded-md dark:bg-gray-700" />
+      {/* Quote Loader */}
+      <div className="pl-4">
+        <Skeleton className="h-7 w-64" />
+      </div>
 
-      <div className="flex items-center space-x-2">
-        <div className="w-6 h-6 bg-gray-200 rounded-full dark:bg-gray-700" />
-        <div className="w-1/3 h-4 bg-gray-200 rounded-md dark:bg-gray-700" />
+      {/* Connect Button Loader */}
+      <Skeleton className="h-10 w-44" />
+
+      {/* Projects Header Loader */}
+      <div className="space-y-4 pt-8">
+        <Skeleton className="h-12 w-72" />
+        <Skeleton className="h-6 w-96" />
       </div>
     </div>
   );

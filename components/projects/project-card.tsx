@@ -1,4 +1,5 @@
 "use client";
+
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +12,11 @@ interface ProjectCardProps {
   project: Project;
   index: number;
 }
+
+const buttonVariants = {
+  initial: { scale: 0, opacity: 0 },
+  hover: { scale: 1, opacity: 1 },
+};
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
   return (
@@ -29,52 +35,28 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           <div className="relative">
             <motion.div
               className="relative aspect-[2/1] overflow-hidden bg-muted"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300, damping: 10 }}
+              whileHover="hover"
             >
               <Image
                 src={project.imageUrl}
                 alt={`${project.title} preview`}
                 fill
-                className="object-cover object-center transition-transform"
+                className="object-cover object-center transition-transform group-hover:scale-105"
                 sizes="(min-width: 768px) 40vw, 100vw"
                 priority={index === 0}
               />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                {project.github && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Button
-                      asChild
-                      variant="secondary"
-                      size="sm"
-                      className="rounded-full"
-                    >
-                      <Link
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Icon name="github" className="w-4 h-4 mr-2" />
-                        GitHub
-                      </Link>
-                    </Button>
-                  </motion.div>
-                )}
+              <motion.div
+                className="absolute inset-0 bg-black/60 flex items-center justify-center gap-4"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+              >
                 {project.demo && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
+                  <motion.div variants={buttonVariants}>
                     <Button
                       asChild
                       variant="secondary"
                       size="sm"
-                      className="rounded-full"
+                      className="rounded-full bg-white text-black hover:bg-gray-200"
                     >
                       <Link
                         href={project.demo}
@@ -87,7 +69,26 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                     </Button>
                   </motion.div>
                 )}
-              </div>
+                {project.github && (
+                  <motion.div variants={buttonVariants}>
+                    <Button
+                      asChild
+                      variant="secondary"
+                      size="sm"
+                      className="rounded-full bg-white text-black hover:bg-gray-200"
+                    >
+                      <Link
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Icon name="github" className="w-4 h-4 mr-2" />
+                        GitHub
+                      </Link>
+                    </Button>
+                  </motion.div>
+                )}
+              </motion.div>
             </motion.div>
           </div>
           <div className="p-6">

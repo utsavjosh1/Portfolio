@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { TutorialStep } from "./tutorial-step";
-import { ArrowUpRight } from "lucide-react";
+// import { ArrowUpRight } from "lucide-react";
 
 export default function SignUpUserSteps() {
   return (
@@ -66,7 +66,7 @@ export default function SignUpUserSteps() {
             target="_blank"
             className="text-primary/50 hover:text-primary flex items-center text-sm gap-1 mt-4"
           >
-            Redirect URLs Docs <ArrowUpRight size={14} />
+            {/* Redirect URLs Docs <ArrowUpRight size={14} /> */}
           </Link>
         </TutorialStep>
       ) : null}

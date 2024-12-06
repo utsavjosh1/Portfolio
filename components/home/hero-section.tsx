@@ -56,12 +56,12 @@ const HeroSection: React.FC = () => {
       variants={container}
       initial="hidden"
       animate="show"
-      className="space-y-10"
+      className="space-y-12"
     >
       {/* Traits Section */}
       <motion.div
         variants={item}
-        className="flex flex-wrap items-center gap-2 text-base font-medium tracking-tight"
+        className="flex flex-wrap items-center gap-3 text-lg font-medium tracking-tight"
       >
         {["Diligent", "Developer", "Dynamism"].map((trait, index) => (
           <React.Fragment key={trait}>
@@ -83,7 +83,7 @@ const HeroSection: React.FC = () => {
       {/* Profile Section */}
       <motion.div
         variants={item}
-        className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8"
+        className="flex flex-col sm:flex-row items-start sm:items-center gap-8"
       >
         {githubData?.avatar ? (
           <motion.div
@@ -96,25 +96,25 @@ const HeroSection: React.FC = () => {
             <Image
               src={githubData.avatar}
               alt="Avatar"
-              width={100}
-              height={100}
+              width={120}
+              height={120}
               className="rounded-full border-2 border-background relative"
               quality={100}
               priority
             />
           </motion.div>
         ) : (
-          <div className="w-[100px] h-[100px] bg-muted rounded-full flex items-center justify-center text-muted-foreground">
+          <div className="w-[120px] h-[120px] bg-muted rounded-full flex items-center justify-center text-muted-foreground">
             No Image
           </div>
         )}
         <div className="space-y-4">
           <StatItem
-            icon={<Icon name="github" className="w-5 h-5" />}
+            icon={<Icon name="github" className="w-6 h-6" />}
             text={`${githubData?.repos || 0} repositories on GitHub`}
           />
           <StatItem
-            icon={<Icon name="graph" className="w-5 h-5" />}
+            icon={<Icon name="graph" className="w-6 h-6" />}
             text="500 views on blogs"
           />
         </div>
@@ -122,7 +122,7 @@ const HeroSection: React.FC = () => {
 
       {/* Quote Section */}
       <motion.div variants={item}>
-        <blockquote className="pl-4 border-l-2 border-primary/50 italic text-lg font-medium text-muted-foreground">
+        <blockquote className="pl-6 border-l-4 border-primary/50 italic text-xl font-medium text-muted-foreground">
           Coding since birth, now, till death.
         </blockquote>
       </motion.div>
@@ -132,15 +132,16 @@ const HeroSection: React.FC = () => {
         <Button
           asChild
           variant="outline"
+          size="lg"
           className="group hover:bg-primary/5 transition-all duration-300"
         >
           <Link
             href="/socials"
-            className="inline-flex items-center gap-3 text-base"
+            className="inline-flex items-center gap-3 text-lg"
           >
             <Icon
               name="external-link"
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5"
+              className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5"
             />
             <span className="font-medium">More ways to connect</span>
           </Link>
@@ -155,7 +156,7 @@ const StatItem: React.FC<{ icon: React.ReactNode; text: string }> = ({
   text,
 }) => (
   <motion.div
-    className="group flex items-center gap-3 text-sm"
+    className="group flex items-center gap-4 text-base"
     whileHover={{ x: 4 }}
     transition={{ type: "spring", stiffness: 300, damping: 10 }}
   >

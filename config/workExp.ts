@@ -1,6 +1,6 @@
 import { WorkExperienceItemProps } from "@/components/about/sections/WorkExperience/WorkExperienceItem";
-import Nextbill from "../../public/NextbillIcon.ico";
-import IITM from "../../public/IITM.png";
+import Nextbill from "../public/NextbillIcon.ico";
+import IITM from "../public/IITM.png";
 
 export const WORK_EXPERIENCES: WorkExperienceItemProps[] = [
   {

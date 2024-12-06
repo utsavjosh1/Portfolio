@@ -52,7 +52,6 @@ export default function AboutLayout({ children }: Readonly<AboutLayoutProps>) {
     <>
       <JsonLd<Person> item={jsonLd} />
       <main id="main-content">
-        <h1 className="sr-only">Utsav Joshi</h1>
         {children}
       </main>
     </>

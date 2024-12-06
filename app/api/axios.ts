@@ -1,7 +1,12 @@
-import axios, { AxiosResponse, isAxiosError } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
 interface GetRequestParams {
   [key: string]: any;
+}
+
+interface ErrorResponse {
+  msg?: string;
+  errors?: string;
 }
 
 const GET_REQUEST = async (
@@ -19,27 +24,31 @@ const GET_REQUEST = async (
     });
     return response.data;
   } catch (error: unknown) {
-    if (isAxiosError(error)) {
-      if (error.response) {
-        // Server-side errors
-        if (error.response.status === 401) {
-          return error.response.data;
+    // Narrow down error type
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+
+      if (axiosError.response) {
+        // Handle server-side errors
+        if (axiosError.response.status === 401) {
+          return axiosError.response.data;
         }
         return (
-          error.response.data?.msg ||
-          error.response.data?.errors ||
+          axiosError.response.data?.msg ||
+          axiosError.response.data?.errors ||
           "Server Error"
         );
-      } else if (error.request) {
-        console.error("No response received:", error.request);
+      } else if (axiosError.request) {
+        // No response received from the server
+        console.error("No response received:", axiosError.request);
         return "No response from server. Please try again.";
-      } else if (error.code === "ERR_NETWORK") {
-        alert(error?.message || "Slow internet connection");
+      } else if (axiosError.code === "ERR_NETWORK") {
+        alert(axiosError.message || "Slow internet connection");
       }
+    } else {
+      console.error("Unexpected error:", error);
+      return "An unexpected error occurred.";
     }
-
-    console.error("Unexpected error:", error);
-    return "An unexpected error occurred.";
   }
 };
 

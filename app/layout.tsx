@@ -10,6 +10,8 @@ import Banner from "@/components/banner";
 import { FloatingDockDemo } from "@/components/floating-nav";
 import { ContentSkeleton } from "@/components/layoutSkeleton";
 import { Suspense } from "react";
+import FreelanceConnect from "@/components/freelance-connect";
+import PostHogProviderWrapper from "@/components/PostHogProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,7 +56,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -71,55 +73,58 @@ export default async function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Banner text={"This website is still under development"} />
-          <div className="flex flex-col min-h-screen">
-            <header className="w-full border-b border-b-foreground/10">
-              <div className="w-full md:w-2/5 mx-auto px-4 sm:px-6">
-                <nav className="flex justify-between items-center h-14">
-                  <div className="text-xl md:text-2xl font-bold">
-                    <Link href="/">Utsav Joshi</Link>
-                  </div>
-                </nav>
-              </div>
-            </header>
+        <PostHogProviderWrapper>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Banner text={"This website is still under development"} />
 
-            <main className="flex-grow flex justify-center">
-              <div className="w-full md:w-2/5 px-4 sm:px-6 py-6">
-                <Suspense fallback={<ContentSkeleton />}>{children}</Suspense>
-              </div>
-            </main>
-
-            <footer>
-              <div className="fixed bottom-4 inset-x-0 flex items-center justify-center gap-2 px-4">
-                <div className="flex items-center gap-4">
-                  <Link href="/">
-                    <Avatar>
-                      <AvatarImage
-                        src="https://avatars.githubusercontent.com/u/98454866?v=4"
-                        className="border-1 shadow-sm"
-                        alt="Utsav Joshi"
-                      />
-                      <AvatarFallback>
-                        <Icon
-                          name="home"
-                          className="h-5 w-5 text-neutral-500 dark:text-neutral-300"
-                        />
-                      </AvatarFallback>
-                    </Avatar>
-                  </Link>
-                  <FloatingDockDemo />
-                  <ModeToggle />
+            <div className="flex flex-col min-h-screen">
+              <header className="w-full border-b border-b-foreground/10">
+                <div className="w-full md:w-2/5 mx-auto px-4 sm:px-6">
+                  <nav className="flex justify-between items-center h-16">
+                    <div className="w-full flex items-center justify-between text-4xl md:text-2xl font-bold">
+                      <Link href="/">JoshiUtsav</Link>
+                      {/* <FreelanceConnect /> */}
+                    </div>
+                  </nav>
                 </div>
-              </div>
-            </footer>
-          </div>
-        </ThemeProvider>
+              </header>
+
+              <main className="flex-grow flex justify-center">
+                <div className="w-full md:w-2/5 px-4 sm:px-6 py-6">
+                  <Suspense fallback={<ContentSkeleton />}>{children}</Suspense>
+                </div>
+              </main>
+              <footer>
+                <div className="fixed bottom-4 inset-x-0 flex items-center justify-center gap-2 px-4">
+                  <div className="flex items-center gap-4">
+                    <Link href="/">
+                      <Avatar>
+                        <AvatarImage
+                          src="https://avatars.githubusercontent.com/u/98454866?v=4"
+                          className="border-1 shadow-sm"
+                          alt="Utsav Joshi"
+                        />
+                        <AvatarFallback>
+                          <Icon
+                            name="home"
+                            className="h-5 w-5 text-neutral-500 dark:text-neutral-300"
+                          />
+                        </AvatarFallback>
+                      </Avatar>
+                    </Link>
+                    <FloatingDockDemo />
+                    <ModeToggle />
+                  </div>
+                </div>
+              </footer>
+            </div>
+          </ThemeProvider>
+        </PostHogProviderWrapper>
       </body>
     </html>
   );

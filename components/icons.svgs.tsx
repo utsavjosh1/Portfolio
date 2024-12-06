@@ -1,10 +1,5 @@
 import React, { memo } from "react";
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { cn } from "@/utils/cn";
 
 export type IconName =
   | "github"
@@ -25,13 +20,19 @@ export type IconName =
   | "layout-navbar-collapse"
   | "check"
   | "chevron-right"
-  | "circle";
+  | "circle"
+  | "arrow-left"
+  | "arrow-right"
+  | "close"
+  | "brand-fiverr";
 
 interface IconProps {
   name: IconName;
   className?: string;
   size?: number;
   title?: string;
+  color?: string;
+  strokeWidth?: number;
 }
 
 const iconPaths: Record<IconName, React.ReactNode> = {
@@ -105,6 +106,9 @@ const iconPaths: Record<IconName, React.ReactNode> = {
       <path d="M3 7l9 6 9-6" />
     </>
   ),
+  "brand-fiverr": (
+    <path d="M15.3 5.3c0-2.1-1.7-3.8-3.8-3.8-1.8 0-3.3 1.3-3.7 2.9H2.6C1.2 4.4 0 5.6 0 7s1.2 2.6 2.6 2.6h5.2c.4 1.6 1.9 2.9 3.7 2.9 2.1 0 3.8-1.7 3.8-3.8 0-.7-.2-1.4-.6-2 .4-.6.6-1.3.6-2zM11.5 3c1.3 0 2.3 1 2.3 2.3s-1 2.3-2.3 2.3-2.3-1-2.3-2.3S10.2 3 11.5 3zM2.6 8.1c-.6 0-1.1-.5-1.1-1.1s.5-1.1 1.1-1.1h4.7c0 .2-.1.4-.1.6 0 .6.1 1.1.3 1.6H2.6zm8.9 2.9c-1.3 0-2.3-1-2.3-2.3s1-2.3 2.3-2.3 2.3 1 2.3 2.3-1 2.3-2.3 2.3z" />
+  ),
   "brand-linkedin": (
     <>
       <rect x="4" y="4" width="16" height="16" rx="2" />
@@ -129,10 +133,13 @@ const iconPaths: Record<IconName, React.ReactNode> = {
   check: <polyline points="20 6 9 17 4 12" />,
   "chevron-right": <polyline points="9 18 15 12 9 6" />,
   circle: <circle cx="12" cy="12" r="10" />,
+  "arrow-left": <path d="M19 12H5M12 19l-7-7 7-7" />,
+  "arrow-right": <path d="M5 12h14M12 5l7 7-7 7" />,
+  close: <path d="M18 6L6 18M6 6l12 12" />,
 };
 
 export const Icon: React.FC<IconProps> = memo(
-  ({ name, className, size = 24, title }) => {
+  ({ name, className, size = 24, title, color, strokeWidth = 2 }) => {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -140,8 +147,8 @@ export const Icon: React.FC<IconProps> = memo(
         width={size}
         height={size}
         viewBox="0 0 24 24"
-        strokeWidth="2"
-        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        stroke={color || "currentColor"}
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"

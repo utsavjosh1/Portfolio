@@ -12,7 +12,13 @@ const nextConfig = {
         hostname: "api.microlink.io",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+        pathname: "/**",
+      },
     ],
+    dangerouslyAllowSVG: true,
   },
 };
 

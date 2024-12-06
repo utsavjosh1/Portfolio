@@ -25,11 +25,11 @@ export function ProjectsGrid({
       >
         <motion.div
           className="space-y-4"
-          initial={{ y: -20, opacity: 0 }}
+          initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
+          transition={{ delay: 1.2, duration: 0.5 }}
         >
-          <h2 className="text-4xl font-bold tracking-tight">{title}</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground text-lg">{description}</p>
         </motion.div>
         <motion.div

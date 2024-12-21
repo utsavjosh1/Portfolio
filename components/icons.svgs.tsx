@@ -24,7 +24,8 @@ export type IconName =
   | "arrow-left"
   | "arrow-right"
   | "close"
-  | "brand-fiverr";
+  | "brand-fiverr"
+  | "calendar";
 
 interface IconProps {
   name: IconName;
@@ -114,6 +115,14 @@ const iconPaths: Record<IconName, React.ReactNode> = {
       <rect x="4" y="4" width="16" height="16" rx="2" />
       <path d="M8 11v5M8 8v.01M12 16v-5" />
       <path d="M16 16v-3a2 2 0 00-4 0" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
     </>
   ),
   sun: (

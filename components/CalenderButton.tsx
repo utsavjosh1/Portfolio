@@ -1,31 +1,35 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/icons.svgs";
-import { getCalApi } from "@calcom/embed-react";
+import { motion } from "framer-motion";
 
-const CalendarSchedule: React.FC = () => {
+export default function CalendarButton() {
   const [isHovered, setIsHovered] = useState(false);
+  const [isCalApiLoaded, setIsCalApiLoaded] = useState(false);
 
   useEffect(() => {
-    (async function () {
-      const cal = await getCalApi();
-      cal("ui", {
+    // Load Cal API script dynamically
+    const script = document.createElement("script");
+    script.src = "https://cal.com/embed.js";
+    script.async = true;
+    script.onload = () => setIsCalApiLoaded(true);
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handleSchedule = () => {
+    if (typeof window !== "undefined" && (window as any).Cal) {
+      (window as any).Cal("ui", {
         styles: { branding: { brandColor: "#3366FF" } },
         hideEventTypeDetails: false,
         layout: "month_view",
       });
-    })();
-  }, []);
-
-  const handleSchedule = () => {
-    const cal = (window as any).Cal;
-    if (typeof cal !== "undefined") {
-      cal("openDefaultSchedulePage");
-    } else {
-      console.error("Cal.com embed is not loaded");
+      (window as any).Cal("openDefaultSchedulePage");
     }
   };
 
@@ -42,6 +46,7 @@ const CalendarSchedule: React.FC = () => {
         }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        disabled={!isCalApiLoaded}
       >
         <motion.div
           className="flex items-center space-x-2 px-4 py-2"
@@ -77,6 +82,4 @@ const CalendarSchedule: React.FC = () => {
       </Button>
     </motion.div>
   );
-};
-
-export default CalendarSchedule;
+}

@@ -1,39 +1,83 @@
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
 
 const HeroSectionLoader: React.FC = () => {
   return (
-    <div className="space-y-10">
-      {/* Traits Loader */}
-      <div className="flex items-center gap-2">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-6 w-24" />
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-12"
+    >
+      {/* Traits Section Skeleton */}
+      <motion.div variants={item} className="flex flex-wrap items-center gap-3">
+        {[100, 120, 90].map((width, index) => (
+          <React.Fragment key={index}>
+            {index > 0 && (
+              <span
+                aria-hidden="true"
+                className="text-muted-foreground/60 select-none"
+              >
+                •
+              </span>
+            )}
+            <Skeleton className={`h-7 w-${width}px rounded-md`} />
+          </React.Fragment>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Profile Loader */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8">
-        <Skeleton className="w-[100px] h-[100px] rounded-full" />
+      {/* Profile Section Skeleton */}
+      <motion.div
+        variants={item}
+        className="flex flex-col sm:flex-row items-start sm:items-center gap-8"
+      >
+        <Skeleton className="w-[120px] h-[120px] rounded-full" />
         <div className="space-y-4">
-          <Skeleton className="h-5 w-48" />
-          <Skeleton className="h-5 w-40" />
+          <StatItemSkeleton />
+          <StatItemSkeleton />
         </div>
-      </div>
+      </motion.div>
 
-      {/* Quote Loader */}
-      <div className="pl-4">
-        <Skeleton className="h-7 w-64" />
-      </div>
+      {/* Quote Section Skeleton */}
+      <motion.div variants={item}>
+        <div className="pl-6 border-l-4 border-primary/50 space-y-2">
+          <Skeleton className="h-6 w-[280px]" />
+          <Skeleton className="h-6 w-[200px]" />
+        </div>
+      </motion.div>
 
-      {/* Connect Button Loader */}
-      <Skeleton className="h-10 w-44" />
-
-      {/* Projects Header Loader */}
-      <div className="space-y-4 pt-8">
-        <Skeleton className="h-12 w-72" />
-        <Skeleton className="h-6 w-96" />
-      </div>
-    </div>
+      {/* Connect Button Skeleton */}
+      <motion.div variants={item}>
+        <Skeleton className="h-12 w-[250px] rounded-md" />
+      </motion.div>
+    </motion.div>
   );
 };
+
+const StatItemSkeleton: React.FC = () => (
+  <motion.div className="flex items-center gap-4" variants={item}>
+    <Skeleton className="w-6 h-6 rounded-full" />
+    <Skeleton className="h-5 w-[200px]" />
+  </motion.div>
+);
 
 export default HeroSectionLoader;

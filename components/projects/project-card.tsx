@@ -5,11 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Project } from "@/types/project";
+import { ProjectProps } from "@/types/project";
 import { Icon } from "@/components/icons.svgs";
 
 interface ProjectCardProps {
-  project: Project;
+  project: ProjectProps;
   index: number;
 }
 
@@ -38,7 +38,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
               whileHover="hover"
             >
               <Image
-                src={project.imageUrl}
+                src={project.imageUrl || ""}
                 alt={`${project.title} preview`}
                 fill
                 className="object-cover object-center transition-transform group-hover:scale-105"

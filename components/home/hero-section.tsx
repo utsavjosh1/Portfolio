@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -11,6 +11,7 @@ import { GithubData } from "@/types/github";
 import HeroSectionLoader from "@/components/home/hero-section-loader";
 import { Button } from "@/components/ui/button";
 
+// Animation variants
 const container = {
   hidden: { opacity: 0 },
   show: {
@@ -27,29 +28,76 @@ const item = {
   show: { opacity: 1, y: 0 },
 };
 
+// Memoized StatItem component to prevent unnecessary re-renders
+const StatItem = memo(({ icon, text }: { icon: React.ReactNode; text: string }) => (
+  <motion.div
+    className="group flex items-center gap-4 text-base"
+    whileHover={{ x: 4 }}
+    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+  >
+    <span className="text-muted-foreground group-hover:text-primary transition-colors duration-200">
+      {icon}
+    </span>
+    <span className="font-medium group-hover:text-primary transition-colors duration-200">
+      {text}
+    </span>
+  </motion.div>
+));
+
+StatItem.displayName = "StatItem";
+
+// Profile Image component
+const ProfileImage = memo(({ avatar }: { avatar: string }) => (
+  <motion.div
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+    className="relative group"
+  >
+    <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-primary/50 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500" />
+    <Image
+      src={avatar}
+      alt="Profile Picture"
+      width={120}
+      height={120}
+      className="rounded-full border-2 border-background relative"
+      quality={90}
+      priority
+    />
+  </motion.div>
+));
+
+ProfileImage.displayName = "ProfileImage";
+
 const HeroSection: React.FC = () => {
   const [githubData, setGithubData] = useState<GithubData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    let isMounted = true;
+    
     const fetchData = async () => {
-      setIsLoading(true);
       try {
         const data = await fetchGithubData({ username: "joshiutsav" });
-        setGithubData(data);
+        if (isMounted) {
+          setGithubData(data);
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching GitHub data:", error);
-      } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchData();
+    
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  if (isLoading) {
-    return <HeroSectionLoader />;
-  }
 
   return (
     <motion.div
@@ -58,51 +106,13 @@ const HeroSection: React.FC = () => {
       animate="show"
       className="space-y-12"
     >
-      {/* Traits Section */}
-      <motion.div
-        variants={item}
-        className="flex flex-wrap items-center gap-3 text-lg font-medium tracking-tight"
-      >
-        {["Diligent", "Developer", "Dynamism"].map((trait, index) => (
-          <React.Fragment key={trait}>
-            {index > 0 && (
-              <span
-                aria-hidden="true"
-                className="text-muted-foreground/60 select-none"
-              >
-                •
-              </span>
-            )}
-            <span className="hover:text-primary transition-colors duration-200">
-              {trait}
-            </span>
-          </React.Fragment>
-        ))}
-      </motion.div>
-
       {/* Profile Section */}
       <motion.div
         variants={item}
         className="flex flex-col sm:flex-row items-start sm:items-center gap-8"
       >
         {githubData?.avatar ? (
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 10 }}
-            className="relative group"
-          >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-primary/50 rounded-full blur opacity-0 group-hover:opacity-75 transition duration-500" />
-            <Image
-              src={githubData.avatar}
-              alt="Avatar"
-              width={120}
-              height={120}
-              className="rounded-full border-2 border-background relative"
-              quality={100}
-              priority
-            />
-          </motion.div>
+          <ProfileImage avatar={githubData.avatar} />
         ) : (
           <div className="w-[120px] h-[120px] bg-muted rounded-full flex items-center justify-center text-muted-foreground">
             No Image
@@ -123,7 +133,7 @@ const HeroSection: React.FC = () => {
       {/* Quote Section */}
       <motion.div variants={item}>
         <blockquote className="pl-6 border-l-4 border-primary/50 italic text-xl font-medium text-muted-foreground">
-          Coding since birth, now, till death.
+          {githubData?.bio || "No bio available"}
         </blockquote>
       </motion.div>
 
@@ -150,23 +160,5 @@ const HeroSection: React.FC = () => {
     </motion.div>
   );
 };
-
-const StatItem: React.FC<{ icon: React.ReactNode; text: string }> = ({
-  icon,
-  text,
-}) => (
-  <motion.div
-    className="group flex items-center gap-4 text-base"
-    whileHover={{ x: 4 }}
-    transition={{ type: "spring", stiffness: 300, damping: 10 }}
-  >
-    <span className="text-muted-foreground group-hover:text-primary transition-colors duration-200">
-      {icon}
-    </span>
-    <span className="font-medium group-hover:text-primary transition-colors duration-200">
-      {text}
-    </span>
-  </motion.div>
-);
 
 export default HeroSection;

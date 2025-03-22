@@ -1,55 +1,108 @@
 "use client";
 
-import { ProjectsGrid } from "@/components/projects/project-grid";
-import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
+import { ProjectCard } from "@/components/projects/project-card";
 import type { ProjectProps } from "@/types/project";
-import { ProjectsGridSkeleton } from "@/components/projects/project-grid-skeleton";
+import { createClient } from "@/utils/supabase/client";
+import { useEffect, useState, useMemo } from "react";
 
 export default function ProjectsPage() {
-  const supabase = createClient();
   const [projects, setProjects] = useState<ProjectProps[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Create Supabase client once
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
+    // Track component mount state
+    let isMounted = true;
+    
     async function fetchProjects() {
       try {
         const { data, error } = await supabase
           .from("Project")
           .select("*")
-          .order("pinned", { ascending: false });
+          .limit(10); 
+       
         if (error) {
-          console.error("Error fetching projects:", error.message);
-        } else {
-          setProjects(data);
+          if (isMounted) {
+            console.error("Error fetching projects:", error.message);
+            setError(error.message);
+          }
+        } else if (isMounted) {
+          setProjects(data || []);
         }
       } catch (error) {
-        if (error instanceof Error) {
-          console.error("Unexpected error fetching projects:", error.message);
-        } else {
-          console.error("Unexpected error:", error);
+        if (isMounted) {
+          const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+          console.error("Unexpected error fetching projects:", errorMessage);
+          setError(errorMessage);
         }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
-    fetchProjects();
-  }, []);
+    
+    // Use AbortController for fetch requests
+    const controller = new AbortController();
+    
+    // Delay the non-critical data fetch by a small amount to prioritize UI rendering
+    const timeoutId = setTimeout(() => {
+      fetchProjects();
+    }, 100);
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+      controller.abort();
+      clearTimeout(timeoutId);
+    };
+  }, [supabase]);
 
   if (loading) {
-    return <ProjectsGridSkeleton />;
+    return (
+      <div className="space-y-4 text-center py-12">
+        <div className="flex justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+        </div>
+        <p className="text-muted-foreground">Loading projects...</p>
+      </div>
+    );
   }
 
-  if (!projects) {
-    return null;
+  if (error) {
+    return (
+      <div className="space-y-4 text-center py-12">
+        <h2 className="text-xl font-semibold">Unable to load projects</h2>
+        <p className="text-muted-foreground">Please try again later</p>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-12">
-      <ProjectsGrid
-        title="Build fast, Ship fast."
-        description="Here are some of the projects I've worked on."
-      />
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">All Projects</h1>
+        <p className="text-muted-foreground mt-2">A complete collection of my work</p>
+      </div>
+      
+      {projects.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">No projects found</p>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          {projects.map((project, index) => (
+            <ProjectCard 
+              key={project.id} 
+              project={project} 
+              index={index} 
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

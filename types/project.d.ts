@@ -1,10 +1,13 @@
-export type ProjectProps = {
-  id?: number;
-  title: string;
-  year?: string;
-  description: string;
-  imageUrl?: string;
-  github?: string;
-  demo?: string;
-  pinned?: boolean;
-};
+export interface ProjectProps {
+  id: string
+  title: string
+  description: string
+  imageUrl: string
+  github?: string
+  demo?: string
+  year: string
+  pinned: boolean
+  tags?: string[]
+  created_at: string
+}
+

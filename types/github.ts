@@ -4,11 +4,12 @@ export interface PinnedRepo {
 
 export interface GithubData {
   name: string;
+  bio: string;
   pinned: PinnedRepo[];
   avatar: string | null;
   repos: number;
 }
 
 export interface ProjectData {
- name: string;
+  name: string;
 }

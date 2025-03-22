@@ -9,25 +9,18 @@ import {
 export function FloatingDockDemo() {
   const links = [
     {
+      title: "Me",
+      icon: (
+        <Icon name="user-circle" className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+      ),
+      href: "/me",
+    },
+    {
       title: "Projects",
       icon: (
         <Icon name="briefcase" className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "/projects",
-    },
-    {
-      title: "Content",
-      icon: (
-        <Icon name="tournament" className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "/content",
-    },
-    {
-      title: "Music",
-      icon: (
-        <Icon name="music" className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "/music",
     },
     {
       title: "Twitter",
@@ -42,13 +35,6 @@ export function FloatingDockDemo() {
         <Icon name="github" className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: "https://github.com/joshiUtsav/",
-    },
-    {
-      title: "Me",
-      icon: (
-        <Icon name="user-circle" className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-      ),
-      href: "/me",
     },
   ];
   return (

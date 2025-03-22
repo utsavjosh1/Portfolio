@@ -13,7 +13,7 @@ const LinkData = [
   },
   {
     name: "Instagram",
-    url: "https://www.instagram.com/joshi___utsav/",
+    url: "https://www.instagram.com/utsavjosh1/",
   },
   {
     name: "LinkedIn",

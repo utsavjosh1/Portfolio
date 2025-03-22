@@ -25,7 +25,21 @@ export type IconName =
   | "arrow-right"
   | "close"
   | "brand-fiverr"
-  | "calendar";
+  | "calendar"
+  | "clock"
+  | "clock-1"
+  | "clock-2"
+  | "clock-3"
+  | "clock-4"
+  | "clock-alarm"
+  | "clock-check"
+  | "clock-pause"
+  | "clock-play"
+  | "clock-stop"
+  | "clock-reset"
+  | "hourglass"
+  | "timer"
+  | "stopwatch";
 
 interface IconProps {
   name: IconName;
@@ -37,6 +51,103 @@ interface IconProps {
 }
 
 const iconPaths: Record<IconName, React.ReactNode> = {
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </>
+  ),
+  "clock-1": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 8 14" />
+    </>
+  ),
+  "clock-2": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 16" />
+    </>
+  ),
+  "clock-3": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 7 12" />
+    </>
+  ),
+  "clock-4": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 10" />
+    </>
+  ),
+  "clock-alarm": (
+    <>
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 9v4l2 2" />
+      <path d="M5 3L2 6" />
+      <path d="M22 6l-3-3" />
+      <path d="M6 19l-2 2" />
+      <path d="M18 19l2 2" />
+    </>
+  ),
+  "clock-check": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+      <path d="M22 4L12 14l-3-3" />
+    </>
+  ),
+  "clock-pause": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <line x1="10" y1="9" x2="10" y2="15" />
+      <line x1="14" y1="9" x2="14" y2="15" />
+    </>
+  ),
+  "clock-play": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <polygon points="10 8 16 12 10 16 10 8" />
+    </>
+  ),
+  "clock-stop": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <rect x="9" y="9" width="6" height="6" />
+    </>
+  ),
+  "clock-reset": (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 6v6l4 2" />
+      <path d="M4 4v7h7" />
+    </>
+  ),
+  hourglass: (
+    <>
+      <path d="M22 6H2v4l8 4-8 4v4h20v-4l-8-4 8-4V6z" />
+      <path d="M12 10v8" />
+    </>
+  ),
+  timer: (
+    <>
+      <circle cx="12" cy="12" r="8" />
+      <path d="M12 8v4l3 3" />
+      <path d="M12 2v4" />
+      <path d="M12 14h4" />
+    </>
+  ),
+  stopwatch: (
+    <>
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 9v4l2 2" />
+      <path d="M12 2v4" />
+      <path d="M4 13h2" />
+      <path d="M18 13h2" />
+      <path d="M12 17v2" />
+    </>
+  ),
   github: (
     <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 00-1.3-3.2 4.2 4.2 0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 00-6.2 0c-2.4-1.6-3.5-1.3-3.5-1.3a4.2 4.2 0 00-.1 3.2 4.6 4.6 0 00-1.3 3.2c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2v3.5" />
   ),

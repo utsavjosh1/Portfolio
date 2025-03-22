@@ -39,17 +39,6 @@ const AboutMe = () => {
           open-source, build scalable solutions, and am open to freelance
           opportunities.
         </p>
-
-        <p className="text-lg mb-4 text-left leading-relaxed">
-          I share my thoughts on technology, fiction, and life in my{" "}
-          <Link
-            href="/content"
-            className="font-semibold underline text-blue-600 hover:text-blue-400"
-          >
-            Memoirs
-          </Link>
-          .
-        </p>
         <p className="text-lg text-left leading-relaxed">
           When I&apos;m not coding, you&#39;ll find me immersed in music, a good
           book, or exploring new places. <span className="text-sm">🙂</span>

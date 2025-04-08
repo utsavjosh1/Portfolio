@@ -1,17 +1,13 @@
 "use client";
 
-import React from "react";
-import ImageGridSection from "@/components/image-grid";
-import ConnectSection from "@/components/about/connect";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import React from "react";
+import ConnectSection from "@/components/about/connect";
 import { WorkExperience } from "@/components/about/work";
 
 const AboutMe = () => {
   return (
     <div className="relative flex flex-col items-start justify-start mb-16 h-full w-full mx-auto text-black dark:text-[#E0E0E0] max-w-2xl space-y-10">
-      <ImageGridSection />
-
       {/* About Section */}
       <motion.section
         className="w-full"

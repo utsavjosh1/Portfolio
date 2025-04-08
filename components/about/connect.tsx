@@ -22,7 +22,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   },
   {
     name: "Instagram",
-    href: "https://instagram.com/joshi___utsav/",
+    href: "https://instagram.com/utsavjosh1/",
     icon: "brand-instagram",
   },
   { name: "Twitch", href: "https://twitch.tv/1xki11er/", icon: "brand-twitch" },

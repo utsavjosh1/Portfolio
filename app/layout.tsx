@@ -7,7 +7,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 // Components
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/ui/darkmode";
-import { ContentSkeleton } from "@/components/layoutSkeleton";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 // Styles
@@ -123,9 +122,7 @@ export default function RootLayout({
                   className="flex-grow flex justify-center"
                 >
                   <div className="w-full md:w-2/5 px-4 sm:px-6 py-6">
-                    <Suspense fallback={<ContentSkeleton />}>
                       {children}
-                    </Suspense>
                   </div>
                 </main>
                 

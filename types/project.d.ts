@@ -1,13 +1,11 @@
 export interface ProjectProps {
-  id: string
-  title: string
-  description: string
-  imageUrl: string
-  github?: string
-  demo?: string
-  year: string
-  pinned: boolean
-  tags?: string[]
-  created_at: string
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  github?: string;
+  demo?: string;
+  year: number;
+  pinned: boolean;
+  tags?: string[];
 }
-

@@ -12,6 +12,7 @@ interface ProjectCardProps {
   project: ProjectProps
   index: number
   className?: string
+  isPinned?: boolean
 }
 
 const buttonVariants = {
@@ -19,7 +20,7 @@ const buttonVariants = {
   hover: { scale: 1, opacity: 1 },
 }
 
-export function ProjectCard({ project, index }: ProjectCardProps) {
+export function ProjectCard({ project, index, isPinned }: ProjectCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

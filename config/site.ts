@@ -6,14 +6,14 @@ export const SITE_CONFIG = {
     "Utsav Joshi's portfolio - Developer, GPU Enthusiast, and Tech Lover",
   links: {
     twitter: "https://twitter.com/joshi__utsav",
-    github: "https://github.com/YOUR_GITHUB_USERNAME",
+    github: "https://github.com/joshiutsav",
   },
   author: {
     name: "Utsav Joshi",
     jobTitle: "Software Developer",
     socialProfiles: [
       "https://www.linkedin.com/in/joshi-utsav/",
-      "https://github.com/YOUR_GITHUB_USERNAME",
+      "https://github.com/joshiutsav",
       "https://twitter.com/joshi__utsav",
     ],
   },

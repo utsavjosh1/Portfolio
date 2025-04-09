@@ -36,7 +36,7 @@ export const metadata = {
     url: "https://joshiutsav.com",
     type: "website",
     images: [{
-      url: "https://your-portfolio-url.com/og-image.jpg",
+      url: "/nextjs.svg",
       width: 1200,
       height: 630,
       alt: "Utsav Joshi Portfolio Image"

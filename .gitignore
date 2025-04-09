@@ -39,3 +39,8 @@ next-env.d.ts
 package-lock.json
 
 .vercel
+
+node_modules/
+.next/cache/
+cache/
+.git/

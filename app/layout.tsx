@@ -1,3 +1,4 @@
+// Modified root layout with centered content and proper responsiveness
 import { Suspense, lazy } from "react";
 import Link from "next/link";
 import { Inter } from "next/font/google";
@@ -104,7 +105,7 @@ export default function RootLayout({
               
               <div className="flex flex-col min-h-screen">
                 <header className="w-full border-b border-b-foreground/10">
-                  <div className="w-full md:w-2/5 mx-auto px-4 sm:px-6">
+                  <div className="w-full px-4 sm:px-6 mx-auto sm:max-w-[90%] md:max-w-[70%] lg:max-w-[50%] xl:max-w-[35%]">
                     <nav
                       className="flex justify-between items-center h-16"
                       aria-label="Main navigation"
@@ -121,7 +122,7 @@ export default function RootLayout({
                   id="main-content"
                   className="flex-grow flex justify-center"
                 >
-                  <div className="w-full md:w-2/5 px-4 sm:px-6 py-6">
+                  <div className="w-full px-4 sm:px-6 py-6 mx-auto sm:max-w-[90%] md:max-w-[70%] lg:max-w-[50%] xl:max-w-[35%]">
                       {children}
                   </div>
                 </main>

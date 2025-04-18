@@ -18,7 +18,7 @@ export const WorkExperienceItem: React.FC<WorkExperienceItemProps> = ({
   period,
 }) => {
   return (
-    <li className="flex items-center p-4 rounded-lg bg-gray-50 dark:bg-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700">
+    <li className="flex items-center p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
       <div className="relative w-12 h-12 mr-4">
         <Image
           src={logo}

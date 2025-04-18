@@ -40,13 +40,20 @@ const SocialLink: React.FC<SocialLinkProps> = ({
 }) => (
   <li
     className={cn(
-      "flex items-center justify-center p-3 border rounded-lg",
-      "hover:bg-gray-100 dark:hover:bg-gray-700 transition",
       "group-hover:opacity-50 hover:!opacity-100 dark:border-gray-600",
       className
     )}
   >
-    <Link href={href} className="flex items-center" aria-label={name}>
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center justify-center p-3 border rounded-lg",
+        "hover:bg-gray-100 dark:hover:bg-gray-700 transition",
+        "w-full"
+      )}
+      aria-label={name}
+      target="_blank"
+    >
       <Icon name={icon} className="mr-2" aria-hidden="true" />
       <span>{name}</span>
     </Link>
@@ -76,7 +83,7 @@ export default function ConnectSection() {
         </Link>
         . Try finding me anywhere else at @joshiUtsav.
       </p>
-      <ul className="grid grid-cols-2 gap-4 md:grid-cols-4 group">
+      <ul className="grid grid-cols-2 gap-4 group">
         {SOCIAL_LINKS.map((link) => (
           <SocialLink key={link.name} {...link} />
         ))}

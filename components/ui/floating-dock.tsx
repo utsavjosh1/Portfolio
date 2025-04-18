@@ -41,7 +41,6 @@ const FloatingDockMobile = ({
   items: { title: string; icon: React.ReactNode; href: string }[];
   className?: string;
 }) => {
-  const [open, setOpen] = useState(false);
   let touchX = useMotionValue(Infinity);
 
   return (
@@ -53,29 +52,12 @@ const FloatingDockMobile = ({
         className
       )}
     >
-      <button
-        onClick={() => setOpen(!open)}
-        className="h-10 w-10 rounded-full bg-gray-50 dark:bg-neutral-800 flex items-center justify-center"
-      >
-        <Icon
-          name="layout-navbar-collapse"
-          className="h-7 w-7 text-neutral-500 dark:text-neutral-400"
-        />
-      </button>
-
       <AnimatePresence>
-        {open && (
-          <motion.div className="absolute bottom-full mb-2 inset-x-0 flex flex-row justify-center gap-2">
-            {items.map((item) => (
-              <IconContainerMobile
-                touchX={touchX}
-                key={item.title}
-                setOpen={setOpen}
-                {...item}
-              />
-            ))}
-          </motion.div>
-        )}
+        <motion.div className="absolute bottom-full mb-2 inset-x-0 flex flex-row justify-center gap-2">
+          {items.map((item) => (
+            <IconContainerMobile touchX={touchX} key={item.title} {...item} />
+          ))}
+        </motion.div>
       </AnimatePresence>
     </motion.div>
   );
@@ -195,13 +177,11 @@ function IconContainerMobile({
   title,
   icon,
   href,
-  setOpen,
 }: {
   touchX: MotionValue;
   title: string;
   icon: React.ReactNode;
   href: string;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   let ref = useRef<HTMLDivElement>(null);
 
@@ -245,12 +225,8 @@ function IconContainerMobile({
 
   const [hovered, setHovered] = useState(false);
 
-  const handleClick = () => {
-    setOpen(false); // Automatically close after click
-  };
-
   return (
-    <Link href={href} onClick={handleClick}>
+    <Link href={href}>
       <motion.div
         ref={ref}
         style={{ width, height }}

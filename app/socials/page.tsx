@@ -1,83 +1,91 @@
-"use client";
-
-import React from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { Icon } from "@/components/icons.svgs";
+"use client"
+import Image from "next/image"
+import Link from "next/link"
+import { Icon } from "@/components/icons.svgs"
+import { MotionWrapper, StaggerContainer, StaggerItem, HoverMotion } from "@/components/animation/motion-wrapper"
 
 const LinkData = [
   {
     name: "Email(General)",
     url: "mailto:utsavjohshi602@gmail.com",
+    icon: "mail",
   },
   {
     name: "Instagram",
     url: "https://www.instagram.com/utsavjosh1/",
+    icon: "instagram",
   },
   {
     name: "LinkedIn",
     url: "https://www.linkedin.com/in/joshi-utsav/",
+    icon: "linkedin",
   },
-];
+  {
+    name: "GitHub",
+    url: "https://github.com/joshiUtsav",
+    icon: "github",
+  },
+]
 
 const SocialLink = () => {
   return (
     <div className="relative flex flex-col items-center h-full w-full mx-auto text-black dark:text-white">
-      <motion.div
-        className="flex flex-col items-center max-w-md"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-      >
-        <Image
-          src="https://avatars.githubusercontent.com/u/98454866?v=4"
-          alt="logo"
-          width={100}
-          height={100}
-          className="rounded-full border"
-          quality={100}
-          loading="lazy"
-        />
-        <motion.div
-          className="text-2xl md:text-3xl font-bold mb-4 text-black dark:text-white"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut", delay: 0.1 }}
+      <MotionWrapper className="flex flex-col items-center max-w-md" variant="fade-down" duration={0.8}>
+        <div className="relative">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/30 to-primary/10 rounded-full blur opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <HoverMotion scale={1.1} duration={0.5}>
+            <Image
+              src="https://avatars.githubusercontent.com/u/98454866?v=4"
+              alt="Utsav Joshi"
+              width={120}
+              height={120}
+              className="rounded-full border-2 border-primary/20 shadow-lg object-cover z-10 relative"
+              quality={100}
+              priority
+            />
+          </HoverMotion>
+        </div>
+
+        <MotionWrapper
+          className="text-2xl md:text-3xl font-bold my-4 text-black dark:text-white"
+          variant="fade-up"
+          delay={0.1}
         >
           Utsav Joshi
-        </motion.div>
-        <motion.span
-          className="text-lg text-center text-black dark:text-white mb-4"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut", delay: 0.2 }}
+        </MotionWrapper>
+
+        <MotionWrapper
+          className="text-lg text-center text-black dark:text-white mb-8 max-w-sm"
+          variant="fade-up"
+          delay={0.2}
         >
           Implements my thought on code. Find me elsewhere @joshiUtsav
-        </motion.span>
+        </MotionWrapper>
 
-        <div className="mb-28 w-full">
+        <StaggerContainer className="w-full space-y-4 mb-28" staggerChildren={0.1} delayChildren={0.3}>
           {LinkData.map((link, index) => (
-            <Link href={link.url} key={index} className="hover:underline">
-              <motion.div
-                className="flex items-center justify-between bg-gray-200 dark:bg-[#222222] rounded-md text-black dark:text-white m-4 p-5 hover:bg-gray-300 dark:hover:bg-[#333333] transition-colors duration-200"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeInOut",
-                  delay: 0.3 + index * 0.1,
-                }}
-              >
-                {link.name}
-                <Icon name="external-link" />
-              </motion.div>
-            </Link>
+            <StaggerItem key={index} variant="fade-up">
+              <Link href={link.url} target="_blank" rel="noopener noreferrer">
+                <HoverMotion y={-5} className="group">
+                  <div className="flex items-center justify-between bg-gray-200 dark:bg-[#222222] rounded-md text-black dark:text-white p-5 hover:bg-gray-300 dark:hover:bg-[#333333] transition-colors duration-300 shadow-sm hover:shadow-md">
+                    <div className="flex items-center gap-3">
+                      <span className="text-primary/80 group-hover:text-primary transition-colors duration-300">
+                        <Icon name={"external-link"} className="w-5 h-5" />
+                      </span>
+                      <span className="group-hover:translate-x-1 transition-transform duration-300">{link.name}</span>
+                    </div>
+                    <div className="transform group-hover:translate-x-1 transition-transform duration-300">
+                      <Icon name="external-link" className="w-5 h-5" />
+                    </div>
+                  </div>
+                </HoverMotion>
+              </Link>
+            </StaggerItem>
           ))}
-        </div>
-      </motion.div>
+        </StaggerContainer>
+      </MotionWrapper>
     </div>
-  );
-};
+  )
+}
 
-export default SocialLink;
+export default SocialLink

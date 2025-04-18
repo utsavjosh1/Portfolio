@@ -7,5 +7,5 @@ export interface ProjectProps {
   demo?: string;
   year: number;
   pinned: boolean;
-  tags?: string[];
+  tags?: string[] | undefined;
 }

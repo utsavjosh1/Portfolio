@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Components
+import AnalyticsProvider from "@/_analytics/provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/ui/darkmode";
 import ErrorBoundary from "@/components/ErrorBoundary";
@@ -179,6 +180,7 @@ export default function RootLayout({
         <meta name="rating" content="General" />
         <meta name="revisit-after" content="7 days" />
         <meta property="article:author" content="Utsav Joshi" />
+        <AnalyticsProvider />
       </head>
       <body className={inter.className}>
         <ThemeProvider

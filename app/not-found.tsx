@@ -1,63 +1,64 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Search, Home, RefreshCw } from "lucide-react"
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { Search, Home, RefreshCw } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function NotFound() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [searchQuery, setSearchQuery] = useState("")
-  const [isSearching, setIsSearching] = useState(false)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Mouse position tracking
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect()
+        const rect = containerRef.current.getBoundingClientRect();
         setMousePosition({
           x: e.clientX - rect.left,
           y: e.clientY - rect.top,
-        })
+        });
       }
-    }
+    };
 
-    window.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener("mousemove", handleMouseMove);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove)
-    }
-  }, [])
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
   // Spring physics for smoother motion
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
   useEffect(() => {
-    x.set(mousePosition.x)
-    y.set(mousePosition.y)
-  }, [mousePosition, x, y])
+    x.set(mousePosition.x);
+    y.set(mousePosition.y);
+  }, [mousePosition, x, y]);
 
-  const springConfig = { damping: 25, stiffness: 100 }
-  const springX = useSpring(x, springConfig)
-  const springY = useSpring(y, springConfig)
+  const springConfig = { damping: 25, stiffness: 100 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
 
   // Transform values for the floating 404
-  const rotateX = useTransform(springY, [0, 300], [10, -10])
-  const rotateY = useTransform(springX, [0, 300], [-10, 10])
-  const float404X = useTransform(springX, [0, 300], [-15, 15])
-  const float404Y = useTransform(springY, [0, 300], [-15, 15])
+  const rotateX = useTransform(springY, [0, 300], [10, -10]);
+  const rotateY = useTransform(springX, [0, 300], [-10, 10]);
+  const float404X = useTransform(springX, [0, 300], [-15, 15]);
+  const float404Y = useTransform(springY, [0, 300], [-15, 15]);
 
   // Handle refresh animation
   const handleRefresh = () => {
-    setIsRefreshing(true)
+    setIsRefreshing(true);
     setTimeout(() => {
-      window.location.reload()
-    }, 1000)
-  }
+      window.location.reload();
+    }, 1000);
+  };
 
   // Particles for background
   const particles = Array.from({ length: 20 }).map((_, i) => ({
@@ -66,7 +67,7 @@ export default function NotFound() {
     y: Math.random() * 100,
     size: Math.random() * 10 + 5,
     duration: Math.random() * 20 + 10,
-  }))
+  }));
 
   return (
     <div
@@ -99,7 +100,6 @@ export default function NotFound() {
 
       {/* Main content */}
       <div className="relative z-10 text-center space-y-8 max-w-md px-4">
-        {/* Interactive 404 that follows mouse */}
         <motion.div
           className="relative"
           style={{
@@ -120,7 +120,9 @@ export default function NotFound() {
               damping: 20,
             }}
           >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">404</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+              404
+            </span>
           </motion.h1>
 
           {/* Shadow effect */}
@@ -150,7 +152,8 @@ export default function NotFound() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          Oops! The page you&apos;re looking for doesn&apos;t exist. It might have been moved or deleted.
+          Oops! The page you&apos;re looking for doesn&apos;t exist. It might
+          have been moved or deleted.
         </motion.p>
 
         {/* Interactive search */}
@@ -161,7 +164,11 @@ export default function NotFound() {
           transition={{ delay: 0.4, duration: 0.5 }}
         >
           {!isSearching ? (
-            <Button variant="outline" onClick={() => setIsSearching(true)} className="group">
+            <Button
+              variant="outline"
+              onClick={() => setIsSearching(true)}
+              className="group"
+            >
               <Search className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
               Looking for something?
             </Button>
@@ -190,7 +197,11 @@ export default function NotFound() {
           transition={{ delay: 0.5, duration: 0.5 }}
         >
           <Link href="/" passHref>
-            <Button variant="default" size="lg" className="group relative overflow-hidden">
+            <Button
+              variant="default"
+              size="lg"
+              className="group relative overflow-hidden"
+            >
               <motion.span
                 className="absolute inset-0 bg-primary-foreground/10"
                 initial={{ x: "-100%" }}
@@ -202,10 +213,20 @@ export default function NotFound() {
             </Button>
           </Link>
 
-          <Button variant="outline" size="lg" onClick={handleRefresh} className="group" disabled={isRefreshing}>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={handleRefresh}
+            className="group"
+            disabled={isRefreshing}
+          >
             <motion.span
               animate={isRefreshing ? { rotate: 360 } : {}}
-              transition={{ duration: 1, ease: "linear", repeat: isRefreshing ? Number.POSITIVE_INFINITY : 0 }}
+              transition={{
+                duration: 1,
+                ease: "linear",
+                repeat: isRefreshing ? Number.POSITIVE_INFINITY : 0,
+              }}
             >
               <RefreshCw className="mr-2 h-5 w-5" />
             </motion.span>
@@ -214,5 +235,5 @@ export default function NotFound() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileImage } from "@/components/home/profile-image";
 import { StatItem } from "@/components/home/stat-item";
 import { TechStackItem } from "@/components/home/tech-stack-item";
+import { ContactSection } from "@/components/contact/contact-section";
 
 const ProjectsPage = dynamic(() => import("@/components/projects/project"), {
   loading: () => <div className="h-60 bg-muted rounded-lg animate-pulse"></div>,
@@ -40,7 +41,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="space-y-8 relative">
+    <main className="space-y-16 relative">
       {/* Hero Section */}
       <section
         className={`space-y-8 transition-all duration-1000 ${
@@ -128,6 +129,8 @@ export default function Home() {
           <ProjectsPage />
         </div>
       </section>
+
+      <ContactSection />
     </main>
   );
 }

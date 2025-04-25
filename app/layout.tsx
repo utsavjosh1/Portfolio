@@ -51,7 +51,7 @@ export const metadata = {
     title: "Utsav Joshi | Full Stack Software Engineer & JavaScript Expert",
     description:
       "Professional portfolio of Utsav Joshi, a skilled software engineer specializing in modern web development with React, Next.js, and Node.js. Explore projects, technical expertise, and professional background.",
-    url: "https://joshiutsav.com",
+    url: "https://utsavjosh1.com",
     type: "website",
     images: [
       {
@@ -68,7 +68,7 @@ export const metadata = {
     title: "Utsav Joshi | Software Engineer & JavaScript Expert",
     description:
       "Software engineering portfolio showcasing full stack development expertise, technical projects and professional skills.",
-    creator: "@joshiutsav",
+    creator: "@utsavjosh1",
   },
   robots: {
     index: true,
@@ -81,7 +81,7 @@ export const metadata = {
     },
   },
   alternates: {
-    canonical: "https://joshiutsav.com/",
+    canonical: "https://utsavjosh1.com/",
   },
   authors: [{ name: "Utsav Joshi" }],
   category: "Technology",
@@ -95,11 +95,11 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Utsav Joshi",
-  url: "https://joshiutsav.com",
+  url: "https://utsavjosh1.com",
   sameAs: [
-    "https://github.com/joshiutsav",
-    "https://linkedin.com/in/joshi-utsav",
-    "https://x.com/joshi__utsav",
+    "https://github.com/utsavjosh1",
+    "https://linkedin.com/in/utsavjosh1",
+    "https://x.com/utsavjosh1",
   ],
   jobTitle: "Software Engineer",
   worksFor: {
@@ -138,13 +138,13 @@ const jsonLd = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  url: "https://joshiutsav.com",
+  url: "https://utsavjosh1.com",
   name: "Utsav Joshi - Software Engineer Portfolio",
   description:
     "Professional portfolio of Utsav Joshi showcasing software engineering projects, technical skills, and professional experience.",
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://joshiutsav.com/search?q={search_term_string}",
+    target: "https://utsavjosh1.com/search?q={search_term_string}",
     "query-input": "required name=search_term_string",
   },
 };
@@ -206,7 +206,7 @@ export default function RootLayout({
                         href="/"
                         aria-label="Utsav Joshi - Software Engineer and Full Stack Developer"
                       >
-                        JoshiUtsav
+                        utsavjosh1
                       </Link>
                     </div>
                     <ModeToggle />

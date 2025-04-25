@@ -9,6 +9,6 @@ export const SOCIAL_LINKS = [
   },
   {
     name: "LinkedIn",
-    url: "https://www.linkedin.com/in/joshi-utsav/",
+    url: "https://www.linkedin.com/in/utsavjosh1/",
   },
 ];

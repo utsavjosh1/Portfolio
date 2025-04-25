@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { ArrowRight } from "lucide-react";
+
 import { Icon } from "@/components/icons.svgs";
 import { Button } from "@/components/ui/button";
 import { ProfileImage } from "@/components/home/profile-image";
@@ -12,7 +13,7 @@ import { TechStackItem } from "@/components/home/tech-stack-item";
 import { ContactSection } from "@/components/contact/contact-section";
 
 const ProjectsPage = dynamic(() => import("@/components/projects/project"), {
-  loading: () => <div className="h-60 bg-muted rounded-lg animate-pulse"></div>,
+  // loading: () => <div className="h-60 bg-muted rounded-lg animate-pulse"></div>,
   ssr: false,
 });
 
@@ -50,7 +51,7 @@ export default function Home() {
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
           <ProfileImage avatar={PROFILE_DATA.avatarUrl} />
-          <Link href={"https://github.com/joshiutsav"}>
+          <Link href={"https://github.com/utsavjosh1"}>
             <div className="space-y-4">
               <StatItem
                 icon={<Icon name="github" className="w-6 h-6" />}

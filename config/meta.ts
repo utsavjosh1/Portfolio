@@ -32,8 +32,8 @@ export const META_DEFAULTS: Partial<Metadata> = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@joshi__utsav",
-    creator: "@joshi__utsav",
+    site: "@utsavjosh1",
+    creator: "@utsavjosh1",
   },
   verification: {
     google: "YOUR_GOOGLE_SITE_VERIFICATION_ID",

@@ -27,14 +27,14 @@ export function FloatingDockDemo() {
       icon: (
         <Icon name="x" className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "https://twitter.com/joshi__utsav/",
+      href: "https://twitter.com/utsavjosh1/",
     },
     {
       title: "Github",
       icon: (
         <Icon name="github" className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
-      href: "https://github.com/joshiUtsav/",
+      href: "https://github.com/utsavjosh1/",
     },
   ];
   return (

@@ -51,14 +51,14 @@ export const metadata: Metadata = getSeoMetadata({
     // profile: {
     //   firstName: "Utsav",
     //   lastName: "Joshi",
-    //   username: "joshiutsav",
+    //   username: "utsavjosh1",
     //   gender: "male",
     // },
   },
   twitter: {
     card: "summary_large_image",
-    site: "@joshiutsav",
-    creator: "@joshiutsav",
+    site: "@utsavjosh1",
+    creator: "@utsavjosh1",
     title: "About Utsav Joshi | Software Engineer & Full Stack Developer",
     description:
       "Discover the professional journey and technical expertise of Utsav Joshi, a passionate software engineer focused on creating innovative and scalable web solutions.",

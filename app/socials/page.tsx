@@ -17,12 +17,12 @@ const LinkData = [
   },
   {
     name: "LinkedIn",
-    url: "https://www.linkedin.com/in/joshi-utsav/",
+    url: "https://www.linkedin.com/in/utsavjosh1/",
     icon: "linkedin",
   },
   {
     name: "GitHub",
-    url: "https://github.com/joshiUtsav",
+    url: "https://github.com/utsavjosh1",
     icon: "github",
   },
 ]
@@ -59,7 +59,7 @@ const SocialLink = () => {
           variant="fade-up"
           delay={0.2}
         >
-          Implements my thought on code. Find me elsewhere @joshiUtsav
+          Implements my thought on code. Find me elsewhere @utsavjosh1
         </MotionWrapper>
 
         <StaggerContainer className="w-full space-y-4 mb-28" staggerChildren={0.1} delayChildren={0.3}>

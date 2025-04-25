@@ -26,7 +26,7 @@ Here are some notable projects I have worked on:
 Feel free to reach out to me via:
 
 - **Email**: [E-mail](mailto:utsavjoshi@gmail.com)
-- **LinkedIn**: [joshi-utsav](#)
-- **Twitter**: [joshi___utsav](#)
+- **LinkedIn**: [utsavjosh1](#)
+- **Twitter**: [utsavjosh1](#)
 
 Thank you for visiting my portfolio! I look forward to connecting with you.

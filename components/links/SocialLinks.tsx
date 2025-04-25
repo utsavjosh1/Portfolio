@@ -44,7 +44,7 @@ export const SocialLinks: React.FC = () => {
           animate={animate}
           transition={{ ...transition, delay: 0.2 }}
         >
-          Implements my thoughts in code. Find me elsewhere @joshiUtsav
+          Implements my thoughts in code. Find me elsewhere @utsavjosh1
         </motion.p>
 
         <nav className="mb-28 w-full" aria-label="Social links">

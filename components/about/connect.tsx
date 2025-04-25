@@ -17,7 +17,7 @@ const SOCIAL_LINKS: SocialLink[] = [
   { name: "Email", href: "mailto:utsavjoshi602@gmail.com", icon: "mail" },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/joshi-utsav/",
+    href: "https://www.linkedin.com/in/utsavjosh1/",
     icon: "brand-linkedin",
   },
   {
@@ -81,7 +81,7 @@ export default function ConnectSection() {
         >
           text me
         </Link>
-        . Try finding me anywhere else at @joshiUtsav.
+        . Try finding me anywhere else at @utsavjosh1.
       </p>
       <ul className="grid grid-cols-2 gap-4 group">
         {SOCIAL_LINKS.map((link) => (

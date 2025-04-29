@@ -23,52 +23,68 @@ const LazyFloatingDockDemo = lazy(() =>
   }))
 );
 
-// Enhanced metadata for SEO
+// Separate viewport configuration
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+};
+
+// Main metadata configuration
 export const metadata = {
-  title:
-    "Utsav Joshi | Full Stack Developer & Software Engineer | JavaScript & TypeScript Expert",
-  description:
-    "Explore Utsav Joshi's professional software engineering portfolio showcasing expertise in JavaScript, TypeScript, React, Next.js, Node.js and cloud technologies. View projects, technical skills, and professional experience.",
+  metadataBase: new URL('https://utsavjosh1.com'),
+  title: {
+    default: "Utsav Joshi | Full Stack Developer & Software Engineer",
+    template: "%s | Utsav Joshi"
+  },
+  description: "Expert Full Stack Developer specializing in React, Next.js, Node.js, and TypeScript. View my latest projects, technical blog posts, and professional experience in web development.",
   keywords: [
     "Utsav Joshi",
-    "Software Engineer",
     "Full Stack Developer",
-    "JavaScript Developer",
-    "TypeScript Expert",
     "React Developer",
-    "Next.js Developer",
-    "Node.js Engineer",
-    "Cloud Computing",
-    "Web Development",
-    "API Development",
-    "Frontend Engineer",
-    "Backend Developer",
-    "Portfolio Website",
-    "Hire Developer",
-    "Software Architecture",
+    "Next.js Expert",
+    "TypeScript Developer",
+    "Software Engineer India",
+    "Web Development Delhi",
+    "MERN Stack Developer",
+    "JavaScript Engineer",
+    "Cloud Computing Expert"
   ],
+  authors: [{ name: "Utsav Joshi", url: "https://utsavjosh1.com" }],
+  creator: "Utsav Joshi",
+  publisher: "Utsav Joshi",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: "Utsav Joshi | Full Stack Software Engineer & JavaScript Expert",
-    description:
-      "Professional portfolio of Utsav Joshi, a skilled software engineer specializing in modern web development with React, Next.js, and Node.js. Explore projects, technical expertise, and professional background.",
-    url: "https://utsavjosh1.com",
     type: "website",
+    locale: "en_US",
+    url: "https://utsavjosh1.com",
+    title: "Utsav Joshi | Full Stack Software Engineer & JavaScript Expert",
+    description: "Professional portfolio of Utsav Joshi, a skilled software engineer specializing in modern web development with React, Next.js, and Node.js. Explore projects, technical expertise, and professional background.",
+    siteName: "Utsav Joshi - Software Engineer Portfolio",
     images: [
       {
-        url: "/portfolio.png",
+        url: "/api/og",
         width: 1200,
         height: 630,
         alt: "Utsav Joshi - Professional Software Engineer Portfolio",
       },
     ],
-    siteName: "Utsav Joshi - Software Engineer Portfolio",
   },
   twitter: {
     card: "summary_large_image",
     title: "Utsav Joshi | Software Engineer & JavaScript Expert",
-    description:
-      "Software engineering portfolio showcasing full stack development expertise, technical projects and professional skills.",
+    description: "Software engineering portfolio showcasing full stack development expertise, technical projects and professional skills.",
     creator: "@utsavjosh1",
+    site: "@utsavjosh1",
+    images: ["/api/og"],
   },
   robots: {
     index: true,
@@ -76,17 +92,32 @@ export const metadata = {
     googleBot: {
       index: true,
       follow: true,
+      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: "https://utsavjosh1.com/",
-  },
-  authors: [{ name: "Utsav Joshi" }],
-  category: "Technology",
   verification: {
     google: "your-google-verification-code",
+    yandex: "your-yandex-verification-code",
+  },
+  alternates: {
+    canonical: "https://utsavjosh1.com",
+    languages: {
+      "en-US": "https://utsavjosh1.com",
+    },
+  },
+  category: "Technology",
+  classification: "Portfolio",
+  referrer: "origin-when-cross-origin",
+  other: {
+    "msapplication-TileColor": "#000000",
+    "msapplication-TileImage": "/mstile-144x144.png",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+    "apple-mobile-web-app-title": "Utsav Joshi",
+    "format-detection": "telephone=no",
+    "mobile-web-app-capable": "yes",
   },
 };
 

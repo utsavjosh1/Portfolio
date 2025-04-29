@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://utsavjosh1.com/sitemap.xml
+
+# Disallow admin and private routes
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+
+# Crawl-delay
+Crawl-delay: 10 

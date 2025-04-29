@@ -4,8 +4,8 @@ export interface ProjectProps {
   description: string;
   imageUrl: string;
   github?: string;
+  year?: number;
   demo?: string;
-  year: number;
   pinned: boolean;
   tags?: string[] | undefined;
 }

@@ -1,39 +1,56 @@
 "use client";
 
-import React, { ErrorInfo, ReactNode } from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
 
-interface ErrorBoundaryProps {
+interface Props {
   children: ReactNode;
 }
 
-interface ErrorBoundaryState {
+interface State {
   hasError: boolean;
+  error: Error | null;
 }
 
-class ErrorBoundary extends React.Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
+export default class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
+    error: null,
+  };
+
+  public static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
   }
 
-  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
   }
 
-  render() {
+  private handleReset = () => {
+    this.setState({ hasError: false, error: null });
+  };
+
+  public render() {
     if (this.state.hasError) {
-      return <h1>Sorry.. there was an error</h1>;
+      return (
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 p-4">
+          <h1 className="text-4xl font-bold">Something went wrong</h1>
+          <p className="text-muted-foreground max-w-md">
+            {this.state.error?.message ||
+              "An unexpected error occurred. Please try again."}
+          </p>
+          <Button
+            onClick={this.handleReset}
+            className="inline-flex items-center gap-2"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Try Again
+          </Button>
+        </div>
+      );
     }
 
     return this.props.children;
   }
 }
-
-export default ErrorBoundary;

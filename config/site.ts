@@ -1,3 +1,17 @@
+export interface Project {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  imageUrl: string;
+  github: string;
+  demo: string;
+  technologies: string[];
+  createdAt: string;
+  updatedAt: string;
+  pinned: boolean;
+}
+
 export const SITE_CONFIG = {
   title: "Utsav Joshi | Software Engineer Portfolio",
   name: "Utsav Joshi | Professional Software Engineer Portfolio",
@@ -101,4 +115,6 @@ export const SITE_CONFIG = {
   analytics: {
     googleAnalyticsId: "G-YGSVWFZS92",
   },
+  // Projects configuration
+  projects: [] as Project[],
 };

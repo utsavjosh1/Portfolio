@@ -44,3 +44,4 @@ node_modules/
 .next/cache/
 cache/
 .git/
+.env*.local

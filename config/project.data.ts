@@ -2,12 +2,11 @@ import { Project } from "./site";
 
 export const projects: Project[] = [
   {
-    id: 1,
     title: "Learnesst",
-    slug: "learnest",
     description:
       "Learnesst is a SaaS application for individuals or organizations looking to launch their own LMS platform with ease and flexibility.",
-    imageUrl: "https://f2idqsaenr3pv3f7.public.blob.vercel-storage.com/learnest.png",
+    imageUrl:
+      "https://f2idqsaenr3pv3f7.public.blob.vercel-storage.com/learnest.png",
     github: "https://github.com/utsavjosh1/learnest",
     demo: "https://learnesst.vercel.app/",
     technologies: [
@@ -17,9 +16,31 @@ export const projects: Project[] = [
       "Prisma",
       "PostgreSQL",
     ],
-    createdAt: "2024-01-01",
-    updatedAt: "2024-04-08",
+    features: [
+      "User authentication and authorization",
+      "Course creation and management",
+      "Interactive lessons and quizzes",
+      "Progress tracking",
+      "Analytics dashboard",
+    ],
     pinned: true,
+    slug: "learnesst",
+    content: `
+# Learnesst - Modern LMS Platform
+
+## Overview
+Learnesst is a modern Learning Management System (LMS) built with Next.js and TypeScript. It provides a comprehensive solution for creating and managing online courses.
+
+## Key Features
+- User authentication and authorization
+- Course creation and management
+- Interactive lessons and quizzes
+- Progress tracking
+- Analytics dashboard
+
+## Technical Details
+Built with Next.js, TypeScript, and Prisma, Learnesst offers a robust and scalable solution for online education.
+    `,
   },
   {
     id: 2,

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Icon, IconName } from "@/components/icons.svgs";
 import { cn } from "@/utils/cn";
 import { ANIMATION_DELAY, ANIMATION_DURATION } from "@/config/animation";

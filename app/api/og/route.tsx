@@ -10,12 +10,12 @@ export async function GET() {
         style={{
           background: 'linear-gradient(to bottom right, #000000, #1a1a1a)',
           width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '40px',
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "40px",
         }}
       >
         <div

@@ -10,6 +10,7 @@ export interface Project {
   createdAt: string;
   updatedAt: string;
   pinned: boolean;
+  content: string;
 }
 
 export const SITE_CONFIG = {

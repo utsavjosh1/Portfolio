@@ -1,30 +1,41 @@
 "use client";
 
-import React from "react";
 import { ProjectCard } from "@/components/projects/project-card";
-import { projects } from "@/config/project.data";
+import { Project } from "@prisma/client";
 
-export default function ProjectsPage() {
-  const pinnedProjects = projects.filter((project) => project.pinned);
-  const otherProjects = projects.filter((project) => !project.pinned);
+interface ProjectsProps {
+  projects: Project[];
+  showOnlyPinned?: boolean;
+}
+
+export default function Projects({
+  projects,
+  showOnlyPinned = false,
+}: ProjectsProps) {
+  // Ensure projects are serialized
+  const serializedProjects = projects.map((project) => ({
+    ...project,
+    createdAt: project.createdAt.toString(),
+    updatedAt: project.updatedAt.toString(),
+  }));
+
+  const projectsToShow = showOnlyPinned
+    ? serializedProjects.filter((project) => project.pinned)
+    : serializedProjects;
 
   return (
-    <main className="space-y-12">
-      {/* Pinned Projects */}
-      {pinnedProjects.length > 0 && (
-        <section>
-          <div className="grid gap-8 md:grid-cols-1">
-            {pinnedProjects.map((project, index) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                index={index}
-                isPinned={true}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-    </main>
+    <div className="space-y-16">
+      <section>
+        <div className="grid gap-8 md:grid-cols-1">
+          {projectsToShow.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={serializedProjects.indexOf(project)}
+            />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

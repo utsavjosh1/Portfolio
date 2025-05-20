@@ -1,15 +1,15 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import type { ProjectProps } from "@/types/project"
-import { Icon } from "@/components/icons.svgs"
+import { ExternalLink, Github } from "lucide-react"
+import { Project } from "@prisma/client"
 
 interface ProjectCardProps {
-  project: ProjectProps
+  project: Project
   index: number
   className?: string
   isPinned?: boolean
@@ -21,6 +21,12 @@ const buttonVariants = {
 }
 
 export function ProjectCard({ project, index, isPinned }: ProjectCardProps) {
+  // Format date for display
+  const formattedDate = new Date(project.updatedAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short'
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -58,7 +64,7 @@ export function ProjectCard({ project, index, isPinned }: ProjectCardProps) {
                       className="rounded-full bg-white text-black hover:bg-gray-200"
                     >
                       <Link href={project.demo} target="_blank" rel="noopener noreferrer">
-                        <Icon name="external-link" className="w-4 h-4 mr-2" />
+                        <ExternalLink className="w-4 h-4 mr-2" />
                         Live Demo
                       </Link>
                     </Button>
@@ -73,7 +79,7 @@ export function ProjectCard({ project, index, isPinned }: ProjectCardProps) {
                       className="rounded-full bg-white text-black hover:bg-gray-200"
                     >
                       <Link href={project.github} target="_blank" rel="noopener noreferrer">
-                        <Icon name="github" className="w-4 h-4 mr-2" />
+                        <Github className="w-4 h-4 mr-2" />
                         GitHub
                       </Link>
                     </Button>
@@ -86,14 +92,14 @@ export function ProjectCard({ project, index, isPinned }: ProjectCardProps) {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <h3 className="font-bold tracking-tight text-lg">{project.title}</h3>
-                <span className="text-sm text-muted-foreground">{project.year}</span>
+                <span className="text-sm text-muted-foreground">{formattedDate}</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">{project.description}</p>
-              {project.tags && project.tags.length > 0 && (
+              {project.technologies && project.technologies.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="px-2 py-1 text-xs rounded-full bg-muted text-muted-foreground">
-                      {tag}
+                  {project.technologies.map((tech: string) => (
+                    <span key={tech} className="px-2 py-1 text-xs rounded-full bg-muted text-muted-foreground">
+                      {tech}
                     </span>
                   ))}
                 </div>

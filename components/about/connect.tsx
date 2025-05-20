@@ -14,7 +14,7 @@ type SocialLink = {
 };
 
 const SOCIAL_LINKS: SocialLink[] = [
-  { name: "Email", href: "mailto:utsavjoshi602@gmail.com", icon: "mail" },
+  { name: "Email", href: "mailto:hi@joshiutsav.com", icon: "mail" },
   {
     name: "LinkedIn",
     href: "https://www.linkedin.com/in/utsavjosh1/",
@@ -76,7 +76,7 @@ export default function ConnectSection() {
       <p className="mb-6 text-left">
         Have a question or just want to chat? Feel free to{" "}
         <Link
-          href="mailto:utsavjoshi602@gmail.com"
+          href="mailto:hi@joshiutsav.com"
           className="underline text-blue-500 dark:text-blue-400"
         >
           text me

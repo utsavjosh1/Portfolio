@@ -7,7 +7,7 @@ export const projects: Project[] = [
     slug: "learnest",
     description:
       "Learnesst is a SaaS application for individuals or organizations looking to launch their own LMS platform with ease and flexibility.",
-    imageUrl: "/learnest.png",
+    imageUrl: "https://f2idqsaenr3pv3f7.public.blob.vercel-storage.com/learnest.png",
     github: "https://github.com/utsavjosh1/learnest",
     demo: "https://learnesst.vercel.app/",
     technologies: [

@@ -6,13 +6,16 @@ import { getSeoMetadata } from "@/lib/seo";
 
 // Enhanced SEO metadata with targeted keywords and comprehensive description
 export const metadata: Metadata = getSeoMetadata({
-  title:
-    "About Utsav Joshi | Senior Software Engineer & Full Stack Developer | JavaScript Expert",
-  description:
-    "Discover Utsav Joshi's professional journey as a skilled software engineer with expertise in JavaScript, TypeScript, React, Next.js and backend technologies. Learn about my professional experience, technical skills, software development philosophy, and innovative projects that demonstrate problem-solving abilities and coding excellence.",
+  title: "About Utsav Joshi | Software Engineer & Full Stack Developer | joshiutsav.com",
+  description: "Learn about Utsav Joshi (joshiutsav) - Senior Software Engineer and Full Stack Developer. Discover my professional journey, technical expertise in JavaScript, TypeScript, React, Next.js, and backend technologies. View my portfolio, projects, and professional experience.",
   path: "/about",
   keywords: [
     "Utsav Joshi",
+    "joshiutsav",
+    "utsavjoshi",
+    "Utsav Joshi Software Engineer",
+    "Utsav Joshi Portfolio",
+    "joshiutsav.com",
     "Senior Software Engineer",
     "Full Stack Developer",
     "JavaScript Expert",
@@ -32,10 +35,8 @@ export const metadata: Metadata = getSeoMetadata({
     "Software Craftsman",
   ],
   openGraph: {
-    title:
-      "About Utsav Joshi | Senior Software Engineer & Full Stack Developer",
-    description:
-      "Explore the professional background, technical expertise, and development philosophy of Utsav Joshi - an accomplished software engineer specializing in modern web technologies and scalable architecture.",
+    title: "About Utsav Joshi | Software Engineer & Full Stack Developer | joshiutsav.com",
+    description: "Professional profile of Utsav Joshi (joshiutsav) - Senior Software Engineer and Full Stack Developer. Learn about my technical expertise, professional experience, and development philosophy.",
     url: `${SITE_CONFIG.url}/about`,
     type: "profile",
     images: [
@@ -43,7 +44,7 @@ export const metadata: Metadata = getSeoMetadata({
         url: `${SITE_CONFIG.url}/images/utsav-joshi-profile.jpg`,
         width: 1200,
         height: 630,
-        alt: "Utsav Joshi - Senior Software Engineer and Full Stack Developer",
+        alt: "Utsav Joshi - Software Engineer & Full Stack Developer",
       },
     ],
     siteName: SITE_CONFIG.title,
@@ -60,8 +61,7 @@ export const metadata: Metadata = getSeoMetadata({
     site: "@utsavjosh1",
     creator: "@utsavjosh1",
     title: "About Utsav Joshi | Software Engineer & Full Stack Developer",
-    description:
-      "Discover the professional journey and technical expertise of Utsav Joshi, a passionate software engineer focused on creating innovative and scalable web solutions.",
+    description: "Professional profile of Utsav Joshi (joshiutsav) - Senior Software Engineer and Full Stack Developer. Learn about my technical expertise and professional experience.",
     images: [`${SITE_CONFIG.url}/images/utsav-joshi-profile.jpg`],
   },
   // alternates: {

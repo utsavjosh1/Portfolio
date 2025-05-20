@@ -1,31 +1,46 @@
-"use client"
+"use client";
 
-import Image from "next/image"
+import { useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface TechStackItemProps {
-  name: string
-  icon: string
-  index?: number
+  name: string;
+  icon: string;
+  index: number;
 }
 
-export function TechStackItem({ name, icon }: TechStackItemProps) {
+export function TechStackItem({ name, icon, index }: TechStackItemProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="p-4 rounded-xl bg-background dark:bg-muted border shadow-sm">
-        <div className="relative w-12 h-12">
-          <Image
-            src={icon || "/placeholder.svg"}
-            alt={name}
-            fill
-            sizes="48px"
-            className="object-contain drop-shadow-sm"
-            unoptimized
-          />
-        </div>
+    <motion.div
+      className="flex flex-col items-center justify-center p-3 rounded-lg border border-border bg-white transition-colors"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{
+        opacity: isLoaded ? 1 : 0,
+        y: isLoaded ? 0 : 20,
+        transition: {
+          delay: index * 0.05,
+          type: "spring",
+          stiffness: 100,
+          damping: 15,
+        },
+      }}
+      whileHover={{
+        scale: 1.05,
+      }}
+    >
+      <div className="relative h-12 w-12 mb-2">
+        <Image
+          src={icon || "/placeholder.svg"}
+          alt={`${name} icon`}
+          width={48}
+          height={48}
+          onLoad={() => setIsLoaded(true)}
+        />
       </div>
-      <span className="text-sm font-medium opacity-70">
-        {name}
-      </span>
-    </div>
-  )
+      <span className="text-sm text-black font-medium">{name}</span>
+    </motion.div>
+  );
 }

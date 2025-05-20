@@ -26,10 +26,10 @@ export function ContactSection() {
         <div className="mt-4 pt-4 border-t text-sm text-muted-foreground">
           <div className="flex items-center justify-between">
             <a
-              href="mailto:utsavjoshi602@gmail.com"
+              href="mailto:hi@joshiutsav.com"
               className="hover:text-primary transition-colors"
             >
-              utsavjoshi602@gmail.com
+              hi@joshiutsav.com
             </a>
             <span className="text-green-500">Delhi, India</span>
           </div>

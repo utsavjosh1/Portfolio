@@ -9,6 +9,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "f2idqsaenr3pv3f7.public.blob.vercel-storage.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "avatars.githubusercontent.com",
         pathname: "/**",
       },
@@ -25,7 +30,19 @@ const nextConfig = {
     ],
     dangerouslyAllowSVG: true,
   },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "index, follow",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = withBundleAnalyzer(nextConfig);
- 

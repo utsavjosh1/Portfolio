@@ -50,11 +50,11 @@ const SocialLink = () => {
           <HoverMotion scale={1.1} duration={0.5}>
             <Image
               src="https://avatars.githubusercontent.com/u/98454866?v=4"
-              alt="Utsav Joshi"
+              alt="Utsav Joshi - Software Engineer & Full Stack Developer"
               width={120}
               height={120}
               className="rounded-full border-2 border-primary/20 shadow-lg object-cover z-10 relative"
-              quality={100}
+              quality={90}
               priority
               itemProp="image"
             />
@@ -95,9 +95,6 @@ const SocialLink = () => {
                 <HoverMotion y={-5} className="group">
                   <div className="flex items-center justify-between bg-gray-200 dark:bg-[#222222] rounded-md text-black dark:text-white p-5 hover:bg-gray-300 dark:hover:bg-[#333333] transition-colors duration-300 shadow-sm hover:shadow-md">
                     <div className="flex items-center gap-3">
-                      <span className="text-primary/80 group-hover:text-primary transition-colors duration-300">
-                        <Icon name={"external-link"} className="w-5 h-5" />
-                      </span>
                       <span className="group-hover:translate-x-1 transition-transform duration-300">
                         {link.name}
                       </span>

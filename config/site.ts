@@ -13,11 +13,17 @@ export interface Project {
 }
 
 export const SITE_CONFIG = {
-  title: "Utsav Joshi | Software Engineer Portfolio",
+  title: "Utsav Joshi | Software Engineer Portfolio | joshiutsav.com",
   name: "Utsav Joshi | Professional Software Engineer Portfolio",
-  url: "https://utsavjosh1.com",
-  ogImage: "https://utsavjosh1.com/og-image.jpg",
+  url: "https://www.joshiutsav.com",
+  ogImage: "https://www.joshiutsav.com/og-image.jpg",
   keywords: [
+    "Utsav Joshi",
+    "joshiutsav",
+    "utsavjoshi",
+    "Utsav Joshi Software Engineer",
+    "Utsav Joshi Portfolio",
+    "joshiutsav.com",
     "software engineer",
     "full stack developer",
     "JavaScript developer",
@@ -36,20 +42,19 @@ export const SITE_CONFIG = {
     "developer portfolio",
     "code quality expert",
   ],
-  description:
-    "Explore Utsav Joshi's professional software engineering portfolio showcasing expertise in JavaScript, TypeScript, React, and modern web development. Browse projects, technical skills, and professional experience.",
+  description: "Professional portfolio of Utsav Joshi (joshiutsav) - Senior Software Engineer specializing in full stack development. Expert in JavaScript, TypeScript, React, and Node.js. View projects, technical skills, and professional experience.",
   links: {
     twitter: "https://twitter.com/utsavjosh1",
     github: "https://github.com/utsavjosh1",
     linkedin: "https://www.linkedin.com/in/utsavjosh1/",
-    email: "utsavjoshi602@gmail.com",
+    email: "hi@joshiutsav.com",
     me: "/me",
     projects: "/projects",
     contact: "/contact",
   },
   author: {
     name: "Utsav Joshi",
-    url: "https://utsavjosh1.com",
+    url: "https://www.joshiutsav.com",
     jobTitle: "Senior Software Engineer",
     bio: "Experienced software engineer specializing in building high-performance web applications with modern JavaScript frameworks and cloud technologies.",
     location: "Delhi, India",
@@ -60,7 +65,7 @@ export const SITE_CONFIG = {
       "https://www.linkedin.com/in/utsavjosh1/",
       "https://github.com/utsavjosh1",
       "https://twitter.com/utsavjosh1",
-      "https://utsavjosh1.com",
+      "https://www.joshiutsav.com",
     ],
   },
   // Professional skills categorized for better content organization

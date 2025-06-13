@@ -2,7 +2,7 @@
 
 import type { PutBlobResult } from "@vercel/blob";
 import { useState, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Upload, CheckCircle, AlertCircle, X } from "lucide-react";
 
 export default function MinimalAvatarUpload() {

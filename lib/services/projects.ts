@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { safePrisma, isPrismaAvailable } from '@/lib/prisma'
 import { Project, ProjectStatus, Prisma } from '@prisma/client'
 
 export type ProjectWithTechnologies = Prisma.ProjectGetPayload<{
@@ -14,6 +14,10 @@ export type ProjectWithTechnologies = Prisma.ProjectGetPayload<{
 export class ProjectService {
   // Get all published projects
   static async getAllProjects(): Promise<ProjectWithTechnologies[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.project.findMany({
       where: {
         published: true
@@ -33,6 +37,10 @@ export class ProjectService {
 
   // Get featured projects
   static async getFeaturedProjects(): Promise<ProjectWithTechnologies[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.project.findMany({
       where: {
         published: true,
@@ -53,6 +61,10 @@ export class ProjectService {
 
   // Get project by slug
   static async getProjectBySlug(slug: string): Promise<ProjectWithTechnologies | null> {
+    if (!isPrismaAvailable()) {
+      return null
+    }
+    const prisma = safePrisma()
     return await prisma.project.findUnique({
       where: {
         slug,
@@ -70,6 +82,10 @@ export class ProjectService {
 
   // Get projects by status
   static async getProjectsByStatus(status: ProjectStatus): Promise<ProjectWithTechnologies[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.project.findMany({
       where: {
         published: true,
@@ -90,6 +106,10 @@ export class ProjectService {
 
   // Get projects by year
   static async getProjectsByYear(year: string): Promise<ProjectWithTechnologies[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.project.findMany({
       where: {
         published: true,
@@ -110,6 +130,7 @@ export class ProjectService {
 
   // Create a new project
   static async createProject(data: Prisma.ProjectCreateInput): Promise<Project> {
+    const prisma = safePrisma()
     return await prisma.project.create({
       data
     })
@@ -117,6 +138,7 @@ export class ProjectService {
 
   // Update a project
   static async updateProject(id: string, data: Prisma.ProjectUpdateInput): Promise<Project> {
+    const prisma = safePrisma()
     return await prisma.project.update({
       where: { id },
       data
@@ -125,6 +147,7 @@ export class ProjectService {
 
   // Delete a project
   static async deleteProject(id: string): Promise<Project> {
+    const prisma = safePrisma()
     return await prisma.project.delete({
       where: { id }
     })
@@ -132,6 +155,7 @@ export class ProjectService {
 
   // Add technology to project
   static async addTechnologyToProject(projectId: string, technologyId: string) {
+    const prisma = safePrisma()
     return await prisma.projectTechnology.create({
       data: {
         projectId,
@@ -142,6 +166,7 @@ export class ProjectService {
 
   // Remove technology from project
   static async removeTechnologyFromProject(projectId: string, technologyId: string) {
+    const prisma = safePrisma()
     return await prisma.projectTechnology.delete({
       where: {
         projectId_technologyId: {

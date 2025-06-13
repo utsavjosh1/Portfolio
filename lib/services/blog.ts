@@ -1,9 +1,13 @@
-import { prisma } from '@/lib/prisma'
+import { safePrisma, isPrismaAvailable } from '@/lib/prisma'
 import { BlogPost, Prisma } from '@prisma/client'
 
 export class BlogService {
   // Get all published blog posts
   static async getAllPosts(): Promise<BlogPost[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.blogPost.findMany({
       where: {
         published: true
@@ -16,6 +20,10 @@ export class BlogService {
 
   // Get featured blog posts
   static async getFeaturedPosts(): Promise<BlogPost[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.blogPost.findMany({
       where: {
         published: true,
@@ -29,6 +37,10 @@ export class BlogService {
 
   // Get recent blog posts
   static async getRecentPosts(limit: number = 3): Promise<BlogPost[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.blogPost.findMany({
       where: {
         published: true
@@ -42,6 +54,10 @@ export class BlogService {
 
   // Get blog post by slug
   static async getPostBySlug(slug: string): Promise<BlogPost | null> {
+    if (!isPrismaAvailable()) {
+      return null
+    }
+    const prisma = safePrisma()
     return await prisma.blogPost.findUnique({
       where: {
         slug,
@@ -52,6 +68,10 @@ export class BlogService {
 
   // Get posts by category
   static async getPostsByCategory(category: string): Promise<BlogPost[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.blogPost.findMany({
       where: {
         published: true,
@@ -65,6 +85,10 @@ export class BlogService {
 
   // Get posts by tag
   static async getPostsByTag(tag: string): Promise<BlogPost[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.blogPost.findMany({
       where: {
         published: true,
@@ -80,6 +104,10 @@ export class BlogService {
 
   // Get all categories
   static async getAllCategories(): Promise<string[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     const posts = await prisma.blogPost.findMany({
       where: {
         published: true,
@@ -98,6 +126,10 @@ export class BlogService {
 
   // Get all tags
   static async getAllTags(): Promise<string[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     const posts = await prisma.blogPost.findMany({
       where: {
         published: true
@@ -113,6 +145,7 @@ export class BlogService {
 
   // Create a new blog post
   static async createPost(data: Prisma.BlogPostCreateInput): Promise<BlogPost> {
+    const prisma = safePrisma()
     return await prisma.blogPost.create({
       data: {
         ...data,
@@ -123,6 +156,7 @@ export class BlogService {
 
   // Update a blog post
   static async updatePost(id: string, data: Prisma.BlogPostUpdateInput): Promise<BlogPost> {
+    const prisma = safePrisma()
     const updateData = { ...data }
     
     // Set publishedAt if publishing for the first time
@@ -145,6 +179,7 @@ export class BlogService {
 
   // Delete a blog post
   static async deletePost(id: string): Promise<BlogPost> {
+    const prisma = safePrisma()
     return await prisma.blogPost.delete({
       where: { id }
     })
@@ -152,6 +187,10 @@ export class BlogService {
 
   // Search blog posts
   static async searchPosts(query: string): Promise<BlogPost[]> {
+    if (!isPrismaAvailable()) {
+      return []
+    }
+    const prisma = safePrisma()
     return await prisma.blogPost.findMany({
       where: {
         published: true,

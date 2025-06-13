@@ -1,178 +1,210 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
 
-import { Icon } from "@/components/icons.svgs";
 import { Button } from "@/components/ui/button";
-import { ProfileImage } from "@/components/home/profile-image";
-import { StatItem } from "@/components/home/stat-item";
-import { TechStackItem } from "@/components/home/tech-stack-item";
-import { ContactSection } from "@/components/contact/contact-section";
+import { Separator } from "@/components/ui/separator";
+import { ProjectCard } from "@/components/project-card";
+import { ExperienceItem } from "@/components/experience-item";
+import { BlogPostPreview } from "@/components/blog-post-preview";
+import { projectsConfig } from "@/config/projects";
+import { blogConfig } from "@/config/blog";
 
-const ProjectsPage = dynamic(() => import("@/components/projects/project"), {
-  loading: () => <div className="h-60 bg-muted rounded-lg animate-pulse"></div>,
-  ssr: false,
-});
-
-// Data
-const PROFILE_DATA = {
-  avatarUrl:
-    "https://avatars.githubusercontent.com/u/98454866?s=400&u=cf6b7cebb0f7ac602a9bc5b40ab2e4bae5dce048&v=4",
-  repoCount: 42,
-  bio: "Coding since, birth, now, till death",
-};
-
-const TECH_STACK = [
-  { name: "MongoDB", icon: "/mongodb.svg" },
-  { name: "Express.js", icon: "/express.svg" },
-  { name: "React", icon: "/reactjs.svg" },
-  { name: "Node.js", icon: "/nodejs.svg" },
-  { name: "Next.js", icon: "/nextjs.svg" },
-  { name: "TypeScript", icon: "/typescript.svg" },
-];
-
-// Add structured data
-const PAGE_SCHEMA = {
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  mainEntity: {
-    "@type": "Person",
-    name: "Utsav Joshi",
-    jobTitle: "Full Stack Developer",
-    knowsAbout: TECH_STACK.map((tech) => tech.name),
-    url: "https://utsavjosh1.com",
-    image: PROFILE_DATA.avatarUrl,
-    sameAs: [
-      "https://github.com/utsavjosh1",
-      "https://linkedin.com/in/utsavjosh1",
-      "https://twitter.com/utsavjosh1",
+export const metadata: Metadata = {
+  title: "Utsav Joshi | Full-Stack Developer",
+  description:
+    "Portfolio of Utsav Joshi, a full-stack developer specializing in React, Next.js, and modern web technologies.",
+  keywords: "developer, portfolio, web development, React, Next.js, full-stack",
+  openGraph: {
+    title: "Utsav Joshi | Full-Stack Developer",
+    description:
+      "Portfolio of Utsav Joshi, a full-stack developer specializing in React, Next.js, and modern web technologies.",
+    url: "https://joshiutsav.com",
+    siteName: "Utsav Joshi Portfolio",
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Utsav Joshi Portfolio",
+      },
     ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Utsav Joshi | Full-Stack Developer",
+    description:
+      "Portfolio of Utsav Joshi, a full-stack developer specializing in React, Next.js, and modern web technologies.",
+    images: ["/images/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
 export default function Home() {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+  const featuredProjects = projectsConfig.getFeaturedProjects().slice(0, 2)
+  const recentPosts = blogConfig.getRecentPosts(2)
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(PAGE_SCHEMA) }}
-      />
-      <main
-        className="space-y-16 relative"
-        itemScope
-        itemType="https://schema.org/ProfilePage"
-      >
-        {/* Hero Section */}
-        <section
-          className={`space-y-8 transition-all duration-1000 ${
-            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-          aria-label="Introduction"
-        >
-          <h1 className="sr-only">
-            Utsav Joshi - Full Stack Developer Portfolio
-          </h1>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
-            <ProfileImage avatar={PROFILE_DATA.avatarUrl} />
-            <Link href={"https://github.com/utsavjosh1"}>
-              <div className="space-y-4">
-                <StatItem
-                  icon={<Icon name="github" className="w-6 h-6" />}
-                  text={`${PROFILE_DATA.repoCount} repositories on GitHub`}
-                />
-                <StatItem
-                  icon={<Icon name="graph" className="w-6 h-6" />}
-                  text="500 views on blogs"
-                />
-              </div>
-            </Link>
+    <div className="space-y-16 animate-fade-in">
+      {/* Hero Section */}
+      <section className="space-y-6">
+        <div className="flex items-center gap-4">
+          <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-primary">
+            <Image
+              src="https://avatars.githubusercontent.com/u/98454866?s=400&u=cf6b7cebb0f7ac602a9bc5b40ab2e4bae5dce048&v=4"
+              alt="Utsav Joshi"
+              width={80}
+              height={80}
+              className="object-contain"
+              priority
+            />
           </div>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Utsav Joshi</h1>
+            <p className="text-muted-foreground">Full-Stack Developer</p>
+          </div>
+        </div>
 
-          <blockquote
-            className="pl-6 border-l-4 border-primary/50 italic text-xl font-medium text-muted-foreground relative group"
-            itemProp="description"
-          >
-            {PROFILE_DATA.bio}
-          </blockquote>
+        <p className="max-w-prose text-lg">
+          I build accessible, user-friendly web applications with modern
+          technologies. Focused on creating elegant solutions to complex
+          problems.
+        </p>
 
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="group hover:bg-primary/10 overflow-hidden relative"
-          >
-            <Link
-              href="/socials"
-              className="inline-flex items-center gap-3 text-lg"
-              aria-label="Connect with me on social media"
-            >
-              <Icon
-                name="external-link"
-                className="w-5 h-5 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-125"
-              />
-              <span className="font-medium relative">
-                More ways to connect
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-500 ease-out"></span>
-              </span>
-              <span className="absolute inset-0 bg-primary/10 -z-10 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-out"></span>
+        <div className="flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/contact">
+              Get in touch <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-        </section>
+          <Button variant="outline" asChild>
+            <Link href="/projects">View all projects</Link>
+          </Button>
+        </div>
 
-        {/* Tech Stack Section */}
-        <section className="space-y-8 group" aria-label="Technical Skills">
-          <h2 className="text-2xl font-bold">Tech Stack</h2>
+        <div className="flex gap-4">
+          <Link href="https://github.com/utsavjosh1" aria-label="GitHub profile">
+            <Github className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+          </Link>
+          <Link href="https://www.linkedin.com/in/utsavjosh1/" aria-label="LinkedIn profile">
+            <Linkedin className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+          </Link>
+          <Link href="mailto:hi@joshiutsav.com" aria-label="Email contact">
+            <Mail className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+          </Link>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6 perspective">
-            {TECH_STACK.map((tech, index) => (
-              <TechStackItem
-                key={tech.name}
-                name={tech.name}
-                icon={tech.icon}
-                index={index}
-              />
-            ))}
-          </div>
-        </section>
+      <Separator />
 
-        {/* Projects Section */}
-        <section className="space-y-8 group" aria-label="Featured Projects">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Featured Projects</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-              className="group overflow-hidden relative"
+      {/* Featured Projects Section */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Featured Projects
+          </h2>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/projects">
+              View all <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          {featuredProjects.map((project, index) => (
+            <div
+              key={project.title}
+              className="group animate-in fade-in-50 duration-500"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              <Link
-                href="/projects"
-                className="flex items-center gap-1"
-                aria-label="View all projects"
-              >
-                View all
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                <span className="absolute inset-0 bg-primary/10 -z-10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out rounded-md"></span>
-              </Link>
-            </Button>
-          </div>
+              <ProjectCard
+                title={project.title}
+                description={project.description}
+                image={project.image}
+                tags={project.tags}
+                link={project.link}
+                className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
 
-          <div className="grid gap-8 transform-gpu relative">
-            <ProjectsPage />
-          </div>
-        </section>
+      <Separator />
 
-        <ContactSection />
-      </main>
-    </>
+      {/* Experience Section */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold tracking-tight">Experience</h2>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/experience">
+              View all <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+
+        <div className="space-y-6">
+          <ExperienceItem
+            company="Nextbill"
+            position="Software Engineer"
+            period="2023 - Present"
+            description="Led the development of the company's flagship product, improving performance by 40% and implementing new features that increased user engagement."
+          />
+          <ExperienceItem
+            company="IIT Madras"
+            position="Backend Developer"
+            period="3 months"
+            description="Worked on multiple research projects using React, Node.js, and AWS, delivering solutions on time and within budget."
+          />
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Blog Section */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Latest Articles
+          </h2>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/blog">
+              View all <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          {recentPosts.map((post, index) => (
+            <div
+              key={post.slug}
+              className="group animate-in fade-in-50 duration-500"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <BlogPostPreview
+                title={post.title}
+                excerpt={post.excerpt}
+                date={post.date}
+                slug={post.slug}
+                className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

@@ -1,54 +1,50 @@
-import { MetadataRoute } from 'next';
-import { SITE_CONFIG } from '@/config/site';
+import type { MetadataRoute } from "next"
+import { siteConfig } from "@/config/site"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = SITE_CONFIG.url;
-  
-  // Core pages with high priority
-  const corePages = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/projects`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/me`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-  ];
+  const baseUrl = siteConfig.url
 
-  // Social and contact pages
-  const socialPages = [
-    {
-      url: `${baseUrl}/socials`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-  ];
+  // Main pages
+  const routes = ["", "/projects", "/experience", "/blog", "/contact"].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: route === "" ? 1 : 0.8,
+  }))
 
-  // Dynamic project pages (if you have individual project pages)
-  const projectPages = SITE_CONFIG.projects?.map(project => ({
-    url: `${baseUrl}/projects/${project.slug}`,
-    lastModified: new Date(project.updatedAt || project.createdAt),
-    changeFrequency: 'monthly' as const,
+  // Project pages
+  const projectSlugs = [
+    "/projects/learnest",
+    "/projects/task-app",
+    "/projects/finance-dashboard",
+    "/projects/ai-content-generator",
+    "/projects/real-estate",
+    "/projects/fitness-tracker",
+  ]
+
+  const projectRoutes = projectSlugs.map((slug) => ({
+    url: `${baseUrl}${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
     priority: 0.6,
-  })) || [];
+  }))
 
-  return [...corePages, ...socialPages, ...projectPages];
-} 
+  // Blog pages
+  const blogSlugs = [
+    "/blog/building-accessible-web-applications",
+    "/blog/future-of-react-server-components",
+    "/blog/optimizing-nextjs-applications",
+    "/blog/design-system-with-tailwind",
+    "/blog/authentication-best-practices",
+    "/blog/state-management-2023",
+  ]
+
+  const blogRoutes = blogSlugs.map((slug) => ({
+    url: `${baseUrl}${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }))
+
+  return [...routes, ...projectRoutes, ...blogRoutes]
+}

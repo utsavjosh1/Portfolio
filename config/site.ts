@@ -1,115 +1,143 @@
-export interface Project {
-  id: number;
-  title: string;
-  slug: string;
-  description: string;
-  imageUrl: string;
-  github: string;
-  demo: string;
-  technologies: string[];
-  createdAt: string;
-  updatedAt: string;
-  pinned: boolean;
-  content: string;
-}
-
-export const SITE_CONFIG = {
-  title: "Utsav Joshi | Software Engineer Portfolio | joshiutsav.com",
-  name: "Utsav Joshi | Professional Software Engineer Portfolio",
-  url: "https://www.joshiutsav.com",
-  ogImage: "https://www.joshiutsav.com/og-image.jpg",
+export const siteConfig = {
+  name: "Utsav Joshi",
+  description:
+    "Utsav Joshi | Software Engineer | Full-Stack Developer specializing in React, Next.js, and modern web technologies.",
+  url: "https://joshiutsav.com",
+  ogImage: "https://joshiutsav.com/og-image.jpg",
+  author: "Utsav Joshi",
+  email: "hi@joshiutsav.com",
+  twitterHandle: "@utsavjosh1",
   keywords: [
+    "developer",
+    "portfolio",
+    "web development",
+    "React",
+    "Next.js",
+    "full-stack",
+    "JavaScript",
+    "TypeScript",
+
+    // Primary Brand Keywords
     "Utsav Joshi",
     "joshiutsav",
     "utsavjoshi",
-    "Utsav Joshi Software Engineer",
-    "Utsav Joshi Portfolio",
+    "Utsav Joshi software engineer",
+    "Utsav Joshi portfolio",
     "joshiutsav.com",
+    "hire Utsav Joshi",
+
+    // Core Professional Titles
     "software engineer",
     "full stack developer",
-    "JavaScript developer",
-    "TypeScript expert",
-    "React engineer",
-    "Next.js developer",
-    "Node.js specialist",
-    "web development portfolio",
-    "software architecture",
+    "senior software developer",
+    "web developer",
     "frontend developer",
-    "backend engineer",
-    "API development",
-    "cloud computing expert",
-    "tech professional",
-    "hire software engineer",
-    "developer portfolio",
-    "code quality expert",
+    "backend developer",
+    "JavaScript developer",
+    "TypeScript developer",
+    "React developer",
+    "Node.js developer",
+
+    // Technical Skills & Frameworks
+    "React specialist",
+    "Next.js developer",
+    "TypeScript expert",
+    "JavaScript expert",
+    "Node.js specialist",
+    "Express.js developer",
+    "MongoDB developer",
+    "PostgreSQL developer",
+    "REST API developer",
+    "GraphQL developer",
+
+    // Service-Oriented Keywords
+    "custom web development",
+    "web application development",
+    "responsive web design",
+    "mobile app development",
+    "API development services",
+    "database design",
+    "cloud solutions",
+    "software architecture",
+    "code optimization",
+    "performance tuning",
+
+    // Long-tail Keywords
+    "experienced React developer for hire",
+    "senior full stack JavaScript engineer",
+    "professional TypeScript Next.js developer",
+    "custom software development services",
+    "modern web application architect",
+    "scalable frontend solutions",
+    "enterprise web development",
+    "freelance software engineer",
+    "contract developer",
+    "remote software developer",
+
+    // Problem-Solving Keywords
+    "convert design to code",
+    "website redesign developer",
+    "legacy system modernization",
+    "web performance optimization",
+    "mobile-first development",
+    "cross-browser compatibility",
+    "SEO-friendly development",
+    "accessibility compliance",
+    "secure web applications",
+    "user experience optimization",
+
+    // Industry & Domain
+    "fintech developer",
+    "e-commerce developer",
+    "SaaS application developer",
+    "startup technical consultant",
+    "enterprise software solutions",
+    "healthcare software developer",
+    "education platform developer",
+    "real estate web applications",
+
+    // Technical Methodologies
+    "agile development",
+    "test-driven development",
+    "clean code practices",
+    "microservices architecture",
+    "serverless development",
+    "DevOps integration",
+    "CI/CD pipeline setup",
+    "code review specialist",
+
+    // Hiring Intent Keywords
+    "hire experienced developer",
+    "freelance web developer",
+    "contract software engineer",
+    "remote React developer",
+    "full-time developer available",
+    "part-time development services",
+    "technical consultation services",
+    "code audit services",
+
+    // Location-based (customize as needed)
+    "software developer India",
+    "remote developer worldwide",
+    "global software engineer",
+    "international web developer",
+
+    // Soft Skills & Qualities
+    "reliable software engineer",
+    "communicative developer",
+    "deadline-driven programmer",
+    "collaborative team player",
+    "innovative problem solver",
+    "detail-oriented developer",
+    "client-focused engineer",
+    "results-driven programmer",
   ],
-  description: "Professional portfolio of Utsav Joshi (joshiutsav) - Senior Software Engineer specializing in full stack development. Expert in JavaScript, TypeScript, React, and Node.js. View projects, technical skills, and professional experience.",
   links: {
     twitter: "https://twitter.com/utsavjosh1",
     github: "https://github.com/utsavjosh1",
     linkedin: "https://www.linkedin.com/in/utsavjosh1/",
     email: "hi@joshiutsav.com",
-    me: "/me",
-    projects: "/projects",
-    contact: "/contact",
   },
-  author: {
-    name: "Utsav Joshi",
-    url: "https://www.joshiutsav.com",
-    jobTitle: "Senior Software Engineer",
-    bio: "Experienced software engineer specializing in building high-performance web applications with modern JavaScript frameworks and cloud technologies.",
-    location: "Delhi, India",
-    twitter: "https://twitter.com/utsavjosh1",
-    github: "https://github.com/utsavjosh1",
-    linkedin: "https://www.linkedin.com/in/utsavjosh1/",
-    socialProfiles: [
-      "https://www.linkedin.com/in/utsavjosh1/",
-      "https://github.com/utsavjosh1",
-      "https://twitter.com/utsavjosh1",
-      "https://www.joshiutsav.com",
-    ],
-  },
-  // Professional skills categorized for better content organization
-  skills: {
-    languages: ["JavaScript", "TypeScript", "HTML5", "CSS3", "SQL", "Python"],
-    frontend: [
-      "React",
-      "Next.js",
-      "Redux",
-      "Tailwind CSS",
-      "Styled Components",
-      "Framer Motion",
-    ],
-    backend: [
-      "Node.js",
-      "Express",
-      "NestJS",
-      "GraphQL",
-      "REST API",
-      "WebSockets",
-    ],
-    database: ["MongoDB", "PostgreSQL", "MySQL", "Redis", "Firebase"],
-    cloud: ["AWS", "Google Cloud", "Azure", "Vercel", "Netlify"],
-    tools: ["Git", "Docker", "Kubernetes", "CI/CD", "Jest", "Cypress"],
-  },
-  // Site sections for improved structure
-  sections: [
-    { name: "About", path: "/about" },
-    { name: "Projects", path: "/projects" },
-    { name: "Skills", path: "/skills" },
-    { name: "Experience", path: "/experience" },
-    { name: "Blog", path: "/blog" },
-    { name: "Contact", path: "/contact" },
-  ],
-  // Professional services offered - helps with search intent matching
-  services: [
-    "Full Stack Web Development",
-    "Frontend Application Development",
-    "API Development & Integration",
-    "Software Architecture Design",
-    "Performance Optimization",
-    "Technical Consultation",
-  ],
   // Important for local SEO
   location: {
     city: "New Delhi",
@@ -121,6 +149,4 @@ export const SITE_CONFIG = {
   analytics: {
     googleAnalyticsId: "G-YGSVWFZS92",
   },
-  // Projects configuration
-  projects: [] as Project[],
 };

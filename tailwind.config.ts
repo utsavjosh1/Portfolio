@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 const config = {
   darkMode: ["class"],
@@ -7,6 +7,7 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+    "*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -72,9 +73,248 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: "65ch",
+            color: "var(--tw-prose-body)",
+            '[class~="lead"]': {
+              color: "var(--tw-prose-lead)",
+            },
+            a: {
+              color: "var(--tw-prose-links)",
+              textDecoration: "underline",
+              fontWeight: "500",
+            },
+            strong: {
+              color: "var(--tw-prose-bold)",
+              fontWeight: "600",
+            },
+            "a strong": {
+              color: "inherit",
+            },
+            "blockquote strong": {
+              color: "inherit",
+            },
+            "thead th strong": {
+              color: "inherit",
+            },
+            ol: {
+              listStyleType: "decimal",
+            },
+            'ol[type="A"]': {
+              listStyleType: "upper-alpha",
+            },
+            'ol[type="a"]': {
+              listStyleType: "lower-alpha",
+            },
+            'ol[type="A" s]': {
+              listStyleType: "upper-alpha",
+            },
+            'ol[type="a" s]': {
+              listStyleType: "lower-alpha",
+            },
+            'ol[type="I"]': {
+              listStyleType: "upper-roman",
+            },
+            'ol[type="i"]': {
+              listStyleType: "lower-roman",
+            },
+            'ol[type="I" s]': {
+              listStyleType: "upper-roman",
+            },
+            'ol[type="i" s]': {
+              listStyleType: "lower-roman",
+            },
+            'ol[type="1"]': {
+              listStyleType: "decimal",
+            },
+            ul: {
+              listStyleType: "disc",
+            },
+            "ol > li::marker": {
+              fontWeight: "400",
+              color: "var(--tw-prose-counters)",
+            },
+            "ul > li::marker": {
+              color: "var(--tw-prose-bullets)",
+            },
+            hr: {
+              borderColor: "var(--tw-prose-hr)",
+              borderTopWidth: 1,
+            },
+            blockquote: {
+              fontWeight: "500",
+              fontStyle: "italic",
+              color: "var(--tw-prose-quotes)",
+              borderLeftWidth: "0.25rem",
+              borderLeftColor: "var(--tw-prose-quote-borders)",
+              paddingLeft: "1em",
+            },
+            "blockquote p:first-of-type::before": {
+              content: "open-quote",
+            },
+            "blockquote p:last-of-type::after": {
+              content: "close-quote",
+            },
+            h1: {
+              color: "var(--tw-prose-headings)",
+              fontWeight: "800",
+            },
+            "h1 strong": {
+              fontWeight: "900",
+              color: "inherit",
+            },
+            h2: {
+              color: "var(--tw-prose-headings)",
+              fontWeight: "700",
+            },
+            "h2 strong": {
+              fontWeight: "800",
+              color: "inherit",
+            },
+            h3: {
+              color: "var(--tw-prose-headings)",
+              fontWeight: "600",
+            },
+            "h3 strong": {
+              fontWeight: "700",
+              color: "inherit",
+            },
+            h4: {
+              color: "var(--tw-prose-headings)",
+              fontWeight: "600",
+            },
+            "h4 strong": {
+              fontWeight: "700",
+              color: "inherit",
+            },
+            img: {
+              marginTop: "2em",
+              marginBottom: "2em",
+            },
+            "figure > *": {
+              marginTop: "0",
+              marginBottom: "0",
+            },
+            figcaption: {
+              color: "var(--tw-prose-captions)",
+              fontSize: "0.875em",
+              lineHeight: "1.4285714",
+              marginTop: "0.8571429em",
+            },
+            code: {
+              color: "var(--tw-prose-code)",
+              fontWeight: "600",
+              fontSize: "0.875em",
+            },
+            "code::before": {
+              content: '"`"',
+            },
+            "code::after": {
+              content: '"`"',
+            },
+            "a code": {
+              color: "inherit",
+            },
+            "h1 code": {
+              color: "inherit",
+            },
+            "h2 code": {
+              color: "inherit",
+            },
+            "h3 code": {
+              color: "inherit",
+            },
+            "h4 code": {
+              color: "inherit",
+            },
+            "blockquote code": {
+              color: "inherit",
+            },
+            "thead th code": {
+              color: "inherit",
+            },
+            pre: {
+              color: "var(--tw-prose-pre-code)",
+              backgroundColor: "var(--tw-prose-pre-bg)",
+              overflowX: "auto",
+              fontWeight: "400",
+              fontSize: "0.875em",
+              lineHeight: "1.7142857",
+              marginTop: "1.7142857em",
+              marginBottom: "1.7142857em",
+              borderRadius: "0.375rem",
+              paddingTop: "0.8571429em",
+              paddingRight: "1.1428571em",
+              paddingBottom: "0.8571429em",
+              paddingLeft: "1.1428571em",
+            },
+            "pre code": {
+              backgroundColor: "transparent",
+              borderWidth: "0",
+              borderRadius: "0",
+              padding: "0",
+              fontWeight: "inherit",
+              color: "inherit",
+              fontSize: "inherit",
+              fontFamily: "inherit",
+              lineHeight: "inherit",
+            },
+            "pre code::before": {
+              content: "none",
+            },
+            "pre code::after": {
+              content: "none",
+            },
+            table: {
+              width: "100%",
+              tableLayout: "auto",
+              textAlign: "left",
+              marginTop: "2em",
+              marginBottom: "2em",
+            },
+            thead: {
+              borderBottomWidth: "1px",
+              borderBottomColor: "var(--tw-prose-th-borders)",
+            },
+            "thead th": {
+              color: "var(--tw-prose-headings)",
+              fontWeight: "600",
+              verticalAlign: "bottom",
+              paddingRight: "0.5714286em",
+              paddingBottom: "0.5714286em",
+              paddingLeft: "0.5714286em",
+            },
+            "thead th:first-child": {
+              paddingLeft: "0",
+            },
+            "thead th:last-child": {
+              paddingRight: "0",
+            },
+            "tbody tr": {
+              borderBottomWidth: "1px",
+              borderBottomColor: "var(--tw-prose-td-borders)",
+            },
+            "tbody tr:last-child": {
+              borderBottomWidth: "0",
+            },
+            "tbody td": {
+              verticalAlign: "baseline",
+            },
+            tfoot: {
+              borderTopWidth: "1px",
+              borderTopColor: "var(--tw-prose-th-borders)",
+            },
+            "tfoot td": {
+              verticalAlign: "top",
+            },
+          },
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+} satisfies Config
 
-export default config;
+export default config

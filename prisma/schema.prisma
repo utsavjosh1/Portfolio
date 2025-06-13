@@ -14,18 +14,233 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Project {
-  id           Int      @id @default(autoincrement())
-  title        String
-  description  String   @db.Text
-  imageUrl     String
-  github       String
-  demo         String?
-  technologies String[]
-  createdAt    String
-  updatedAt    String
-  pinned       Boolean  @default(false)
-  slug         String   @unique
-  content      String?  @db.Text
+// User model for authentication and profile
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatar    String?
+  bio       String?
+  location  String?
+  website   String?
+  github    String?
+  linkedin  String?
+  twitter   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  projects   Project[]
+  blogPosts  BlogPost[]
+  experiences Experience[]
+  skills     Skill[]
+  
+  @@map("users")
 }
 
+// Project model
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  content     String?  // Detailed markdown content
+  image       String?
+  gallery     String[] // Array of image URLs
+  tags        String[]
+  status      ProjectStatus @default(COMPLETED)
+  featured    Boolean  @default(false)
+  year        String?
+  github      String?
+  demo        String?
+  slug        String   @unique
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  technologies ProjectTechnology[]
+  
+  @@map("projects")
+}
+
+// Technology model for projects
+model Technology {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  icon        String?
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  projects    ProjectTechnology[]
+  skills      Skill[]
+  
+  @@map("technologies")
+}
+
+// Junction table for Project-Technology many-to-many relationship
+model ProjectTechnology {
+  id           String @id @default(cuid())
+  projectId    String
+  technologyId String
+  
+  project      Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, technologyId])
+  @@map("project_technologies")
+}
+
+// Blog post model
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  excerpt     String
+  content     String   // Markdown content
+  slug        String   @unique
+  featured    Boolean  @default(false)
+  published   Boolean  @default(false)
+  tags        String[]
+  category    String?
+  readingTime String?
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publishedAt DateTime?
+
+  // Relations
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  
+  @@map("blog_posts")
+}
+
+// Experience model
+model Experience {
+  id          String   @id @default(cuid())
+  company     String
+  position    String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  current     Boolean  @default(false)
+  location    String?
+  website     String?
+  logo        String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  
+  @@map("experiences")
+}
+
+// Skills model
+model Skill {
+  id           String   @id @default(cuid())
+  name         String
+  level        SkillLevel @default(INTERMEDIATE)
+  category     String?
+  description  String?
+  yearsOfExp   Int?
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  userId       String?
+  user         User?      @relation(fields: [userId], references: [id])
+  technologyId String?
+  technology   Technology? @relation(fields: [technologyId], references: [id])
+  
+  @@map("skills")
+}
+
+// Contact form submissions
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  status    ContactStatus @default(UNREAD)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("contact_submissions")
+}
+
+// Newsletter subscriptions
+model NewsletterSubscription {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  active      Boolean  @default(true)
+  source      String?  // Where they subscribed from
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("newsletter_subscriptions")
+}
+
+// Analytics for tracking page views, project clicks, etc.
+model Analytics {
+  id        String   @id @default(cuid())
+  event     String   // 'page_view', 'project_click', 'blog_view', etc.
+  page      String?
+  projectId String?
+  postId    String?
+  userAgent String?
+  ip        String?
+  country   String?
+  city      String?
+  createdAt DateTime @default(now())
+  
+  @@map("analytics")
+}
+
+// Testimonials
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?
+  company   String?
+  content   String
+  avatar    String?
+  rating    Int?     @default(5)
+  featured  Boolean  @default(false)
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("testimonials")
+}
+
+// Enums
+enum ProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+  ON_HOLD
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum ContactStatus {
+  UNREAD
+  READ
+  REPLIED
+  ARCHIVED
+}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { MessageSquare, Users, BarChart3, LogOut, Shield } from "lucide-react"
+import { MessageSquare, Users, BarChart3, LogOut, Shield, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 
@@ -64,7 +64,7 @@ export function AdminNav() {
     {
       href: "/admin/newsletter",
       label: "Newsletter",
-      icon: Users,
+      icon: Mail,
     },
     {
       href: "/admin/analytics",

@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { safePrisma } from '@/lib/prisma'
+import { PrismaClient } from '@prisma/client'
 
+const prisma = new PrismaClient()
+
+// GET - Retrieve all newsletter subscriptions (admin only)
 export async function GET(request: NextRequest) {
   try {
-    const prisma = safePrisma()
-    
-    // In production, you'd want to add authentication here
-    // For now, this is just for development/testing
-    
     const subscriptions = await prisma.newsletterSubscription.findMany({
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         email: true,
@@ -17,29 +16,19 @@ export async function GET(request: NextRequest) {
         createdAt: true,
         updatedAt: true,
       },
-      orderBy: {
-        createdAt: 'desc'
-      }
     })
-
-    const stats = {
-      total: subscriptions.length,
-      active: subscriptions.filter(sub => sub.active).length,
-      inactive: subscriptions.filter(sub => !sub.active).length,
-      sources: subscriptions.reduce((acc, sub) => {
-        acc[sub.source || 'unknown'] = (acc[sub.source || 'unknown'] || 0) + 1
-        return acc
-      }, {} as Record<string, number>)
-    }
 
     return NextResponse.json({
-      subscriptions,
-      stats
+      success: true,
+      data: subscriptions,
     })
   } catch (error) {
-    console.error('Newsletter admin error:', error)
+    console.error('Failed to fetch newsletter subscriptions:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch newsletter data' },
+      { 
+        success: false, 
+        message: 'Failed to fetch subscriptions' 
+      },
       { status: 500 }
     )
   }

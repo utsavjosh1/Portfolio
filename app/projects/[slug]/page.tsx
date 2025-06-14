@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, ExternalLink, Github } from "lucide-react"
+import { ArrowLeft, ExternalLink, Github, Calendar, CheckCircle, Code } from "lucide-react"
 
 import { ProjectService } from "@/lib/services/projects"
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ProjectCard } from "@/components/project-card"
 import { MarkdownContent } from "@/components/ui/markdown-content"
+import { NewsletterSignup } from "@/components/newsletter-signup"
 
 interface ProjectPageProps {
   params: Promise<{
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     openGraph: {
       title: project.title,
       description: project.description,
-      images: [project.image],
+      images: [project.image || "/placeholder.svg"],
     },
   }
 }
@@ -58,21 +59,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const allProjects = await ProjectService.getAllProjects()
   const relatedProjects = allProjects
     .filter(p => p.slug !== project.slug && p.featured)
-    .slice(0, 3)
+    .slice(0, 2)
     .map(p => ({
       title: p.title,
       description: p.description,
-      image: p.image,
+      image: p.image || "/placeholder.svg",
       tags: p.technologies.map((pt: any) => pt.technology.name),
       link: `/projects/${p.slug}`
     }))
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {/* Back Button */}
-      <div>
+      <div className="animate-in fade-in-50 duration-300">
         <Link href="/projects">
-          <Button variant="ghost" size="sm" className="gap-2">
+          <Button variant="ghost" size="sm" className="gap-2 hover:bg-muted/50 transition-colors">
             <ArrowLeft className="h-4 w-4" />
             Back to Projects
           </Button>
@@ -80,41 +81,59 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </div>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20">
-        <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-        <div className="relative p-8 md:p-12 space-y-8">
-          <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-background via-muted/10 to-muted/20 animate-in fade-in-50 slide-in-from-bottom-4 duration-700">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,0,0,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05),transparent_50%)]" />
+        <div className="relative p-8 md:p-16 space-y-10">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div className="space-y-8">
+              {/* Project Meta */}
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span>{project.year}</span>
+                </div>
+                <div className="w-1 h-1 bg-muted-foreground rounded-full" />
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4" />
+                  <span className="capitalize">{project.status.toLowerCase()}</span>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground leading-tight">
                   {project.title}
                 </h1>
-                <p className="text-xl text-muted-foreground leading-relaxed">
+                <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light">
                   {project.description}
                 </p>
               </div>
               
-              <div className="flex flex-wrap gap-2">
-                {project.technologies.map((pt: any) => (
-                  <Badge key={pt.technology.name} variant="secondary" className="px-3 py-1">
+              <div className="flex flex-wrap gap-3">
+                {project.technologies.map((pt: any, index: number) => (
+                  <Badge 
+                    key={pt.technology.name} 
+                    variant="secondary" 
+                    className="px-4 py-2 text-sm font-medium hover:bg-muted transition-colors animate-in fade-in-50 duration-300"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
                     {pt.technology.name}
                   </Badge>
                 ))}
               </div>
               
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-4 pt-4">
                 {project.demo && (
                   <Link href={project.demo} target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                      <ExternalLink className="h-4 w-4" />
+                    <Button size="lg" className="gap-3 px-8 py-6 text-base font-medium hover:scale-105 transition-all duration-200">
+                      <ExternalLink className="h-5 w-5" />
                       Live Demo
                     </Button>
                   </Link>
                 )}
                 {project.github && (
                   <Link href={project.github} target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" size="lg" className="gap-2 border-2 hover:bg-muted">
-                      <Github className="h-4 w-4" />
+                    <Button variant="outline" size="lg" className="gap-3 px-8 py-6 text-base font-medium hover:bg-muted hover:scale-105 transition-all duration-200">
+                      <Github className="h-5 w-5" />
                       View Code
                     </Button>
                   </Link>
@@ -122,17 +141,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
             </div>
             
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-3xl" />
-              <div className="relative aspect-video overflow-hidden rounded-2xl border-2 border-white/20 shadow-2xl">
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-muted/20 to-muted/40 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative aspect-video overflow-hidden rounded-3xl border border-border shadow-2xl bg-background">
                 <Image
                   src={project.image || "/placeholder.svg"}
                   alt={project.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             </div>
           </div>
@@ -141,11 +161,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* Overview Section */}
       {project.content && (
-        <Card className="border-none shadow-lg bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
-          <CardContent className="p-8">
+        <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-200">
+          <CardHeader className="pb-6">
+            <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center">
+                <div className="w-4 h-4 bg-foreground rounded-sm" />
+              </div>
+              Project Overview
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-8 pt-0">
             <MarkdownContent 
               content={project.content} 
-              className="text-foreground"
+              className="text-foreground prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground"
             />
           </CardContent>
         </Card>
@@ -153,27 +181,37 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* Technologies Section */}
       {project.technologies && project.technologies.length > 0 && (
-        <Card className="border-none shadow-lg bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
-          <CardHeader className="pb-6">
-            <CardTitle className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+        <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-300">
+          <CardHeader className="pb-8">
+            <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center">
+                <Code className="h-4 w-4 text-foreground" />
+              </div>
               Technologies Used
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {project.technologies.map((pt: any) => (
-                <div key={pt.technology.name} className="group p-4 rounded-xl border border-border/50 bg-white/50 dark:bg-black/20 hover:bg-white dark:hover:bg-black/40 transition-all duration-300 hover:shadow-md hover:-translate-y-1">
+          <CardContent className="p-8 pt-0">
+            <div className="grid gap-6 sm:grid-cols-2">
+              {project.technologies.map((pt: any, index: number) => (
+                <div 
+                  key={pt.technology.name} 
+                  className="group p-6 rounded-2xl border border-border bg-background hover:bg-muted/30 hover:border-muted-foreground/20 transition-all hover:shadow-md hover:-translate-y-1 animate-in fade-in-50 duration-300"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10 flex items-center justify-center">
-                      <div className="w-6 h-6 bg-blue-500 rounded" />
+                    <div className="w-12 h-12 rounded-xl bg-muted group-hover:bg-foreground/10 flex items-center justify-center transition-colors duration-300">
+                      <div className="w-6 h-6 bg-foreground rounded-md" />
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <div className="flex-1 space-y-2">
+                      <h4 className="font-semibold text-foreground text-lg group-hover:text-foreground transition-colors">
                         {pt.technology.name}
                       </h4>
-                      <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         {pt.technology.description}
                       </p>
+                      <div className="text-xs text-muted-foreground/70 uppercase tracking-wide font-medium">
+                        {pt.technology.category}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -185,21 +223,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* Gallery Section */}
       {project.gallery && project.gallery.length > 0 && (
-        <Card>
+        <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-400">
           <CardHeader>
-            <CardTitle>Project Gallery</CardTitle>
+            <CardTitle className="text-2xl font-bold text-foreground">Project Gallery</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 sm:grid-cols-2">
+          <CardContent className="p-8 pt-0">
+            <div className="grid gap-6 sm:grid-cols-2">
               {project.gallery.map((image: string, index: number) => (
-                <div key={index} className="relative aspect-video overflow-hidden rounded-lg">
+                <div 
+                  key={index} 
+                  className="group relative aspect-video overflow-hidden rounded-2xl border border-border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                >
                   <Image
                     src={image}
                     alt={`${project.title} screenshot ${index + 1}`}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               ))}
             </div>
@@ -208,26 +250,26 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       )}
 
       {/* Project Stats */}
-      <Card className="border-none shadow-lg bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
+      <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-500">
         <CardContent className="p-8">
           <div className="grid gap-8 sm:grid-cols-3">
-            <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+            <div className="text-center space-y-3 group">
+              <div className="text-4xl font-bold text-foreground group-hover:scale-110 transition-transform duration-200">
                 {project.year}
               </div>
-              <div className="text-sm text-muted-foreground">Year</div>
+              <div className="text-sm text-muted-foreground uppercase tracking-wide font-medium">Year</div>
             </div>
-            <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                {project.status}
+            <div className="text-center space-y-3 group">
+              <div className="text-4xl font-bold text-foreground group-hover:scale-110 transition-transform duration-200 capitalize">
+                {project.status.toLowerCase()}
               </div>
-              <div className="text-sm text-muted-foreground">Status</div>
+              <div className="text-sm text-muted-foreground uppercase tracking-wide font-medium">Status</div>
             </div>
-            <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-pink-600 dark:text-pink-400">
+            <div className="text-center space-y-3 group">
+              <div className="text-4xl font-bold text-foreground group-hover:scale-110 transition-transform duration-200">
                 {project.technologies.length}
               </div>
-              <div className="text-sm text-muted-foreground">Technologies</div>
+              <div className="text-sm text-muted-foreground uppercase tracking-wide font-medium">Technologies</div>
             </div>
           </div>
         </CardContent>
@@ -235,27 +277,38 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* Related Projects */}
       {relatedProjects.length > 0 && (
-        <Card>
+        <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-600">
           <CardHeader>
-            <CardTitle>Related Projects</CardTitle>
+            <CardTitle className="text-2xl font-bold text-foreground">Related Projects</CardTitle>
+            <p className="text-muted-foreground">Explore more of my work</p>
           </CardHeader>
-          <CardContent>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {relatedProjects.map((relatedProject) => (
-                <ProjectCard
+          <CardContent className="p-8 pt-0">
+            <div className="grid gap-8 md:grid-cols-2">
+              {relatedProjects.map((relatedProject, index) => (
+                <div
                   key={relatedProject.title}
-                  title={relatedProject.title}
-                  description={relatedProject.description}
-                  image={relatedProject.image}
-                  tags={relatedProject.tags}
-                  link={relatedProject.link}
-                  className="h-full"
-                />
+                  className="animate-in fade-in-50 duration-500"
+                  style={{ animationDelay: `${index * 200}ms` }}
+                >
+                  <ProjectCard
+                    title={relatedProject.title}
+                    description={relatedProject.description}
+                    image={relatedProject.image}
+                    tags={relatedProject.tags}
+                    link={relatedProject.link}
+                    className="h-full hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+                  />
+                </div>
               ))}
             </div>
           </CardContent>
         </Card>
       )}
+
+      {/* Newsletter Signup */}
+      <section className="pt-12 border-t border-border animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-700">
+        <NewsletterSignup source={`project-${project.slug}`} />
+      </section>
     </div>
   )
 } 

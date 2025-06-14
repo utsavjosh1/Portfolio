@@ -2,8 +2,8 @@ export const siteConfig = {
   name: "Utsav Joshi",
   description:
     "Utsav Joshi | Software Engineer | Full-Stack Developer specializing in React, Next.js, and modern web technologies.",
-  url: "https://joshiutsav.com",
-  ogImage: "https://joshiutsav.com/og-image.jpg",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://joshiutsav.com",
+  ogImage: `${process.env.NEXT_PUBLIC_SITE_URL || "https://joshiutsav.com"}/og-image.jpg`,
   author: "Utsav Joshi",
   email: "hi@joshiutsav.com",
   twitterHandle: "@utsavjosh1",

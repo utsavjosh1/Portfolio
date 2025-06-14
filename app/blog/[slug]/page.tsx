@@ -5,11 +5,10 @@ import { ArrowLeft, Calendar, Clock, Twitter } from "lucide-react"
 
 import { BlogService } from "@/lib/services/blog"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { BlogPostPreview } from "@/components/blog-post-preview"
 import { ShareButtons } from "@/components/ui/share-buttons"
 import { MarkdownContent } from "@/components/ui/markdown-content"
+import { NewsletterSignup } from "@/components/newsletter-signup"
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -73,7 +72,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const shareText = `Check out this article: ${post.title}`
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-3xl mx-auto space-y-8">
       {/* Back Button */}
       <div>
         <Link href="/blog">
@@ -85,53 +84,49 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 dark:from-emerald-900/20 dark:via-blue-900/20 dark:to-purple-900/20">
-        <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-        <div className="relative p-8 md:p-12 space-y-8">
-          <div className="max-w-4xl space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
-              {post.title}
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl">
-              {post.excerpt}
-            </p>
-            
-            {/* Metadata */}
-            <div className="flex flex-wrap items-center gap-6 text-sm">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-sm">
-                <Calendar className="h-4 w-4 text-emerald-600" />
-                <span className="font-medium">
-                  {post.publishedAt?.toISOString().split('T')[0] || post.createdAt.toISOString().split('T')[0]}
-                </span>
-              </div>
-              {post.readingTime && (
-                <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-sm">
-                  <Clock className="h-4 w-4 text-blue-600" />
-                  <span className="font-medium">{post.readingTime}</span>
-                </div>
-              )}
-              {post.category && (
-                <div className="px-3 py-2 rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-sm">
-                  <span className="font-medium">{post.category}</span>
-                </div>
-              )}
+      <div className="border-b border-border pb-8">
+        <div className="space-y-6">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-tight">
+            {post.title}
+          </h1>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            {post.excerpt}
+          </p>
+          
+          {/* Metadata */}
+          <div className="flex flex-wrap items-center gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <span className="text-muted-foreground">
+                {post.publishedAt?.toISOString().split('T')[0] || post.createdAt.toISOString().split('T')[0]}
+              </span>
             </div>
-            
-            {/* Tags */}
-            {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag: string) => (
-                  <Badge 
-                    key={tag} 
-                    variant="secondary" 
-                    className="px-3 py-1 bg-white/70 dark:bg-black/30 backdrop-blur-sm hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
-                  >
-                    {tag}
-                  </Badge>
-                ))}
+            {post.readingTime && (
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <span className="text-muted-foreground">{post.readingTime}</span>
               </div>
             )}
+            {post.category && (
+              <span className="px-2 py-1 text-xs font-medium bg-muted text-muted-foreground rounded border border-border">
+                {post.category}
+              </span>
+            )}
           </div>
+          
+          {/* Tags */}
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag: string) => (
+                <span 
+                  key={tag} 
+                  className="px-2 py-1 text-xs font-medium bg-foreground text-background rounded"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -139,75 +134,52 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="space-y-8">
         {/* Article Content */}
         {post.content && (
-          <Card className="border-none shadow-lg bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
-            <CardContent className="p-8">
-              <article>
-                <MarkdownContent 
-                  content={post.content} 
-                  className="text-foreground"
-                />
-              </article>
-            </CardContent>
-          </Card>
+          <div className="border border-border rounded-lg p-8 bg-background">
+            <article className="prose prose-gray dark:prose-invert max-w-none">
+              <MarkdownContent 
+                content={post.content} 
+                className="text-foreground"
+              />
+            </article>
+          </div>
         )}
 
         {/* Share Buttons */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <h3 className="font-medium">Share this article</h3>
-              <ShareButtons
-                url={shareUrl}
-                title={post.title}
-                platforms={['twitter', 'linkedin', 'facebook']}
-                twitterHandle="@joshiutsav"
-              />
-            </div>
-          </CardContent>
-        </Card>
+        <div className="border border-border rounded-lg p-6 bg-background">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h3 className="font-medium text-foreground">Share this article</h3>
+            <ShareButtons
+              url={shareUrl}
+              title={post.title}
+              platforms={['twitter', 'linkedin', 'facebook']}
+              twitterHandle="@joshiutsav"
+            />
+          </div>
+        </div>
 
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Related Articles</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {relatedPosts.map((relatedPost) => (
-                  <BlogPostPreview
-                    key={relatedPost.slug}
-                    title={relatedPost.title}
-                    excerpt={relatedPost.excerpt}
-                    date={relatedPost.date}
-                    slug={relatedPost.slug}
-                    className="h-full"
-                  />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <div className="border border-border rounded-lg p-6 bg-background">
+            <h3 className="text-lg font-semibold text-foreground mb-4 border-b border-border pb-2">Related Articles</h3>
+            <div className="space-y-4">
+              {relatedPosts.map((relatedPost) => (
+                <BlogPostPreview
+                  key={relatedPost.slug}
+                  title={relatedPost.title}
+                  excerpt={relatedPost.excerpt}
+                  date={relatedPost.date}
+                  slug={relatedPost.slug}
+                  className="transition-all duration-200 hover:bg-muted/30 border-border"
+                />
+              ))}
+            </div>
+          </div>
         )}
 
-        {/* Newsletter CTA */}
-        <Card className="bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 dark:from-emerald-900/20 dark:via-blue-900/20 dark:to-purple-900/20 border-none">
-          <CardContent className="p-8 text-center space-y-4">
-            <h3 className="text-xl font-semibold">Enjoyed this article?</h3>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              Subscribe to my newsletter to get notified when I publish new articles about web development and design.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-2 rounded-md border border-input bg-background"
-              />
-              <Button className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700">
-                Subscribe
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Newsletter Signup */}
+        <div className="pt-8 border-t border-border">
+          <NewsletterSignup source={`blog-post-${post.slug}`} />
+        </div>
       </div>
     </div>
   )

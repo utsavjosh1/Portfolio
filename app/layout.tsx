@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Suspense } from "react"
+import GoogleAnalytics from "@/_analytics/provider"
 
 import { ThemeProvider } from "@/components/theme-provider"
 import { Header } from "@/components/header"
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  manifest: `${siteConfig.url}/site.webmanifest`,
+  manifest: "/site.webmanifest",
     generator: 'v0.dev'
 }
 
@@ -88,6 +89,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </ThemeProvider>
+        <GoogleAnalytics />
         <Analytics />
         <SpeedInsights />
       </body>

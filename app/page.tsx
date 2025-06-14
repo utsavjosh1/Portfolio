@@ -9,7 +9,7 @@ import { ProjectCard } from "@/components/project-card";
 import { ExperienceItem } from "@/components/experience-item";
 import { BlogPostPreview } from "@/components/blog-post-preview";
 import { projectsConfig } from "@/config/projects";
-import { blogConfig } from "@/config/blog";
+import { BlogService } from "@/lib/services/blog";
 
 export const metadata: Metadata = {
   title: "Utsav Joshi | Full-Stack Developer",
@@ -53,9 +53,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
-  const featuredProjects = projectsConfig.getFeaturedProjects().slice(0, 2)
-  const recentPosts = blogConfig.getRecentPosts(2)
+export default async function Home() {
+  const featuredProjects = projectsConfig.getFeaturedProjects().slice(0, 2);
+  const recentPosts = await BlogService.getRecentPosts(2);
 
   return (
     <div className="space-y-16 animate-fade-in">
@@ -96,10 +96,16 @@ export default function Home() {
         </div>
 
         <div className="flex gap-4">
-          <Link href="https://github.com/utsavjosh1" aria-label="GitHub profile">
+          <Link
+            href="https://github.com/utsavjosh1"
+            aria-label="GitHub profile"
+          >
             <Github className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
           </Link>
-          <Link href="https://www.linkedin.com/in/utsavjosh1/" aria-label="LinkedIn profile">
+          <Link
+            href="https://www.linkedin.com/in/utsavjosh1/"
+            aria-label="LinkedIn profile"
+          >
             <Linkedin className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
           </Link>
           <Link href="mailto:hi@joshiutsav.com" aria-label="Email contact">
@@ -182,28 +188,56 @@ export default function Home() {
           </h2>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/blog">
-              View all <ArrowRight className="ml-2 h-4 w-4" />
+              View blog <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2">
-          {recentPosts.map((post, index) => (
-            <div
-              key={post.slug}
-              className="group animate-in fade-in-50 duration-500"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <BlogPostPreview
-                title={post.title}
-                excerpt={post.excerpt}
-                date={post.date}
-                slug={post.slug}
-                className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-              />
+        {recentPosts.length === 0 ? (
+          <div className="rounded-lg border-2 border-dashed border-muted-foreground/25 p-8 text-center">
+            <div className="mx-auto max-w-md space-y-4">
+              <div className="text-4xl">📝</div>
+              <h3 className="text-lg font-semibold">Blog Coming Soon</h3>
+              <p className="text-muted-foreground">
+                I'm currently working on some awesome articles about authentication, 
+                security best practices, and modern web development. Stay tuned for 
+                in-depth guides coming soon!
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  JWT vs Sessions
+                </span>
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  OAuth 2.0
+                </span>
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  Zero-Trust Auth
+                </span>
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  API Security
+                </span>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2">
+            {recentPosts.map((post, index) => (
+              <div
+                key={post.slug}
+                className="group animate-in fade-in-50 duration-500"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <BlogPostPreview
+                  title={post.title}
+                  excerpt={post.excerpt}
+                  date={post.publishedAt?.toISOString().split('T')[0] || post.createdAt.toISOString().split('T')[0]}
+                  slug={post.slug}
+                  className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

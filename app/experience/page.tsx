@@ -83,8 +83,8 @@ export default async function ExperiencePage() {
       }))
     : staticExperiences;
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="space-y-8">
+       <div>
         <h1 className="text-3xl font-bold tracking-tight">Experience</h1>
         <p className="text-muted-foreground mt-2">My professional journey and career highlights.</p>
       </div>

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { safePrisma } from '@/lib/prisma'
 
 // Validation schema for updating contact status
 const updateStatusSchema = z.object({
@@ -18,6 +16,7 @@ interface RouteParams {
 // GET - Get specific contact submission
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const prisma = safePrisma()
     const { id } = await params
     
     const submission = await prisma.contactSubmission.findUnique({
@@ -47,6 +46,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // PATCH - Update contact submission status
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
+    const prisma = safePrisma()
     const { id } = await params
     const body = await request.json()
     
@@ -91,6 +91,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 // DELETE - Delete contact submission
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const prisma = safePrisma()
     const { id } = await params
     
     await prisma.contactSubmission.delete({

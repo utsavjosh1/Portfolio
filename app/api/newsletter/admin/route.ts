@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { safePrisma } from '@/lib/prisma'
 
 // GET - Retrieve all newsletter subscriptions (admin only)
 export async function GET(request: NextRequest) {
   try {
+    const prisma = safePrisma()
     const subscriptions = await prisma.newsletterSubscription.findMany({
       orderBy: { createdAt: 'desc' },
       select: {

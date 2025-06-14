@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { safePrisma } from '@/lib/prisma'
 
 // Validation schema for contact form
 const contactSchema = z.object({
@@ -15,6 +13,7 @@ const contactSchema = z.object({
 // POST - Create new contact submission
 export async function POST(request: NextRequest) {
   try {
+    const prisma = safePrisma()
     const body = await request.json()
     
     // Validate the request body
@@ -66,6 +65,7 @@ export async function POST(request: NextRequest) {
 // GET - Retrieve contact submissions (admin only)
 export async function GET(request: NextRequest) {
   try {
+    const prisma = safePrisma()
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status')
     const limit = parseInt(searchParams.get('limit') || '50')

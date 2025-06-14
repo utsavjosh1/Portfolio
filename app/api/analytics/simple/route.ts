@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { safePrisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
@@ -28,6 +26,8 @@ export async function GET(request: NextRequest) {
       default:
         startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
     }
+
+    const prisma = safePrisma()
 
     // Get basic metrics from existing data
     const [
@@ -102,13 +102,13 @@ export async function GET(request: NextRequest) {
 
     // Create activity feed from real data
     const recentActivity = [
-      ...recentContacts.map(contact => ({
+      ...recentContacts.map((contact: any) => ({
         timestamp: contact.createdAt.toISOString(),
         page: '/contact',
         userAgent: 'Contact Form',
         location: `Contact: ${contact.subject}`
       })),
-      ...recentNewsletterSubs.map(sub => ({
+      ...recentNewsletterSubs.map((sub: any) => ({
         timestamp: sub.createdAt.toISOString(),
         page: sub.source === 'blog' ? '/blog' : '/',
         userAgent: 'Newsletter Signup',

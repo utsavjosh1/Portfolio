@@ -1,8 +1,6 @@
 import type { Metadata } from "next"
 import { ProjectCard } from "@/components/project-card"
 import { ProjectService } from "@/lib/services/projects"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { NewsletterSignup } from "@/components/newsletter-signup"
 import { NoProjects } from "@/components/no-projects"
 

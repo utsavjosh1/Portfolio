@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { ProjectCard } from "@/components/project-card"
 import { MarkdownContent } from "@/components/ui/markdown-content"
 import { NewsletterSignup } from "@/components/newsletter-signup"
+import { OGImages } from "@/lib/og-image"
 
 interface ProjectPageProps {
   params: Promise<{
@@ -29,13 +30,34 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     }
   }
 
+  const technologies = project.technologies.map((pt: any) => pt.technology.name)
+  const ogImageUrl = OGImages.project(project.title, project.description, technologies)
+
   return {
-    title: `${project.title} - Utsav Joshi`,
+    title: `${project.title} | Utsav Joshi`,
     description: project.description,
+    keywords: `${project.title}, ${technologies.join(', ')}, web development, portfolio`,
     openGraph: {
-      title: project.title,
+      title: `${project.title} | Utsav Joshi`,
       description: project.description,
-      images: [project.image || "/placeholder.svg"],
+      url: `https://joshiutsav.com/projects/${project.slug}`,
+      siteName: "Utsav Joshi Portfolio",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} - Project by Utsav Joshi`,
+        },
+      ],
+      locale: "en_US",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} | Utsav Joshi`,
+      description: project.description,
+      images: [ogImageUrl],
     },
   }
 }

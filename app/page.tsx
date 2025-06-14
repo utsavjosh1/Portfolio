@@ -8,8 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import { ProjectCard } from "@/components/project-card";
 import { ExperienceItem } from "@/components/experience-item";
 import { BlogPostPreview } from "@/components/blog-post-preview";
-import { projectsConfig } from "@/config/projects";
+import { ProjectService } from "@/lib/services/projects";
 import { BlogService } from "@/lib/services/blog";
+import { ExperienceService } from "@/lib/services/experience";
+import { OGImages } from "@/lib/og-image";
 
 export const metadata: Metadata = {
   title: "Utsav Joshi | Full-Stack Developer",
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Utsav Joshi Portfolio",
     images: [
       {
-        url: "/images/og-image.jpg",
+        url: OGImages.home(),
         width: 1200,
         height: 630,
         alt: "Utsav Joshi Portfolio",
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
     title: "Utsav Joshi | Full-Stack Developer",
     description:
       "Portfolio of Utsav Joshi, a full-stack developer specializing in React, Next.js, and modern web technologies.",
-    images: ["/images/og-image.jpg"],
+    images: [OGImages.home()],
   },
   robots: {
     index: true,
@@ -54,8 +56,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const featuredProjects = projectsConfig.getFeaturedProjects().slice(0, 2);
+  // Fetch dynamic data from database
+  const featuredProjectsData = await ProjectService.getFeaturedProjects();
+  const featuredProjects = featuredProjectsData.slice(0, 2).map(project => ({
+    title: project.title,
+    description: project.description,
+    image: project.image || "/images/project-placeholder.jpg",
+    tags: project.technologies.map((pt: any) => pt.technology.name),
+    link: `/projects/${project.slug}`
+  }));
+  
   const recentPosts = await BlogService.getRecentPosts(2);
+  const recentExperiences = await ExperienceService.getRecentExperiences(2);
 
   return (
     <div className="space-y-16 animate-fade-in">
@@ -163,18 +175,36 @@ export default async function Home() {
         </div>
 
         <div className="space-y-6">
-          <ExperienceItem
-            company="Nextbill"
-            position="Software Engineer"
-            period="2023 - Present"
-            description="Led the development of the company's flagship product, improving performance by 40% and implementing new features that increased user engagement."
-          />
-          <ExperienceItem
-            company="IIT Madras"
-            position="Backend Developer"
-            period="3 months"
-            description="Worked on multiple research projects using React, Node.js, and AWS, delivering solutions on time and within budget."
-          />
+          {recentExperiences.length > 0 ? (
+            recentExperiences.map((experience) => (
+              <ExperienceItem
+                key={experience.id}
+                company={experience.company}
+                position={experience.position}
+                period={experience.current 
+                  ? `${experience.startDate.getFullYear()} - Present`
+                  : `${experience.startDate.getFullYear()} - ${experience.endDate?.getFullYear() || 'Present'}`
+                }
+                description={experience.description || ''}
+              />
+            ))
+          ) : (
+            // Fallback static data when no experiences in database
+            <>
+              <ExperienceItem
+                company="Nextbill"
+                position="Software Engineer"
+                period="2023 - Present"
+                description="Led the development of the company's flagship product, improving performance by 40% and implementing new features that increased user engagement."
+              />
+              <ExperienceItem
+                company="IIT Madras"
+                position="Backend Developer"
+                period="3 months"
+                description="Worked on multiple research projects using React, Node.js, and AWS, delivering solutions on time and within budget."
+              />
+            </>
+          )}
         </div>
       </section>
 

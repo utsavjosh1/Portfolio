@@ -3,10 +3,34 @@ import { BlogPostPreview } from "@/components/blog-post-preview"
 import { BlogService } from "@/lib/services/blog"
 import { NewsletterSignup } from "@/components/newsletter-signup"
 import { NoBlogs } from "@/components/no-blogs"
+import { OGImages } from "@/lib/og-image"
 
 export const metadata: Metadata = {
-  title: "Blog - Utsav Joshi",
+  title: "Blog | Utsav Joshi",
   description: "Thoughts, tutorials, and insights on web development, design, and the latest technologies shaping our digital world.",
+  keywords: "blog, web development, programming, tutorials, React, Next.js, TypeScript",
+  openGraph: {
+    title: "Blog | Utsav Joshi",
+    description: "Thoughts, tutorials, and insights on web development, design, and the latest technologies shaping our digital world.",
+    url: "https://joshiutsav.com/blog",
+    siteName: "Utsav Joshi Portfolio",
+    images: [
+      {
+        url: OGImages.blog(),
+        width: 1200,
+        height: 630,
+        alt: "Utsav Joshi Blog",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Utsav Joshi",
+    description: "Thoughts, tutorials, and insights on web development, design, and the latest technologies shaping our digital world.",
+    images: [OGImages.blog()],
+  },
 }
 
 export default async function BlogPage() {

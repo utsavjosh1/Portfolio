@@ -16,18 +16,15 @@ export function middleware(request: NextRequest) {
     
     // If no session cookie, redirect to admin login
     if (!adminSession) {
-      console.log('No admin session found, redirecting to login')
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
     
     // Verify the session token
     const validToken = process.env.ADMIN_SESSION_TOKEN || 'admin-secret-token'
     if (adminSession.value !== validToken) {
-      console.log('Invalid admin session token, redirecting to login')
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
     
-    console.log('Admin session valid, allowing access to:', pathname)
   }
 
   // Get the response

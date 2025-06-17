@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config/site"
+import { siteConfig } from "@/config/site";
 
 export function generateDeveloperProfileSchema() {
   return {
@@ -6,30 +6,51 @@ export function generateDeveloperProfileSchema() {
     "@type": "Person",
     name: siteConfig.name,
     url: siteConfig.url,
-    sameAs: [siteConfig.links.github, siteConfig.links.twitter, siteConfig.links.linkedin],
-    jobTitle: "Full-Stack Developer",
+    sameAs: [
+      siteConfig.links.github,
+      siteConfig.links.twitter,
+      siteConfig.links.linkedin,
+    ],
+    jobTitle: "Software Engineer",
     worksFor: {
       "@type": "Organization",
-      name: "Tech Innovations Inc.",
+      name: "Nextbill",
     },
     description: siteConfig.description,
     image: `${siteConfig.url}/profile.jpg`,
     email: siteConfig.email,
     alumniOf: {
       "@type": "EducationalOrganization",
-      name: "University of Technology",
+      name: "Indira Gandhi National Open University (IGNOU)",
     },
-    knowsAbout: ["Web Development", "React", "Next.js", "JavaScript", "TypeScript", "Node.js", "UI/UX Design"],
-  }
+    knowsAbout: [
+      "Web Development",
+      "React",
+      "Next.js",
+      "JavaScript",
+      "TypeScript",
+      "Node.js",
+      "UI/UX Design",
+      "Docker",
+      "Kubernetes",
+      "GraphQL",
+      "REST APIs",
+      "AWS",
+      "Cloud Computing",
+      "OCR",
+      "AI/ML",
+      "React-native",
+    ],
+  };
 }
 
 export function generateArticleSchema(article: {
-  title: string
-  description: string
-  publishDate: string
-  modifiedDate?: string
-  image?: string
-  slug: string
+  title: string;
+  description: string;
+  publishDate: string;
+  modifiedDate?: string;
+  image?: string;
+  slug: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -56,15 +77,15 @@ export function generateArticleSchema(article: {
       "@type": "WebPage",
       "@id": `${siteConfig.url}/blog/${article.slug}`,
     },
-  }
+  };
 }
 
 export function generateProjectSchema(project: {
-  title: string
-  description: string
-  image: string
-  slug: string
-  technologies: string[]
+  title: string;
+  description: string;
+  image: string;
+  slug: string;
+  technologies: string[];
 }) {
   return {
     "@context": "https://schema.org",
@@ -87,5 +108,5 @@ export function generateProjectSchema(project: {
     },
     keywords: project.technologies.join(", "),
     url: `${siteConfig.url}/projects/${project.slug}`,
-  }
+  };
 }

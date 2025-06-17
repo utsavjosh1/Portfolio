@@ -23,13 +23,11 @@ export async function POST(request: NextRequest) {
     const validatedData = loginSchema.parse(body)
     
     // Check credentials
-    console.log('Login attempt:', { username: validatedData.username, expectedUsername: ADMIN_CREDENTIALS.username })
     
     if (
       validatedData.username === ADMIN_CREDENTIALS.username &&
       validatedData.password === ADMIN_CREDENTIALS.password
     ) {
-      console.log('Login successful, setting session cookie')
       
       // Create response with success
       const response = NextResponse.json({
@@ -46,7 +44,6 @@ export async function POST(request: NextRequest) {
         path: '/',
       })
       
-      console.log('Session cookie set with token:', SESSION_TOKEN)
       return response
     } else {
       return NextResponse.json(

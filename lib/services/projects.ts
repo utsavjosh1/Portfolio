@@ -41,7 +41,7 @@ export class ProjectService {
       return []
     }
     const prisma = safePrisma()
-    return await prisma.project.findMany({
+    const result =await prisma.project.findMany({
       where: {
         published: true,
         featured: true
@@ -57,6 +57,7 @@ export class ProjectService {
         createdAt: 'desc'
       }
     })
+    return result
   }
 
   // Get project by slug

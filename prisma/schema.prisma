@@ -21,6 +21,7 @@ model Project {
   description String
   content     String?  // Detailed markdown content
   image       String?
+  video       String?  // Video URL for demo/setup
   gallery     String[] // Array of image URLs
   tags        String[]
   status      ProjectStatus @default(COMPLETED)
@@ -44,6 +45,7 @@ model Technology {
   id          String   @id @default(cuid())
   name        String   @unique
   description String?
+  image       String?  // Technology logo/image
   icon        String?
   category    String?
   createdAt   DateTime @default(now())

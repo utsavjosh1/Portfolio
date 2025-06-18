@@ -68,7 +68,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       category: p.category
     }))
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://joshiutsav.com'}/blog/${post.slug}`
+  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.joshiutsav.com'}/blog/${post.slug}`
   const shareText = `Check out this article: ${post.title}`
 
   return (

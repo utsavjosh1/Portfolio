@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "Utsav Joshi | Full-Stack Developer",
     description:
       "Portfolio of Utsav Joshi, a full-stack developer specializing in React, Next.js, and modern web technologies.",
-    url: "https://joshiutsav.com",
+    url: "https://www.joshiutsav.com",
     siteName: "Utsav Joshi Portfolio",
     images: [
       {

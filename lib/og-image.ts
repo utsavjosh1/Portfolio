@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://joshiutsav.com'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL || 'https://www.joshiutsav.com'
 
 export interface OGImageOptions {
   title?: string
@@ -31,7 +31,9 @@ export function generateOGImageURL(options: OGImageOptions = {}): string {
   if (date) params.set('date', date)
   if (readingTime) params.set('readingTime', readingTime)
 
-  return `${BASE_URL}/api/og?${params.toString()}`
+  // Ensure we have a proper URL
+  const baseUrl = BASE_URL.startsWith('http') ? BASE_URL : `https://${BASE_URL}`
+  return `${baseUrl}/api/og?${params.toString()}`
 }
 
 // Predefined OG images for common pages

@@ -7,9 +7,9 @@ export const metadata: Metadata = {
   title: "Experience | Utsav Joshi",
   description: "My professional experience and career journey in web development.",
   openGraph: {
-    title: "Experience | Utsav Joshi",
-    description: "My professional experience and career journey in web development.",
-    url: "https://joshiutsav.com/experience",
+    title: "Experience - Utsav Joshi",
+    description: "My professional journey and career achievements in software development.",
+    url: "https://www.joshiutsav.com/experience",
     siteName: "Utsav Joshi Portfolio",
     images: [
       {

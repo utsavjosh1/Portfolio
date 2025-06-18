@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { ProjectCard } from "@/components/project-card"
 import { MarkdownContent } from "@/components/ui/markdown-content"
 import { NewsletterSignup } from "@/components/newsletter-signup"
+import { ProjectGallery } from "@/components/project-gallery"
 import { OGImages } from "@/lib/og-image"
 
 interface ProjectPageProps {
@@ -40,7 +41,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     openGraph: {
       title: `${project.title} | Utsav Joshi`,
       description: project.description,
-      url: `https://joshiutsav.com/projects/${project.slug}`,
+      url: `https://www.joshiutsav.com/projects/${project.slug}`,
       siteName: "Utsav Joshi Portfolio",
       images: [
         {
@@ -102,84 +103,124 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Link>
       </div>
 
-      {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-background via-muted/10 to-muted/20 animate-in fade-in-50 slide-in-from-bottom-4 duration-700">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,0,0,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05),transparent_50%)]" />
-        <div className="relative p-8 md:p-16 space-y-10">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+      {/* Video Section */}
+      {project.video && (
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-background via-muted/10 to-muted/20 animate-in fade-in-50 slide-in-from-bottom-4 duration-700">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,0,0,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05),transparent_50%)]" />
+          <div className="relative p-8 md:p-16">
             <div className="space-y-8">
-              {/* Project Meta */}
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>{project.year}</span>
-                </div>
-                <div className="w-1 h-1 bg-muted-foreground rounded-full" />
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4" />
-                  <span className="capitalize">{project.status.toLowerCase()}</span>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground leading-tight">
-                  {project.title}
-                </h1>
-                <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light">
-                  {project.description}
+              <div className="text-center space-y-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground">Project Demo & Setup</h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Watch how to set up and run this application
                 </p>
               </div>
               
-              <div className="flex flex-wrap gap-3">
-                {project.technologies.map((pt: any, index: number) => (
-                  <Badge 
-                    key={pt.technology.name} 
-                    variant="secondary" 
-                    className="px-4 py-2 text-sm font-medium hover:bg-muted transition-colors animate-in fade-in-50 duration-300"
-                    style={{ animationDelay: `${index * 100}ms` }}
+              <div className="relative group max-w-4xl mx-auto">
+                <div className="absolute -inset-4 bg-gradient-to-r from-muted/20 to-muted/40 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative aspect-video overflow-hidden rounded-3xl border border-border shadow-2xl bg-background">
+                  <video
+                    src={project.video}
+                    controls
+                    className="w-full h-full object-cover"
+                    poster={project.image || "/placeholder.svg"}
                   >
-                    {pt.technology.name}
-                  </Badge>
-                ))}
-              </div>
-              
-              <div className="flex flex-wrap gap-4 pt-4">
-                {project.demo && (
-                  <Link href={project.demo} target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" className="gap-3 px-8 py-6 text-base font-medium hover:scale-105 transition-all duration-200">
-                      <ExternalLink className="h-5 w-5" />
-                      Live Demo
-                    </Button>
-                  </Link>
-                )}
-                {project.github && (
-                  <Link href={project.github} target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" size="lg" className="gap-3 px-8 py-6 text-base font-medium hover:bg-muted hover:scale-105 transition-all duration-200">
-                      <Github className="h-5 w-5" />
-                      View Code
-                    </Button>
-                  </Link>
-                )}
-              </div>
-            </div>
-            
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-r from-muted/20 to-muted/40 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative aspect-video overflow-hidden rounded-3xl border border-border shadow-2xl bg-background">
-                <Image
-                  src={project.image || "/placeholder.svg"}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
               </div>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Hero Section */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-background via-muted/10 to-muted/20 animate-in fade-in-50 slide-in-from-bottom-4 duration-700">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,0,0,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05),transparent_50%)]" />
+        <div className="relative p-8 md:p-16 space-y-10">
+          {/* Project Meta */}
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              <span>{project.year}</span>
+            </div>
+            <div className="w-1 h-1 bg-muted-foreground rounded-full" />
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4" />
+              <span className="capitalize">{project.status.toLowerCase()}</span>
+            </div>
+          </div>
+
+          {/* Project Title and Description */}
+          <div className="space-y-6 max-w-4xl">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground leading-tight">
+              {project.title}
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light">
+              {project.description}
+            </p>
+          </div>
+          
+          {/* Technology Badges */}
+          <div className="flex flex-wrap gap-3">
+            {project.technologies.map((pt: any, index: number) => (
+              <Badge 
+                key={pt.technology.name} 
+                variant="secondary" 
+                className="px-4 py-2 text-sm font-medium hover:bg-muted transition-colors animate-in fade-in-50 duration-300"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {pt.technology.name}
+              </Badge>
+            ))}
+          </div>
+          
+          {/* Action Buttons */}
+          <div className="flex flex-wrap gap-4 pt-4">
+            {project.demo && (
+              <Link href={project.demo} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="gap-3 px-8 py-6 text-base font-medium hover:scale-105 transition-all duration-200">
+                  <ExternalLink className="h-5 w-5" />
+                  Live Demo
+                </Button>
+              </Link>
+            )}
+            {project.github && (
+              <Link href={project.github} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="lg" className="gap-3 px-8 py-6 text-base font-medium hover:bg-muted hover:scale-105 transition-all duration-200">
+                  <Github className="h-5 w-5" />
+                  View Code
+                </Button>
+              </Link>
+            )}
+            {!project.github && (
+              <Button variant="outline" size="lg" className="gap-3 px-8 py-6 text-base font-medium opacity-50 cursor-not-allowed" disabled>
+                <Github className="h-5 w-5" />
+                Private Repository
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
+
+      {/* Project Image Section */}
+      {project.image && (
+        <div className="relative group">
+          <div className="absolute -inset-4 bg-gradient-to-r from-muted/20 to-muted/40 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="relative aspect-video overflow-hidden rounded-3xl border border-border shadow-2xl bg-background">
+            <Image
+              src={project.image || "/placeholder.svg"}
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </div>
+        </div>
+      )}
 
       {/* Overview Section */}
       {project.content && (
@@ -211,9 +252,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
               Technologies Used
             </CardTitle>
+            <p className="text-muted-foreground">Tech stack and tools that power this project</p>
           </CardHeader>
           <CardContent className="p-8 pt-0">
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="space-y-6 grid grid-cols-2 gap-4">
               {project.technologies.map((pt: any, index: number) => (
                 <div 
                   key={pt.technology.name} 
@@ -221,19 +263,33 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-muted group-hover:bg-foreground/10 flex items-center justify-center transition-colors duration-300">
-                      <div className="w-6 h-6 bg-foreground rounded-md" />
+                    <div className="w-16 h-16 rounded-xl bg-muted group-hover:bg-foreground/10 flex items-center justify-center transition-colors duration-300 overflow-hidden border border-border">
+                      {pt.technology.image ? (
+                        <Image
+                          src={pt.technology.image}
+                          alt={pt.technology.name}
+                          width={64}
+                          height={64}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-foreground rounded-md" />
+                      )}
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h4 className="font-semibold text-foreground text-lg group-hover:text-foreground transition-colors">
+                    <div className="flex-1 space-y-3">
+                      <h4 className="font-semibold text-foreground text-xl group-hover:text-foreground transition-colors">
                         {pt.technology.name}
                       </h4>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {pt.technology.description}
-                      </p>
-                      <div className="text-xs text-muted-foreground/70 uppercase tracking-wide font-medium">
-                        {pt.technology.category}
-                      </div>
+                      {pt.technology.description && (
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {pt.technology.description}
+                        </p>
+                      )}
+                      {pt.technology.category && (
+                        <div className="text-xs text-muted-foreground/70 uppercase tracking-wide font-medium bg-muted/50 px-3 py-1 rounded-full inline-block">
+                          {pt.technology.category}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -248,54 +304,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-400">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-foreground">Project Gallery</CardTitle>
+            <p className="text-muted-foreground">Screenshots and previews of the application</p>
           </CardHeader>
           <CardContent className="p-8 pt-0">
-            <div className="grid gap-6 sm:grid-cols-2">
-              {project.gallery.map((image: string, index: number) => (
-                <div 
-                  key={index} 
-                  className="group relative aspect-video overflow-hidden rounded-2xl border border-border shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                >
-                  <Image
-                    src={image}
-                    alt={`${project.title} screenshot ${index + 1}`}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-              ))}
-            </div>
+            <ProjectGallery images={project.gallery} projectTitle={project.title} />
           </CardContent>
         </Card>
       )}
-
-      {/* Project Stats */}
-      <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-500">
-        <CardContent className="p-8">
-          <div className="grid gap-8 sm:grid-cols-3">
-            <div className="text-center space-y-3 group">
-              <div className="text-4xl font-bold text-foreground group-hover:scale-110 transition-transform duration-200">
-                {project.year}
-              </div>
-              <div className="text-sm text-muted-foreground uppercase tracking-wide font-medium">Year</div>
-            </div>
-            <div className="text-center space-y-3 group">
-              <div className="text-4xl font-bold text-foreground group-hover:scale-110 transition-transform duration-200 capitalize">
-                {project.status.toLowerCase()}
-              </div>
-              <div className="text-sm text-muted-foreground uppercase tracking-wide font-medium">Status</div>
-            </div>
-            <div className="text-center space-y-3 group">
-              <div className="text-4xl font-bold text-foreground group-hover:scale-110 transition-transform duration-200">
-                {project.technologies.length}
-              </div>
-              <div className="text-sm text-muted-foreground uppercase tracking-wide font-medium">Technologies</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Related Projects */}
       {relatedProjects.length > 0 && (

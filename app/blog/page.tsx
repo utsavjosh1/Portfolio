@@ -10,9 +10,9 @@ export const metadata: Metadata = {
   description: "Thoughts, tutorials, and insights on web development, design, and the latest technologies shaping our digital world.",
   keywords: "blog, web development, programming, tutorials, React, Next.js, TypeScript",
   openGraph: {
-    title: "Blog | Utsav Joshi",
-    description: "Thoughts, tutorials, and insights on web development, design, and the latest technologies shaping our digital world.",
-    url: "https://joshiutsav.com/blog",
+    title: "Blog - Utsav Joshi",
+    description: "Technical articles, tutorials, and insights about web development, programming, and technology.",
+    url: "https://www.joshiutsav.com/blog",
     siteName: "Utsav Joshi Portfolio",
     images: [
       {

@@ -13,6 +13,9 @@ export interface OGImageOptions {
   readingTime?: string;
 }
 
+// Cache for OG image URLs to prevent regeneration
+const ogImageCache = new Map<string, string>();
+
 export function generateOGImageURL(options: OGImageOptions = {}): string {
   const {
     title = "Utsav Joshi",
@@ -24,13 +27,19 @@ export function generateOGImageURL(options: OGImageOptions = {}): string {
     readingTime,
   } = options;
 
+  // Create cache key from options
+  const cacheKey = JSON.stringify(options);
+  if (ogImageCache.has(cacheKey)) {
+    return ogImageCache.get(cacheKey)!;
+  }
+
   const params = new URLSearchParams();
 
-  if (title) params.set("title", title);
-  if (subtitle) params.set("subtitle", subtitle);
-  if (description) params.set("description", description);
+  if (title) params.set("title", encodeURIComponent(title));
+  if (subtitle) params.set("subtitle", encodeURIComponent(subtitle));
+  if (description) params.set("description", encodeURIComponent(description));
   if (type) params.set("type", type);
-  if (tags.length > 0) params.set("tags", tags.join(","));
+  if (tags.length > 0) params.set("tags", tags.map(tag => encodeURIComponent(tag)).join(","));
   if (date) params.set("date", date);
   if (readingTime) params.set("readingTime", readingTime);
 
@@ -38,10 +47,16 @@ export function generateOGImageURL(options: OGImageOptions = {}): string {
   const baseUrl = BASE_URL.startsWith("http")
     ? BASE_URL
     : `https://${BASE_URL}`;
-  return `${baseUrl}/api/og?${params.toString()}`;
+  
+  const url = `${baseUrl}/api/og?${params.toString()}`;
+  
+  // Cache the result
+  ogImageCache.set(cacheKey, url);
+  
+  return url;
 }
 
-// Predefined OG images for common pages
+// Predefined OG images for common pages - these are cached
 export const OGImages = {
   home: () =>
     generateOGImageURL({
@@ -93,7 +108,7 @@ export const OGImages = {
       tags: ["Contact", "Networking", "Opportunities", "Collaboration"],
     }),
 
-  // Dynamic generators
+  // Dynamic generators with memoization
   project: (title: string, description: string, tags: string[]) =>
     generateOGImageURL({
       title,
@@ -120,3 +135,15 @@ export const OGImages = {
       readingTime,
     }),
 };
+
+// Preload critical OG images
+export function preloadCriticalOGImages() {
+  if (typeof window !== 'undefined') {
+    // Preload home page OG image
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = OGImages.home();
+    document.head.appendChild(link);
+  }
+}

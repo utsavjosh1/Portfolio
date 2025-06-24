@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Suspense } from "react";
-import GoogleAnalytics from "@/_analytics/provider";
+import Script from "next/script";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
@@ -12,14 +12,16 @@ import { Footer } from "@/components/footer";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { ThemeEffect } from "@/components/theme-effect";
-import { ReactScan } from "@/components/react-scan";
 
 import "./globals.css";
 
+// Optimized font loading with preload and fallback
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 export const metadata: Metadata = {
@@ -76,14 +78,45 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        {/* DNS prefetch for external resources */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//avatars.githubusercontent.com" />
+        <link rel="dns-prefetch" href="//vercel.com" />
+        
+        {/* Preconnect to critical resources */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        
+        {/* Critical CSS inline to prevent FOUC */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Critical CSS for initial render */
+            body { 
+              font-family: system-ui, -apple-system, sans-serif; 
+              margin: 0; 
+              background: hsl(0 0% 100%);
+              color: hsl(240 10% 3.9%);
+            }
+            @media (prefers-color-scheme: dark) {
+              body {
+                background: hsl(240 10% 3.9%);
+                color: hsl(0 0% 98%);
+              }
+            }
+            .theme-transition {
+              transition: background-color 0.3s ease, color 0.3s ease;
+            }
+          `
+        }} />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased theme-transition",
           inter.variable
         )}
       >
-        <ReactScan />
+        {/* Critical rendering path optimization */}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -94,18 +127,52 @@ export default function RootLayout({
           <div className="relative flex min-h-screen flex-col">
             <Header />
             <main className="flex-1 flex justify-center">
-              <Suspense>
-                <div className="w-[40%] min-w-[320px] px-4 py-12">
+              {/* Optimized layout container with better performance */}
+              <div className="w-[40%] min-w-[320px] px-4 py-12">
+                <Suspense fallback={
+                  <div className="space-y-8 animate-pulse">
+                    <div className="space-y-4">
+                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                    </div>
+                    <div className="grid gap-6 sm:grid-cols-2">
+                      <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    </div>
+                  </div>
+                }>
                   {children}
-                </div>
-              </Suspense>
+                </Suspense>
+              </div>
             </main>
             <Footer />
           </div>
         </ThemeProvider>
-        <GoogleAnalytics />
-        <Analytics />
-        <SpeedInsights />
+
+        {/* Load analytics scripts with strategy to optimize performance */}
+        <Suspense>
+          <Analytics />
+          <SpeedInsights />
+        </Suspense>
+
+        {/* Google Analytics with optimized loading */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+          `}
+        </Script>
+
+        {/* Remove ReactScan from production */}
+        {process.env.NODE_ENV === 'development' && (
+          <Script src="/react-scan.js" strategy="lazyOnload" />
+        )}
       </body>
     </html>
   );

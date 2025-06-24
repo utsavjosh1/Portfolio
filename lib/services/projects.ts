@@ -11,8 +11,82 @@ export type ProjectWithTechnologies = Prisma.ProjectGetPayload<{
   }
 }>
 
+// Optimized project type with only needed fields for listing pages
+export type OptimizedProject = {
+  id: string
+  title: string
+  description: string
+  image: string | null
+  slug: string
+  featured: boolean
+  status: ProjectStatus
+  technologies: {
+    technology: {
+      name: string
+    }
+  }[]
+}
+
 export class ProjectService {
-  // Get all published projects
+  // Optimized: Get all project data in a single query with field selection
+  static async getProjectsPageData(): Promise<{
+    allProjects: OptimizedProject[]
+    featuredProjects: OptimizedProject[]
+    completedProjects: OptimizedProject[]
+    totalProjects: number
+  }> {
+    if (!isPrismaAvailable()) {
+      return {
+        allProjects: [],
+        featuredProjects: [],
+        completedProjects: [],
+        totalProjects: 0
+      }
+    }
+    
+    const prisma = safePrisma()
+    
+    // Single query with optimized field selection
+    const allProjects = await prisma.project.findMany({
+      where: {
+        published: true
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        image: true,
+        slug: true,
+        featured: true,
+        status: true,
+        technologies: {
+          select: {
+            technology: {
+              select: {
+                name: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    }) as OptimizedProject[]
+
+    // Process data client-side to avoid additional DB queries
+    const featuredProjects = allProjects.filter(project => project.featured)
+    const completedProjects = allProjects.filter(project => project.status === 'COMPLETED')
+    
+    return {
+      allProjects,
+      featuredProjects,
+      completedProjects,
+      totalProjects: allProjects.length
+    }
+  }
+
+  // Get all published projects (legacy method for backward compatibility)
   static async getAllProjects(): Promise<ProjectWithTechnologies[]> {
     if (!isPrismaAvailable()) {
       return []
@@ -35,7 +109,7 @@ export class ProjectService {
     })
   }
 
-  // Get featured projects
+  // Get featured projects (legacy method for backward compatibility)
   static async getFeaturedProjects(): Promise<ProjectWithTechnologies[]> {
     if (!isPrismaAvailable()) {
       return []

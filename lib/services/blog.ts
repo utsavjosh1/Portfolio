@@ -1,8 +1,72 @@
 import { safePrisma, isPrismaAvailable } from '@/lib/prisma'
 import { BlogPost, Prisma } from '@prisma/client'
 
+// Optimized blog post type with only needed fields
+export type OptimizedBlogPost = {
+  id: string
+  title: string
+  excerpt: string
+  slug: string
+  featured: boolean
+  tags: string[]
+  category: string | null
+  createdAt: Date
+  publishedAt: Date | null
+}
+
 export class BlogService {
-  // Get all published blog posts
+  // Optimized: Get all blog data in a single query with field selection
+  static async getBlogPageData(): Promise<{
+    allPosts: OptimizedBlogPost[]
+    featuredPosts: OptimizedBlogPost[]
+    recentPosts: OptimizedBlogPost[]
+    totalPosts: number
+  }> {
+    if (!isPrismaAvailable()) {
+      return {
+        allPosts: [],
+        featuredPosts: [],
+        recentPosts: [],
+        totalPosts: 0
+      }
+    }
+    
+    const prisma = safePrisma()
+    
+    // Single query with optimized field selection
+    const allPosts = await prisma.blogPost.findMany({
+      where: {
+        published: true
+      },
+      select: {
+        id: true,
+        title: true,
+        excerpt: true,
+        slug: true,
+        featured: true,
+        tags: true,
+        category: true,
+        createdAt: true,
+        publishedAt: true
+      },
+      orderBy: {
+        publishedAt: 'desc'
+      }
+    }) as OptimizedBlogPost[]
+
+    // Process data client-side to avoid additional DB queries
+    const featuredPosts = allPosts.filter(post => post.featured)
+    const recentPosts = allPosts.slice(0, 5)
+    
+    return {
+      allPosts,
+      featuredPosts,
+      recentPosts,
+      totalPosts: allPosts.length
+    }
+  }
+
+  // Get all published blog posts (legacy method for backward compatibility)
   static async getAllPosts(): Promise<BlogPost[]> {
     if (!isPrismaAvailable()) {
       return []
@@ -18,7 +82,7 @@ export class BlogService {
     })
   }
 
-  // Get featured blog posts
+  // Get featured blog posts (legacy method for backward compatibility)
   static async getFeaturedPosts(): Promise<BlogPost[]> {
     if (!isPrismaAvailable()) {
       return []
@@ -35,7 +99,7 @@ export class BlogService {
     })
   }
 
-  // Get recent blog posts
+  // Get recent blog posts (legacy method for backward compatibility)
   static async getRecentPosts(limit: number = 3): Promise<BlogPost[]> {
     if (!isPrismaAvailable()) {
       return []

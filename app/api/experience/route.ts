@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server'
 import { ExperienceService } from '@/lib/services/experience'
 
+// Cache for 10 minutes with stale-while-revalidate for 2 hours (experience data changes less frequently)
+const CACHE_HEADERS = {
+  'Cache-Control': 'public, s-maxage=600, stale-while-revalidate=7200',
+  'CDN-Cache-Control': 'public, s-maxage=600',
+  'Vercel-CDN-Cache-Control': 'public, s-maxage=600'
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -32,7 +39,13 @@ export async function GET(request: Request) {
         : `${exp.startDate.getFullYear()} - ${exp.endDate?.getFullYear() || 'Present'}`
     }))
 
-    return NextResponse.json(transformedExperiences)
+    return new NextResponse(JSON.stringify(transformedExperiences), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        ...CACHE_HEADERS
+      }
+    })
   } catch (error) {
     console.error('Error fetching experiences:', error)
     return NextResponse.json(

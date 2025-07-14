@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // Google Analytics integration (optional - requires npm install @google-analytics/data)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let BetaAnalyticsDataClient: any = null
 try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const ga = require('@google-analytics/data')
   BetaAnalyticsDataClient = ga.BetaAnalyticsDataClient
-} catch (error) {
+} catch {
   console.log('Google Analytics Data API not installed. Install with: npm install @google-analytics/data')
 }
 
@@ -111,15 +113,19 @@ export async function GET(request: NextRequest) {
     const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`
 
     // Process top pages with proper typing
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const topPages = pagesResponse.rows?.map((row: any) => ({
       page: row.dimensionValues?.[0]?.value || '',
       views: parseInt(row.metricValues?.[0]?.value || '0')
     })) || []
 
     // Process device types with proper typing
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const totalDeviceUsers = deviceResponse.rows?.reduce((sum: number, row: any) => 
       sum + parseInt(row.metricValues?.[0]?.value || '0'), 0) || 1
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const deviceTypes = deviceResponse.rows?.map((row: any) => {
       const count = parseInt(row.metricValues?.[0]?.value || '0')
       return {
@@ -130,9 +136,11 @@ export async function GET(request: NextRequest) {
     }) || []
 
     // Process traffic sources with proper typing
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const totalSourceUsers = sourceResponse.rows?.reduce((sum: number, row: any) => 
       sum + parseInt(row.metricValues?.[0]?.value || '0'), 0) || 1
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const trafficSources = sourceResponse.rows?.map((row: any) => {
       const visitors = parseInt(row.metricValues?.[0]?.value || '0')
       return {

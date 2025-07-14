@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import {  NextResponse } from 'next/server'
 import { safePrisma } from '@/lib/prisma'
 
 // GET - Retrieve all newsletter subscriptions (admin only)
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const prisma = safePrisma()
     const subscriptions = await prisma.newsletterSubscription.findMany({

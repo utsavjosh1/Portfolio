@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,7 +15,6 @@ export default function AdminLoginPage() {
     password: "",
   })
   const [error, setError] = useState("")
-  const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -138,5 +136,5 @@ export default function AdminLoginPage() {
         </form>
       </Card>
     </div>
-  )
-} 
+  );
+}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Calendar, Clock, Twitter } from "lucide-react"
+import { ArrowLeft, Calendar, Clock } from "lucide-react"
 
 import { BlogService } from "@/lib/services/blog"
 import { Button } from "@/components/ui/button"
@@ -69,7 +69,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     }))
 
   const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.joshiutsav.com'}/blog/${post.slug}`
-  const shareText = `Check out this article: ${post.title}`
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">

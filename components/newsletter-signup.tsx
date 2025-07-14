@@ -46,7 +46,7 @@ export function NewsletterSignup({ source = 'blog', className = '' }: Newsletter
         setStatus('error')
         setMessage(data.error || 'Failed to subscribe')
       }
-    } catch (error) {
+    } catch {
       setStatus('error')
       setMessage('Network error. Please try again.')
     }
@@ -62,7 +62,7 @@ export function NewsletterSignup({ source = 'blog', className = '' }: Newsletter
           <div className="text-left">
             <h3 className="font-semibold text-foreground">Thanks for subscribing!</h3>
             <p className="text-sm text-muted-foreground">
-              You'll receive updates about new articles on authentication and security.
+              You&apos;ll receive updates about new articles on authentication and security.
             </p>
           </div>
         </div>

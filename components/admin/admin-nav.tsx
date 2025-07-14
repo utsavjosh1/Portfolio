@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { MessageSquare, Users, BarChart3, LogOut, Shield, Mail, Upload } from "lucide-react"
+import { MessageSquare, BarChart3, LogOut, Shield, Mail, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 

@@ -34,8 +34,7 @@ export async function GET(request: NextRequest) {
       totalContacts,
       totalNewsletterSubs,
       recentContacts,
-      recentNewsletterSubs,
-      blogPosts
+      recentNewsletterSubs
     ] = await Promise.all([
       // Total contact submissions
       prisma.contactSubmission.count({
@@ -89,10 +88,7 @@ export async function GET(request: NextRequest) {
           email: true,
           source: true
         }
-      }),
-      
-      // Blog posts count
-      prisma.blogPost.count()
+      })
     ])
 
     // Simulate some analytics data based on real activity
@@ -102,12 +98,14 @@ export async function GET(request: NextRequest) {
 
     // Create activity feed from real data
     const recentActivity = [
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ...recentContacts.map((contact: any) => ({
         timestamp: contact.createdAt.toISOString(),
         page: '/contact',
         userAgent: 'Contact Form',
         location: `Contact: ${contact.subject}`
       })),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ...recentNewsletterSubs.map((sub: any) => ({
         timestamp: sub.createdAt.toISOString(),
         page: sub.source === 'blog' ? '/blog' : '/',

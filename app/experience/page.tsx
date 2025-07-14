@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next"
 import { ExperienceItem } from "@/components/experience-item"
 import { ExperienceService } from "@/lib/services/experience"
@@ -30,76 +31,102 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function ExperiencePage() {
-  // Fetch dynamic data from database
-  const dynamicExperiences = await ExperienceService.getAllExperiences();
-  
-  // Fallback static data if no experiences in database
-  const staticExperiences = [
-    {
-      id: "static-1",
-      company: "Tech Innovations Inc.",
-      position: "Senior Frontend Developer",
-      period: "2021 - Present",
-      description:
-        "Led the development of the company's flagship product, improving performance by 40% and implementing new features that increased user engagement. Mentored junior developers and established best practices for the frontend team.",
-    },
-    {
-      id: "static-2",
-      company: "Digital Solutions Ltd.",
-      position: "Full-Stack Developer",
-      period: "2018 - 2021",
-      description:
-        "Worked on multiple client projects using React, Node.js, and AWS, delivering solutions on time and within budget. Implemented CI/CD pipelines that reduced deployment time by 60%.",
-    },
-    {
-      id: "static-3",
-      company: "Creative Web Agency",
-      position: "Frontend Developer",
-      period: "2016 - 2018",
-      description:
-        "Developed responsive websites and web applications for clients across various industries. Collaborated with designers to implement pixel-perfect UIs and improve user experience.",
-    },
-    {
-      id: "static-4",
-      company: "Startup Ventures",
-      position: "Junior Web Developer",
-      period: "2014 - 2016",
-      description:
-        "Built and maintained websites using HTML, CSS, JavaScript, and PHP. Assisted in the development of the company's internal tools and client management system.",
-    },
-  ];
+// ISR Configuration for experience page
+export const revalidate = 3600;
 
-  // Use dynamic data if available, otherwise fallback to static
-  const experiences = dynamicExperiences.length > 0 
-    ? dynamicExperiences.map(exp => ({
-        id: exp.id,
-        company: exp.company,
-        position: exp.position,
-        period: exp.current 
-          ? `${exp.startDate.getFullYear()} - Present`
-          : `${exp.startDate.getFullYear()} - ${exp.endDate?.getFullYear() || 'Present'}`,
-        description: exp.description || ''
-      }))
-    : staticExperiences;
+// Empty state component for experience
+function NoExperience() {
   return (
-    <div className="space-y-8">
-       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Experience</h1>
-        <p className="text-muted-foreground mt-2">My professional journey and career highlights.</p>
+    <div className="text-center py-16 border-2 border-dashed border-border rounded-lg">
+      <div className="space-y-3">
+        <h3 className="text-xl font-medium text-muted-foreground">No work experience added yet</h3>
+        <p className="text-muted-foreground max-w-md mx-auto">
+          Professional experience and career history will be displayed here once added.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default async function ExperiencePage() {
+  let experiences: any[] = [];
+
+  try {
+    // Fetch dynamic data from database
+    const dynamicExperiences = await ExperienceService.getAllExperiences();
+    
+    // Transform the data for display
+    experiences = dynamicExperiences.map(exp => ({
+      id: exp.id,
+      company: exp.company,
+      position: exp.position,
+      period: exp.current 
+        ? `${exp.startDate.getFullYear()} - Present`
+        : `${exp.startDate.getFullYear()} - ${exp.endDate?.getFullYear() || 'Present'}`,
+      description: exp.description || ''
+    }));
+  } catch (error) {
+    console.warn('Failed to fetch experience data:', error);
+    // Continue with empty array
+  }
+
+  const hasNoExperience = experiences.length === 0;
+
+  return (
+    <div className="space-y-12">
+      {/* Hero Section */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-background to-muted/20 rounded-2xl -z-10" />
+        <div className="relative px-6 py-16 text-center space-y-6">
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+              Experience
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
+              My professional journey and career achievements in software development.
+            </p>
+          </div>
+          
+          {/* Stats */}
+          {!hasNoExperience && (
+            <div className="flex items-center justify-center gap-8 text-sm border-t border-b border-border py-6">
+              <div className="text-center">
+                <div className="text-xl font-bold text-foreground">{experiences.length}</div>
+                <div className="text-muted-foreground text-xs uppercase tracking-wide">Positions</div>
+              </div>
+              <div className="w-px h-8 bg-border" />
+              <div className="text-center">
+                <div className="text-xl font-bold text-foreground">
+                  {experiences.filter(exp => exp.period.includes('Present')).length}
+                </div>
+                <div className="text-muted-foreground text-xs uppercase tracking-wide">Current</div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="space-y-6">
-        {experiences.map((experience) => (
-          <ExperienceItem
-            key={experience.id}
-            company={experience.company}
-            position={experience.position}
-            period={experience.period}
-            description={experience.description}
-          />
-        ))}
-      </div>
+      {/* Experience Content */}
+      {hasNoExperience ? (
+        <NoExperience />
+      ) : (
+        <div className="space-y-8">
+          {experiences.map((experience, index) => (
+            <div
+              key={experience.id}
+              className="animate-in fade-in-50 duration-500"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <ExperienceItem
+                company={experience.company}
+                position={experience.position}
+                period={experience.period}
+                description={experience.description}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

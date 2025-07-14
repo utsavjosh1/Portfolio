@@ -6,12 +6,19 @@ import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 
 export function ThemeEffect() {
-  const { theme, resolvedTheme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const [prevTheme, setPrevTheme] = useState<string | undefined>(undefined)
   const [position, setPosition] = useState({ x: "50%", y: "50%" })
   const [showTransition, setShowTransition] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    
     // Skip initial render
     if (prevTheme === undefined) {
       setPrevTheme(resolvedTheme)
@@ -34,9 +41,9 @@ export function ThemeEffect() {
     }
 
     setPrevTheme(resolvedTheme)
-  }, [resolvedTheme, prevTheme])
+  }, [resolvedTheme, prevTheme, mounted])
 
-  if (!showTransition) return null
+  if (!mounted || !showTransition) return null
 
   return (
     <div

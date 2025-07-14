@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, ExternalLink, Github, Calendar, CheckCircle, Code } from "lucide-react"
+import { ArrowLeft, ExternalLink, Github, Calendar, Code } from "lucide-react"
 
 import { ProjectService } from "@/lib/services/projects"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ProjectCard } from "@/components/project-card"
 import { MarkdownContent } from "@/components/ui/markdown-content"
@@ -92,258 +92,224 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     }))
 
   return (
-    <div className="space-y-12">
-      {/* Back Button */}
-      <div className="animate-in fade-in-50 duration-300">
+    <div className="space-y-16 sm:space-y-24">
+      {/* Back Navigation */}
+      <div style={{ animation: `fadeInUp 0.6s ease-out both` }}>
         <Link href="/projects">
-          <Button variant="ghost" size="sm" className="gap-2 hover:bg-muted/50 transition-colors">
+          <Button variant="ghost" size="sm" className="gap-2 hover:bg-muted/50 transition-colors -ml-2">
             <ArrowLeft className="h-4 w-4" />
             Back to Projects
           </Button>
         </Link>
       </div>
 
-      {/* Video Section */}
-      {project.video && (
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-background via-muted/10 to-muted/20 animate-in fade-in-50 slide-in-from-bottom-4 duration-700">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,0,0,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05),transparent_50%)]" />
-          <div className="relative p-8 md:p-16">
-            <div className="space-y-8">
-              <div className="text-center space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground">Project Demo & Setup</h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Watch how to set up and run this application
-                </p>
-              </div>
-              
-              <div className="relative group max-w-4xl mx-auto">
-                <div className="absolute -inset-4 bg-gradient-to-r from-muted/20 to-muted/40 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative aspect-video overflow-hidden rounded-3xl border border-border shadow-2xl bg-background">
-                  <video
-                    src={project.video}
-                    controls
-                    className="w-full h-full object-cover"
-                    poster={project.image || "/placeholder.svg"}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-              </div>
+      {/* Hero Section */}
+      <section className="space-y-12" style={{ animation: `fadeInUp 0.6s ease-out 0.1s both` }}>
+        {/* Project Meta */}
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            <span>{project.year}</span>
+          </div>
+          <div className="w-1 h-1 bg-muted-foreground rounded-full" />
+          <span className="capitalize">{project.status.toLowerCase()}</span>
+        </div>
+
+        {/* Title and Description */}
+        <div className="space-y-6 max-w-4xl">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+            {project.title}
+          </h1>
+          <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed">
+            {project.description}
+          </p>
+        </div>
+        
+        {/* Action Buttons */}
+        <div className="flex flex-wrap gap-4">
+          {project.demo && (
+            <Link href={project.demo} target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="gap-3">
+                <ExternalLink className="h-4 w-4" />
+                Live Demo
+              </Button>
+            </Link>
+          )}
+          {project.github && (
+            <Link href={project.github} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="lg" className="gap-3">
+                <Github className="h-4 w-4" />
+                View Code
+              </Button>
+            </Link>
+          )}
+          {!project.github && (
+            <Button variant="outline" size="lg" className="gap-3 opacity-50 cursor-not-allowed" disabled>
+              <Github className="h-4 w-4" />
+              Private Repository
+            </Button>
+          )}
+        </div>
+
+        {/* Technology Badges */}
+        <div className="flex flex-wrap gap-2">
+          {project.technologies.map((pt: any, index: number) => (
+            <Badge 
+              key={pt.technology.name} 
+              variant="secondary" 
+              className="px-3 py-1.5"
+              style={{ animation: `fadeInUp 0.6s ease-out ${0.2 + index * 0.05}s both` }}
+            >
+              {pt.technology.name}
+            </Badge>
+          ))}
+        </div>
+      </section>
+
+      {/* Project Image */}
+      {project.image && (
+        <section style={{ animation: `fadeInUp 0.6s ease-out 0.3s both` }}>
+          <div className="relative group">
+            <div className="relative aspect-video overflow-hidden rounded-2xl border border-border/50 bg-muted/20">
+              <Image
+                src={project.image || "/placeholder.svg"}
+                alt={project.title}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 100vw"
+                priority
+              />
             </div>
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-background via-muted/10 to-muted/20 animate-in fade-in-50 slide-in-from-bottom-4 duration-700">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(0,0,0,0.05),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.05),transparent_50%)]" />
-        <div className="relative p-8 md:p-16 space-y-10">
-          {/* Project Meta */}
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>{project.year}</span>
+      {/* Video Section */}
+      {project.video && (
+        <section style={{ animation: `fadeInUp 0.6s ease-out 0.4s both` }}>
+          <div className="space-y-6">
+            <h2 className="text-2xl sm:text-3xl font-bold">Demo Video</h2>
+            <div className="relative group">
+              <div className="relative aspect-video overflow-hidden rounded-2xl border border-border/50 bg-background">
+                <video
+                  src={project.video}
+                  controls
+                  className="w-full h-full object-cover"
+                  poster={project.image || "/placeholder.svg"}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </div>
             </div>
-            <div className="w-1 h-1 bg-muted-foreground rounded-full" />
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4" />
-              <span className="capitalize">{project.status.toLowerCase()}</span>
-            </div>
           </div>
-
-          {/* Project Title and Description */}
-          <div className="space-y-6 max-w-4xl">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground leading-tight">
-              {project.title}
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-light">
-              {project.description}
-            </p>
-          </div>
-          
-          {/* Technology Badges */}
-          <div className="flex flex-wrap gap-3">
-            {project.technologies.map((pt: any, index: number) => (
-              <Badge 
-                key={pt.technology.name} 
-                variant="secondary" 
-                className="px-4 py-2 text-sm font-medium hover:bg-muted transition-colors animate-in fade-in-50 duration-300"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {pt.technology.name}
-              </Badge>
-            ))}
-          </div>
-          
-          {/* Action Buttons */}
-          <div className="flex flex-wrap gap-4 pt-4">
-            {project.demo && (
-              <Link href={project.demo} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="gap-3 px-8 py-6 text-base font-medium hover:scale-105 transition-all duration-200">
-                  <ExternalLink className="h-5 w-5" />
-                  Live Demo
-                </Button>
-              </Link>
-            )}
-            {project.github && (
-              <Link href={project.github} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="lg" className="gap-3 px-8 py-6 text-base font-medium hover:bg-muted hover:scale-105 transition-all duration-200">
-                  <Github className="h-5 w-5" />
-                  View Code
-                </Button>
-              </Link>
-            )}
-            {!project.github && (
-              <Button variant="outline" size="lg" className="gap-3 px-8 py-6 text-base font-medium opacity-50 cursor-not-allowed" disabled>
-                <Github className="h-5 w-5" />
-                Private Repository
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Project Image Section */}
-      {project.image && (
-        <div className="relative group">
-          <div className="absolute -inset-4 bg-gradient-to-r from-muted/20 to-muted/40 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="relative aspect-video overflow-hidden rounded-3xl border border-border shadow-2xl bg-background">
-            <Image
-              src={project.image || "/placeholder.svg"}
-              alt={project.title}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, 100vw"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
-        </div>
+        </section>
       )}
 
       {/* Overview Section */}
       {project.content && (
-        <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-200">
-          <CardHeader className="pb-6">
-            <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center">
-                <div className="w-4 h-4 bg-foreground rounded-sm" />
-              </div>
-              Project Overview
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-8 pt-0">
+        <section className="space-y-8" style={{ animation: `fadeInUp 0.6s ease-out 0.5s both` }}>
+          <h2 className="text-2xl sm:text-3xl font-bold">Overview</h2>
+          <div className="prose prose-lg dark:prose-invert max-w-none">
             <MarkdownContent 
               content={project.content} 
-              className="text-foreground prose prose-lg max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground"
+              className="text-muted-foreground leading-relaxed"
             />
-          </CardContent>
-        </Card>
+          </div>
+        </section>
       )}
 
       {/* Technologies Section */}
       {project.technologies && project.technologies.length > 0 && (
-        <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-300">
-          <CardHeader className="pb-8">
-            <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center">
-                <Code className="h-4 w-4 text-foreground" />
-              </div>
-              Technologies Used
-            </CardTitle>
+        <section className="space-y-8" style={{ animation: `fadeInUp 0.6s ease-out 0.6s both` }}>
+          <div className="space-y-3">
+            <h2 className="text-2xl sm:text-3xl font-bold">Technologies</h2>
             <p className="text-muted-foreground">Tech stack and tools that power this project</p>
-          </CardHeader>
-          <CardContent className="p-8 pt-0">
-            <div className="space-y-6 grid grid-cols-2 gap-4">
-              {project.technologies.map((pt: any, index: number) => (
-                <div 
-                  key={pt.technology.name} 
-                  className="group p-6 rounded-2xl border border-border bg-background hover:bg-muted/30 hover:border-muted-foreground/20 transition-all hover:shadow-md hover:-translate-y-1 animate-in fade-in-50 duration-300"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-xl bg-muted group-hover:bg-foreground/10 flex items-center justify-center transition-colors duration-300 overflow-hidden border border-border">
-                      {pt.technology.image ? (
-                        <Image
-                          src={pt.technology.image}
-                          alt={pt.technology.name}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 bg-foreground rounded-md" />
-                      )}
-                    </div>
-                    <div className="flex-1 space-y-3">
-                      <h4 className="font-semibold text-foreground text-xl group-hover:text-foreground transition-colors">
-                        {pt.technology.name}
-                      </h4>
-                      {pt.technology.description && (
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          {pt.technology.description}
-                        </p>
-                      )}
-                      {pt.technology.category && (
-                        <div className="text-xs text-muted-foreground/70 uppercase tracking-wide font-medium bg-muted/50 px-3 py-1 rounded-full inline-block">
-                          {pt.technology.category}
-                        </div>
-                      )}
-                    </div>
+          </div>
+          
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {project.technologies.map((pt: any, index: number) => (
+              <div 
+                key={pt.technology.name} 
+                className="group p-6 rounded-xl border border-border/50 bg-card hover:border-border transition-all duration-300 hover:-translate-y-1"
+                style={{ animation: `fadeInUp 0.6s ease-out ${0.7 + index * 0.1}s both` }}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-muted/50 flex items-center justify-center overflow-hidden border border-border/30">
+                    {pt.technology.image ? (
+                      <Image
+                        src={pt.technology.image}
+                        alt={pt.technology.name}
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <Code className="h-6 w-6 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <h4 className="font-semibold text-foreground">
+                      {pt.technology.name}
+                    </h4>
+                    {pt.technology.description && (
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {pt.technology.description}
+                      </p>
+                    )}
+                    {pt.technology.category && (
+                      <div className="text-xs text-muted-foreground/70 bg-muted/50 px-2 py-1 rounded-md inline-block">
+                        {pt.technology.category}
+                      </div>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Gallery Section */}
       {project.gallery && project.gallery.length > 0 && (
-        <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-400">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-foreground">Project Gallery</CardTitle>
+        <section className="space-y-8" style={{ animation: `fadeInUp 0.6s ease-out 0.8s both` }}>
+          <div className="space-y-3">
+            <h2 className="text-2xl sm:text-3xl font-bold">Gallery</h2>
             <p className="text-muted-foreground">Screenshots and previews of the application</p>
-          </CardHeader>
-          <CardContent className="p-8 pt-0">
-            <ProjectGallery images={project.gallery} projectTitle={project.title} />
-          </CardContent>
-        </Card>
+          </div>
+          <ProjectGallery images={project.gallery} projectTitle={project.title} />
+        </section>
       )}
 
       {/* Related Projects */}
       {relatedProjects.length > 0 && (
-        <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-600">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-foreground">Related Projects</CardTitle>
+        <section className="space-y-8" style={{ animation: `fadeInUp 0.6s ease-out 0.9s both` }}>
+          <div className="space-y-3">
+            <h2 className="text-2xl sm:text-3xl font-bold">Related Projects</h2>
             <p className="text-muted-foreground">Explore more of my work</p>
-          </CardHeader>
-          <CardContent className="p-8 pt-0">
-            <div className="grid gap-8 md:grid-cols-2">
-              {relatedProjects.map((relatedProject, index) => (
-                <div
-                  key={relatedProject.title}
-                  className="animate-in fade-in-50 duration-500"
-                  style={{ animationDelay: `${index * 200}ms` }}
-                >
-                  <ProjectCard
-                    title={relatedProject.title}
-                    description={relatedProject.description}
-                    image={relatedProject.image}
-                    tags={relatedProject.tags}
-                    link={relatedProject.link}
-                    className="h-full hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-                  />
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+          
+          <div className="grid gap-6 md:grid-cols-2">
+            {relatedProjects.map((relatedProject, index) => (
+              <div
+                key={relatedProject.title}
+                style={{ animation: `fadeInUp 0.6s ease-out ${1.0 + index * 0.1}s both` }}
+              >
+                <ProjectCard
+                  title={relatedProject.title}
+                  description={relatedProject.description}
+                  image={relatedProject.image}
+                  tags={relatedProject.tags}
+                  link={relatedProject.link}
+                  className="h-full border-border/50"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Newsletter Signup */}
-      <section className="pt-12 border-t border-border animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-700">
+      <section className="pt-8 border-t border-border/50" style={{ animation: `fadeInUp 0.6s ease-out 1.1s both` }}>
         <NewsletterSignup source={`project-${project.slug}`} />
       </section>
     </div>

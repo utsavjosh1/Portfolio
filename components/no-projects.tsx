@@ -15,7 +15,7 @@ export function NoProjects({ className = '' }: NoProjectsProps) {
             </div>
             <h2 className="text-2xl font-bold tracking-tight text-foreground">No Projects Yet</h2>
             <p className="text-muted-foreground leading-relaxed">
-              I'm currently working on exciting new projects that showcase modern web development, 
+              I&apos;m currently working on exciting new projects that showcase modern web development, 
               authentication systems, and innovative solutions. Stay tuned for updates!
             </p>
           </div>

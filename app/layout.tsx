@@ -12,6 +12,8 @@ import { Footer } from "@/components/footer";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { ThemeEffect } from "@/components/theme-effect";
+import { HomepageLoadingSkeleton } from "@/components/ui/loading-skeleton";
+import { PageTransition } from "@/components/page-transition";
 
 import "./globals.css";
 
@@ -115,6 +117,7 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased theme-transition",
           inter.variable
         )}
+        suppressHydrationWarning
       >
         {/* Critical rendering path optimization */}
         <ThemeProvider
@@ -128,20 +131,9 @@ export default function RootLayout({
             <Header />
             <main className="flex-1 flex justify-center">
               {/* Optimized layout container with better performance */}
-              <div className="w-[40%] min-w-[320px] px-4 py-12">
-                <Suspense fallback={
-                  <div className="space-y-8 animate-pulse">
-                    <div className="space-y-4">
-                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                    </div>
-                    <div className="grid gap-6 sm:grid-cols-2">
-                      <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                    </div>
-                  </div>
-                }>
-                  {children}
+              <div className="w-[50%] min-w-[320px] max-w-4xl px-4 sm:px-6 py-8 sm:py-12">
+                <Suspense fallback={<HomepageLoadingSkeleton />}>
+                  <PageTransition>{children}</PageTransition>
                 </Suspense>
               </div>
             </main>
@@ -168,11 +160,6 @@ export default function RootLayout({
             gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
           `}
         </Script>
-
-        {/* Remove ReactScan from production */}
-        {process.env.NODE_ENV === 'development' && (
-          <Script src="/react-scan.js" strategy="lazyOnload" />
-        )}
       </body>
     </html>
   );

@@ -14,7 +14,6 @@ import {
   ExternalLink,
   RefreshCw,
   Info,
-  AlertTriangle,
   Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -199,7 +198,7 @@ export function UploadClientPage() {
     try {
       await navigator.clipboard.writeText(url);
       toast.success("URL copied to clipboard!");
-    } catch (err) {
+    } catch {
       toast.error("Failed to copy URL");
     }
   };

@@ -3,12 +3,12 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Send, Mail, MessageSquare, User, AlertCircle, CheckCircle } from "lucide-react"
+import { Send, Mail, MapPin, Clock, Github, Linkedin, ExternalLink, AlertCircle, CheckCircle } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { ContactService, type ContactFormData } from "@/lib/services/contact"
@@ -100,6 +100,7 @@ export default function ContactClientPage() {
         if (response.errors) {
           // Handle validation errors from server
           const serverErrors: FormErrors = {}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           response.errors.forEach((error: any) => {
             if (error.path && error.path[0]) {
               serverErrors[error.path[0] as keyof FormErrors] = error.message
@@ -124,179 +125,222 @@ export default function ContactClientPage() {
 
   if (isSubmitted) {
     return (
-      <div className="space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">Contact</h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Get in touch with me for work inquiries, collaborations, or just to say hello.
-          </p>
+      <div className="max-w-4xl mx-auto px-4 py-24">
+        <div className="text-center space-y-8">
+          <div className="w-16 h-16 mx-auto bg-green-50 dark:bg-green-950/20 rounded-full flex items-center justify-center border border-green-200 dark:border-green-800/30">
+            <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+          </div>
+          <div className="space-y-4">
+            <h1 className="text-3xl font-light">Message sent successfully</h1>
+            <p className="text-muted-foreground text-lg max-w-md mx-auto">
+                             Thank you for reaching out. I&apos;ll get back to you within 24 hours.
+            </p>
+          </div>
+          <Button 
+            onClick={resetForm}
+            variant="outline" 
+            className="mt-8"
+          >
+            Send another message
+          </Button>
         </div>
-
-        <Card className="border-border shadow-lg animate-in fade-in-50 duration-500">
-          <CardContent className="p-12 text-center space-y-6">
-            <div className="w-16 h-16 mx-auto rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
-              <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
-            </div>
-            <div className="space-y-3">
-              <h2 className="text-2xl font-bold text-foreground">Message Sent Successfully!</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                Thank you for reaching out. I'll get back to you as soon as possible, usually within 24 hours.
-              </p>
-            </div>
-            <Button 
-              onClick={resetForm}
-              variant="outline" 
-              className="mt-6"
-            >
-              Send Another Message
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     )
   }
 
   return (
-    <div className="space-y-8">
-      <div className="text-center space-y-4 animate-in fade-in-50 duration-300">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">Contact</h1>
-        <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-          Get in touch with me for work inquiries, collaborations, or just to say hello.
+    <div className="max-w-4xl mx-auto px-4 py-24">
+      {/* Header */}
+      <div className="text-center space-y-6 mb-20">
+        <h1 className="text-5xl md:text-6xl font-light tracking-tight">Contact</h1>
+        <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
+          I&apos;m always open to discussing new opportunities and interesting projects.
         </p>
       </div>
 
-      <Card className="border-border shadow-lg animate-in fade-in-50 slide-in-from-bottom-4 duration-700 delay-200">
-        <CardHeader className="pb-8">
-          <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center">
-              <MessageSquare className="h-4 w-4 text-foreground" />
-            </div>
-            Send a Message
-          </CardTitle>
-          <CardDescription className="text-base">
-            Fill out the form below and I'll get back to you as soon as possible.
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-6 p-8 pt-0">
+      <div className="grid lg:grid-cols-5 gap-16">
+        {/* Contact Information */}
+        <div className="lg:col-span-2 space-y-12">
+          <div className="space-y-8">
             <div className="space-y-3">
-              <Label htmlFor="name" className="text-sm font-medium text-foreground flex items-center gap-2">
-                <User className="h-4 w-4" />
-                Name
-              </Label>
-              <Input
-                id="name"
-                name="name"
-                placeholder="Your full name"
-                value={formData.name}
-                onChange={handleChange}
-                className={`h-12 ${errors.name ? 'border-red-500 focus:border-red-500' : 'border-border'}`}
-                required
-              />
-              {errors.name && (
-                <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
-                  <AlertCircle className="h-4 w-4" />
-                  {errors.name}
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-3">
-              <Label htmlFor="email" className="text-sm font-medium text-foreground flex items-center gap-2">
+              <div className="flex items-center gap-3 text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                Email
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="your.email@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                className={`h-12 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-border'}`}
-                required
-              />
-              {errors.email && (
-                <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
-                  <AlertCircle className="h-4 w-4" />
-                  {errors.email}
-                </div>
-              )}
+                <span className="text-sm font-medium uppercase tracking-wider">Email</span>
+              </div>
+              <Link 
+                href="mailto:hi@joshiutsav.com" 
+                className="text-xl hover:text-muted-foreground transition-colors duration-200 block"
+              >
+                hi@joshiutsav.com
+              </Link>
             </div>
 
             <div className="space-y-3">
-              <Label htmlFor="subject" className="text-sm font-medium text-foreground">
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <MapPin className="h-4 w-4" />
+                <span className="text-sm font-medium uppercase tracking-wider">Location</span>
+              </div>
+              <p className="text-xl">Remote Worldwide</p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span className="text-sm font-medium uppercase tracking-wider">Response Time</span>
+              </div>
+              <p className="text-xl">Usually within 24 hours</p>
+            </div>
+          </div>
+
+          <div className="h-px bg-border"></div>
+
+          <div className="space-y-4">
+            <span className="text-sm font-medium uppercase tracking-wider text-muted-foreground">Connect</span>
+            <div className="flex gap-6">
+              <Link
+                href="https://github.com/utsavjosh1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 group"
+              >
+                <Github className="h-4 w-4" />
+                <span>GitHub</span>
+                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Link>
+              <Link
+                href="https://www.linkedin.com/in/utsavjosh1/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 group"
+              >
+                <Linkedin className="h-4 w-4" />
+                <span>LinkedIn</span>
+                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Form */}
+        <div className="lg:col-span-3">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  name="name"
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={`h-14 border-0 border-b border-border bg-transparent rounded-none focus:border-foreground transition-colors duration-200 ${errors.name ? 'border-red-500 focus:border-red-500' : ''}`}
+                  required
+                />
+                {errors.name && (
+                  <div className="flex items-center gap-2 text-sm text-red-500 mt-2">
+                    <AlertCircle className="h-4 w-4" />
+                    {errors.name}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`h-14 border-0 border-b border-border bg-transparent rounded-none focus:border-foreground transition-colors duration-200 ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
+                  required
+                />
+                {errors.email && (
+                  <div className="flex items-center gap-2 text-sm text-red-500 mt-2">
+                    <AlertCircle className="h-4 w-4" />
+                    {errors.email}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="subject" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
                 Subject
               </Label>
               <Input
                 id="subject"
                 name="subject"
-                placeholder="What is this regarding?"
+                placeholder="What's this about?"
                 value={formData.subject}
                 onChange={handleChange}
-                className={`h-12 ${errors.subject ? 'border-red-500 focus:border-red-500' : 'border-border'}`}
+                className={`h-14 border-0 border-b border-border bg-transparent rounded-none focus:border-foreground transition-colors duration-200 ${errors.subject ? 'border-red-500 focus:border-red-500' : ''}`}
                 required
               />
               {errors.subject && (
-                <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
+                <div className="flex items-center gap-2 text-sm text-red-500 mt-2">
                   <AlertCircle className="h-4 w-4" />
                   {errors.subject}
                 </div>
               )}
             </div>
 
-            <div className="space-y-3">
-              <Label htmlFor="message" className="text-sm font-medium text-foreground">
+            <div className="space-y-2">
+              <Label htmlFor="message" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
                 Message
               </Label>
               <Textarea
                 id="message"
                 name="message"
-                placeholder="Tell me about your project, question, or just say hello..."
+                placeholder="Tell me about your project or just say hello..."
                 rows={6}
                 value={formData.message}
                 onChange={handleChange}
-                className={`resize-none ${errors.message ? 'border-red-500 focus:border-red-500' : 'border-border'}`}
+                className={`border-0 border-b border-border bg-transparent rounded-none resize-none focus:border-foreground transition-colors duration-200 ${errors.message ? 'border-red-500 focus:border-red-500' : ''}`}
                 required
               />
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center pt-2">
                 {errors.message ? (
-                  <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
+                  <div className="flex items-center gap-2 text-sm text-red-500">
                     <AlertCircle className="h-4 w-4" />
                     {errors.message}
                   </div>
                 ) : (
-                  <div className="text-sm text-muted-foreground">
-                    Minimum 10 characters
-                  </div>
+                  <span className="text-sm text-muted-foreground">Minimum 10 characters</span>
                 )}
-                <div className="text-sm text-muted-foreground">
+                <span className={`text-sm ${formData.message.length > 1800 ? 'text-amber-500' : 'text-muted-foreground'}`}>
                   {formData.message.length}/2000
-                </div>
+                </span>
               </div>
             </div>
-          </CardContent>
-          <CardFooter className="p-8 pt-0">
-            <Button 
-              type="submit" 
-              disabled={isSubmitting} 
-              className="w-full h-12 text-base font-medium hover:scale-105 transition-all duration-200"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center gap-3">
-                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                  Sending Message...
-                </span>
-              ) : (
-                <span className="flex items-center gap-3">
-                  Send Message
-                  <Send className="h-5 w-5" />
-                </span>
-              )}
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
+
+            <div className="pt-4">
+              <Button 
+                type="submit" 
+                disabled={isSubmitting} 
+                className="w-full md:w-auto h-14 px-12 bg-foreground hover:bg-foreground/90 text-background"
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center gap-3">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    Sending...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-3">
+                    Send Message
+                    <Send className="h-4 w-4" />
+                  </span>
+                )}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   )
 }

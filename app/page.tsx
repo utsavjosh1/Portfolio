@@ -60,7 +60,7 @@ export const metadata: Metadata = {
 };
 
 // Optimized ISR: Cache for 5 minutes in production, immediate in dev
-export const revalidate = process.env.NODE_ENV === "production" ? 300 : 0;
+export const revalidate = 300;
 
 // Empty state component
 function EmptyState({

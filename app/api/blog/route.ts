@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server'
 import { BlogService } from '@/lib/services/blog'
 
+// Cache for 5 minutes with stale-while-revalidate for 1 hour
+const CACHE_HEADERS = {
+  'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=3600',
+  'CDN-Cache-Control': 'public, s-maxage=300',
+  'Vercel-CDN-Cache-Control': 'public, s-maxage=300'
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -32,7 +39,13 @@ export async function GET(request: Request) {
       date: post.publishedAt?.toISOString().split('T')[0] || post.createdAt.toISOString().split('T')[0]
     }))
 
-    return NextResponse.json(transformedPosts)
+    return new NextResponse(JSON.stringify(transformedPosts), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        ...CACHE_HEADERS
+      }
+    })
   } catch (error) {
     console.error('Error fetching blog posts:', error)
     return NextResponse.json(

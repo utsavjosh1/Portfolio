@@ -20,6 +20,7 @@ export interface ContactResponse {
   success: boolean
   message: string
   id?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors?: any[]
 }
 

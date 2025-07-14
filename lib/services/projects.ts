@@ -1,17 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { safePrisma, isPrismaAvailable } from '@/lib/prisma'
-import { Project, ProjectStatus, Prisma } from '@prisma/client'
 
-export type ProjectWithTechnologies = Prisma.ProjectGetPayload<{
-  include: {
-    technologies: {
-      include: {
-        technology: true
-      }
-    }
-  }
-}>
-
-// Optimized project type with only needed fields for listing pages
+// Optimized project type for list views
 export type OptimizedProject = {
   id: string
   title: string
@@ -19,22 +9,77 @@ export type OptimizedProject = {
   image: string | null
   slug: string
   featured: boolean
-  status: ProjectStatus
-  technologies: {
+  status: string
+  technologies: Array<{
     technology: {
       name: string
     }
-  }[]
+  }>
 }
 
+// Cache implementation
+interface ProjectCacheEntry {
+  data: any
+  timestamp: number
+  ttl: number
+}
+
+class ProjectCache {
+  private cache: Map<string, ProjectCacheEntry> = new Map()
+
+  set(key: string, data: any, ttlSeconds: number = 180): void {
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+      ttl: ttlSeconds * 1000
+    })
+  }
+
+  get(key: string): any | null {
+    const entry = this.cache.get(key)
+    if (!entry) return null
+
+    const now = Date.now()
+    if (now - entry.timestamp > entry.ttl) {
+      this.cache.delete(key)
+      return null
+    }
+
+    return entry.data
+  }
+
+  clear(): void {
+    this.cache.clear()
+  }
+
+  clearPattern(pattern: string): void {
+    for (const key of this.cache.keys()) {
+      if (key.includes(pattern)) {
+        this.cache.delete(key)
+      }
+    }
+  }
+}
+
+const projectCache = new ProjectCache()
+
 export class ProjectService {
-  // Optimized: Get all project data in a single query with field selection
+  // Ultra-optimized: Get all project data in a single query with field selection and caching
   static async getProjectsPageData(): Promise<{
     allProjects: OptimizedProject[]
     featuredProjects: OptimizedProject[]
     completedProjects: OptimizedProject[]
     totalProjects: number
   }> {
+    const cacheKey = 'projects-page-data'
+    
+    // Try cache first
+    const cachedData = projectCache.get(cacheKey)
+    if (cachedData) {
+      console.log('Projects page data served from cache')
+      return cachedData
+    }
+
     if (!isPrismaAvailable()) {
       return {
         allProjects: [],
@@ -45,210 +90,316 @@ export class ProjectService {
     }
     
     const prisma = safePrisma()
+    console.log('Fetching fresh projects data from database')
+    const startTime = Date.now()
     
-    // Single query with optimized field selection
-    const allProjects = await prisma.project.findMany({
-      where: {
-        published: true
-      },
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        image: true,
-        slug: true,
-        featured: true,
-        status: true,
-        technologies: {
-          select: {
-            technology: {
-              select: {
-                name: true
+    try {
+      // Single optimized query using raw SQL for better performance
+      const allProjects = await prisma.$queryRaw`
+        SELECT 
+          p.id,
+          p.title,
+          p.description,
+          p.image,
+          p.slug,
+          p.featured,
+          p.status,
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT('technology', JSON_BUILD_OBJECT('name', t.name))
+              ORDER BY t.name
+            ) FILTER (WHERE t.name IS NOT NULL),
+            '[]'::json
+          ) as technologies
+        FROM projects p
+        LEFT JOIN project_technologies pt ON p.id = pt."projectId"
+        LEFT JOIN technologies t ON pt."technologyId" = t.id
+        WHERE p.published = true
+        GROUP BY p.id, p.title, p.description, p.image, p.slug, p.featured, p.status, p."createdAt"
+        ORDER BY p."createdAt" DESC
+      ` as OptimizedProject[]
+
+      // Process data client-side to avoid additional DB queries
+      const featuredProjects = allProjects.filter(project => project.featured)
+      const completedProjects = allProjects.filter(project => project.status === 'COMPLETED')
+      
+      const result = {
+        allProjects,
+        featuredProjects,
+        completedProjects,
+        totalProjects: allProjects.length
+      }
+
+      // Cache for 3 minutes
+      projectCache.set(cacheKey, result, 180)
+
+      const queryTime = Date.now() - startTime
+      console.log(`Projects data prepared in ${queryTime}ms`)
+      
+      return result
+    } catch (error) {
+      console.error('Failed to fetch projects data:', error)
+      return {
+        allProjects: [],
+        featuredProjects: [],
+        completedProjects: [],
+        totalProjects: 0
+      }
+    }
+  }
+
+  // Cached version of getAllProjects
+  static async getAllProjects(): Promise<OptimizedProject[]> {
+    const cacheKey = 'all-projects'
+    
+    const cachedData = projectCache.get(cacheKey)
+    if (cachedData) {
+      return cachedData
+    }
+
+    if (!isPrismaAvailable()) {
+      return []
+    }
+
+    const prisma = safePrisma()
+    
+    try {
+      const projects = await prisma.$queryRaw`
+        SELECT 
+          p.id,
+          p.title,
+          p.description,
+          p.image,
+          p.slug,
+          p.featured,
+          p.status,
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT('technology', JSON_BUILD_OBJECT('name', t.name))
+              ORDER BY t.name
+            ) FILTER (WHERE t.name IS NOT NULL),
+            '[]'::json
+          ) as technologies
+        FROM projects p
+        LEFT JOIN project_technologies pt ON p.id = pt."projectId"
+        LEFT JOIN technologies t ON pt."technologyId" = t.id
+        WHERE p.published = true
+        GROUP BY p.id, p.title, p.description, p.image, p.slug, p.featured, p.status, p."createdAt"
+        ORDER BY p."createdAt" DESC
+      ` as OptimizedProject[]
+
+      projectCache.set(cacheKey, projects, 180)
+      return projects
+    } catch (error) {
+      console.error('Failed to fetch all projects:', error)
+      return []
+    }
+  }
+
+  // Cached version of getFeaturedProjects
+  static async getFeaturedProjects(): Promise<OptimizedProject[]> {
+    const cacheKey = 'featured-projects'
+    
+    const cachedData = projectCache.get(cacheKey)
+    if (cachedData) {
+      return cachedData
+    }
+
+    if (!isPrismaAvailable()) {
+      return []
+    }
+
+    const prisma = safePrisma()
+    
+    try {
+      const projects = await prisma.$queryRaw`
+        SELECT 
+          p.id,
+          p.title,
+          p.description,
+          p.image,
+          p.slug,
+          p.featured,
+          p.status,
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT('technology', JSON_BUILD_OBJECT('name', t.name))
+              ORDER BY t.name
+            ) FILTER (WHERE t.name IS NOT NULL),
+            '[]'::json
+          ) as technologies
+        FROM projects p
+        LEFT JOIN project_technologies pt ON p.id = pt."projectId"
+        LEFT JOIN technologies t ON pt."technologyId" = t.id
+        WHERE p.published = true AND p.featured = true
+        GROUP BY p.id, p.title, p.description, p.image, p.slug, p.featured, p.status, p."createdAt"
+        ORDER BY p."createdAt" DESC
+      ` as OptimizedProject[]
+
+      projectCache.set(cacheKey, projects, 180)
+      return projects
+    } catch (error) {
+      console.error('Failed to fetch featured projects:', error)
+      return []
+    }
+  }
+
+  // Individual project by slug with caching
+  static async getProjectBySlug(slug: string) {
+    const cacheKey = `project-${slug}`
+    
+    const cachedData = projectCache.get(cacheKey)
+    if (cachedData) {
+      return cachedData
+    }
+
+    if (!isPrismaAvailable()) {
+      return null
+    }
+
+    const prisma = safePrisma()
+    
+    try {
+      const project = await prisma.project.findUnique({
+        where: { 
+          slug,
+          published: true
+        },
+        include: {
+          technologies: {
+            include: {
+              technology: true
+            },
+            orderBy: {
+              technology: {
+                name: 'asc'
               }
             }
           }
         }
-      },
-      orderBy: {
-        createdAt: 'desc'
+      })
+
+      if (!project) {
+        return null
       }
-    }) as OptimizedProject[]
 
-    // Process data client-side to avoid additional DB queries
-    const featuredProjects = allProjects.filter(project => project.featured)
-    const completedProjects = allProjects.filter(project => project.status === 'COMPLETED')
-    
-    return {
-      allProjects,
-      featuredProjects,
-      completedProjects,
-      totalProjects: allProjects.length
-    }
-  }
-
-  // Get all published projects (legacy method for backward compatibility)
-  static async getAllProjects(): Promise<ProjectWithTechnologies[]> {
-    if (!isPrismaAvailable()) {
-      return []
-    }
-    const prisma = safePrisma()
-    return await prisma.project.findMany({
-      where: {
-        published: true
-      },
-      include: {
-        technologies: {
-          include: {
-            technology: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
-  }
-
-  // Get featured projects (legacy method for backward compatibility)
-  static async getFeaturedProjects(): Promise<ProjectWithTechnologies[]> {
-    if (!isPrismaAvailable()) {
-      return []
-    }
-    const prisma = safePrisma()
-    const result =await prisma.project.findMany({
-      where: {
-        published: true,
-        featured: true
-      },
-      include: {
-        technologies: {
-          include: {
-            technology: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
-    return result
-  }
-
-  // Get project by slug
-  static async getProjectBySlug(slug: string): Promise<ProjectWithTechnologies | null> {
-    if (!isPrismaAvailable()) {
+      projectCache.set(cacheKey, project, 300) // Cache individual projects for 5 minutes
+      return project
+    } catch (error) {
+      console.error(`Failed to fetch project with slug ${slug}:`, error)
       return null
     }
-    const prisma = safePrisma()
-    return await prisma.project.findUnique({
-      where: {
-        slug,
-        published: true
-      },
-      include: {
-        technologies: {
-          include: {
-            technology: true
-          }
-        }
-      }
-    })
   }
 
-  // Get projects by status
-  static async getProjectsByStatus(status: ProjectStatus): Promise<ProjectWithTechnologies[]> {
+  // Get projects by status with caching
+  static async getProjectsByStatus(status: string): Promise<OptimizedProject[]> {
+    const cacheKey = `projects-status-${status}`
+    
+    const cachedData = projectCache.get(cacheKey)
+    if (cachedData) {
+      return cachedData
+    }
+
     if (!isPrismaAvailable()) {
       return []
     }
+
     const prisma = safePrisma()
-    return await prisma.project.findMany({
-      where: {
-        published: true,
-        status
-      },
-      include: {
-        technologies: {
-          include: {
-            technology: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
+    
+    try {
+      const projects = await prisma.$queryRaw`
+        SELECT 
+          p.id,
+          p.title,
+          p.description,
+          p.image,
+          p.slug,
+          p.featured,
+          p.status,
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT('technology', JSON_BUILD_OBJECT('name', t.name))
+              ORDER BY t.name
+            ) FILTER (WHERE t.name IS NOT NULL),
+            '[]'::json
+          ) as technologies
+        FROM projects p
+        LEFT JOIN project_technologies pt ON p.id = pt."projectId"
+        LEFT JOIN technologies t ON pt."technologyId" = t.id
+        WHERE p.published = true AND p.status = ${status}
+        GROUP BY p.id, p.title, p.description, p.image, p.slug, p.featured, p.status, p."createdAt"
+        ORDER BY p."createdAt" DESC
+      ` as OptimizedProject[]
+
+      projectCache.set(cacheKey, projects, 180)
+      return projects
+    } catch (error) {
+      console.error(`Failed to fetch projects by status ${status}:`, error)
+      return []
+    }
   }
 
-  // Get projects by year
-  static async getProjectsByYear(year: string): Promise<ProjectWithTechnologies[]> {
+  // Get projects by year with caching
+  static async getProjectsByYear(year: string): Promise<OptimizedProject[]> {
+    const cacheKey = `projects-year-${year}`
+    
+    const cachedData = projectCache.get(cacheKey)
+    if (cachedData) {
+      return cachedData
+    }
+
     if (!isPrismaAvailable()) {
       return []
     }
+
     const prisma = safePrisma()
-    return await prisma.project.findMany({
-      where: {
-        published: true,
-        year
-      },
-      include: {
-        technologies: {
-          include: {
-            technology: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
+    
+    try {
+      const projects = await prisma.$queryRaw`
+        SELECT 
+          p.id,
+          p.title,
+          p.description,
+          p.image,
+          p.slug,
+          p.featured,
+          p.status,
+          COALESCE(
+            JSON_AGG(
+              JSON_BUILD_OBJECT('technology', JSON_BUILD_OBJECT('name', t.name))
+              ORDER BY t.name
+            ) FILTER (WHERE t.name IS NOT NULL),
+            '[]'::json
+          ) as technologies
+        FROM projects p
+        LEFT JOIN project_technologies pt ON p.id = pt."projectId"
+        LEFT JOIN technologies t ON pt."technologyId" = t.id
+        WHERE p.published = true AND p.year = ${year}
+        GROUP BY p.id, p.title, p.description, p.image, p.slug, p.featured, p.status, p."createdAt"
+        ORDER BY p."createdAt" DESC
+      ` as OptimizedProject[]
+
+      projectCache.set(cacheKey, projects, 180)
+      return projects
+    } catch (error) {
+      console.error(`Failed to fetch projects by year ${year}:`, error)
+      return []
+    }
   }
 
-  // Create a new project
-  static async createProject(data: Prisma.ProjectCreateInput): Promise<Project> {
-    const prisma = safePrisma()
-    return await prisma.project.create({
-      data
-    })
+  /**
+   * Clear all project caches
+   */
+  static clearCache(): void {
+    projectCache.clear()
+    console.log('Project cache cleared')
   }
 
-  // Update a project
-  static async updateProject(id: string, data: Prisma.ProjectUpdateInput): Promise<Project> {
-    const prisma = safePrisma()
-    return await prisma.project.update({
-      where: { id },
-      data
-    })
+  /**
+   * Clear specific project cache
+   */
+  static clearProjectCache(slug: string): void {
+    projectCache.clearPattern(slug)
+    console.log(`Project cache cleared for ${slug}`)
   }
-
-  // Delete a project
-  static async deleteProject(id: string): Promise<Project> {
-    const prisma = safePrisma()
-    return await prisma.project.delete({
-      where: { id }
-    })
-  }
-
-  // Add technology to project
-  static async addTechnologyToProject(projectId: string, technologyId: string) {
-    const prisma = safePrisma()
-    return await prisma.projectTechnology.create({
-      data: {
-        projectId,
-        technologyId
-      }
-    })
-  }
-
-  // Remove technology from project
-  static async removeTechnologyFromProject(projectId: string, technologyId: string) {
-    const prisma = safePrisma()
-    return await prisma.projectTechnology.delete({
-      where: {
-        projectId_technologyId: {
-          projectId,
-          technologyId
-        }
-      }
-    })
-  }
-} 
+}

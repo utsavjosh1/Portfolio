@@ -17,7 +17,7 @@ export function NoBlogs({ className = '' }: NoBlogsProps) {
             </div>
             <h2 className="text-2xl font-bold tracking-tight text-foreground">No Articles Yet</h2>
             <p className="text-muted-foreground leading-relaxed">
-              I'm currently working on creating high-quality content about authentication, security, 
+              I&apos;m currently working on creating high-quality content about authentication, security, 
               and modern web development. The first articles will be published soon!
             </p>
           </div>

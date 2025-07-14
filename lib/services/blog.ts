@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { safePrisma, isPrismaAvailable } from '@/lib/prisma'
 import { BlogPost, Prisma } from '@prisma/client'
 

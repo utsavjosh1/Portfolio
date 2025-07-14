@@ -1,14 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { LogOut } from "lucide-react"
 import { toast } from "sonner"
 
 export function LogoutButton() {
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
 
   const handleLogout = async () => {
     setIsLoading(true)

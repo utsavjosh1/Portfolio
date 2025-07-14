@@ -106,8 +106,63 @@
   }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Infinite carousel animations */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Different speed variations */
+.animate-scroll-left-1 {
+  animation: scroll-left 40s linear infinite;
+}
+
+.animate-scroll-left-2 {
+  animation: scroll-left 35s linear infinite;
+}
+
+.animate-scroll-left-3 {
+  animation: scroll-left 30s linear infinite;
+}
+
+.animate-scroll-right-1 {
+  animation: scroll-right 45s linear infinite;
+}
+
+.animate-scroll-right-2 {
+  animation: scroll-right 38s linear infinite;
+}
+
+.animate-scroll-right-3 {
+  animation: scroll-right 32s linear infinite;
+}
+
+.animate-scroll-pause {
+  animation-play-state: paused;
 }
 
 /* Loading skeleton optimizations */

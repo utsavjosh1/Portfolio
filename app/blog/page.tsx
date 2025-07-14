@@ -1,22 +1,28 @@
 import type { Metadata } from "next"
-import { BlogPostPreview } from "@/components/blog-post-preview"
+import { Suspense } from "react"
+import Link from "next/link"
+import { Calendar, Clock, ArrowRight, BookOpen, Search } from "lucide-react"
+
 import { BlogService } from "@/lib/services/blog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { NewsletterSignup } from "@/components/newsletter-signup"
 import { NoBlogs } from "@/components/no-blogs"
-import { OGImages } from "@/lib/og-image"
 
 export const metadata: Metadata = {
   title: "Blog | Utsav Joshi",
-  description: "Thoughts, tutorials, and insights on web development, design, and the latest technologies shaping our digital world.",
-  keywords: "blog, web development, programming, tutorials, React, Next.js, TypeScript",
+  description: "Articles about web development, React, Next.js, and software engineering best practices.",
+  keywords: "blog, articles, web development, React, Next.js, JavaScript, TypeScript, software engineering",
   openGraph: {
     title: "Blog - Utsav Joshi",
-    description: "Technical articles, tutorials, and insights about web development, programming, and technology.",
+    description: "Articles about web development, React, Next.js, and software engineering best practices.",
     url: "https://www.joshiutsav.com/blog",
     siteName: "Utsav Joshi Portfolio",
     images: [
       {
-        url: OGImages.blog(),
+        url: "https://www.joshiutsav.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Utsav Joshi Blog",
@@ -28,240 +34,223 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Blog | Utsav Joshi",
-    description: "Thoughts, tutorials, and insights on web development, design, and the latest technologies shaping our digital world.",
-    images: [OGImages.blog()],
+    description: "Articles about web development, React, Next.js, and software engineering best practices.",
+    images: ["https://www.joshiutsav.com/og-image.png"],
   },
 }
 
-// Fallback data for when database is unavailable
-const fallbackBlogData = {
-  allPosts: [
-    {
-      id: "1",
-      title: "Building Scalable Web Applications with Next.js",
-      excerpt: "Learn how to create performant and scalable web applications using Next.js and modern development practices.",
-      slug: "scalable-nextjs-apps",
-      featured: true,
-      tags: ["Next.js", "React", "Performance"],
-      category: "Tutorial",
-      createdAt: new Date('2024-01-15'),
-      publishedAt: new Date('2024-01-15')
-    },
-    {
-      id: "2",
-      title: "TypeScript Best Practices for React Developers",
-      excerpt: "Discover essential TypeScript patterns and best practices that will make your React code more robust and maintainable.",
-      slug: "typescript-react-best-practices",
-      featured: false,
-      tags: ["TypeScript", "React", "Best Practices"],
-      category: "Guide",
-      createdAt: new Date('2024-01-10'),
-      publishedAt: new Date('2024-01-10')
-    }
-  ],
-  featuredPosts: [
-    {
-      id: "1",
-      title: "Building Scalable Web Applications with Next.js",
-      excerpt: "Learn how to create performant and scalable web applications using Next.js and modern development practices.",
-      slug: "scalable-nextjs-apps",
-      featured: true,
-      tags: ["Next.js", "React", "Performance"],
-      category: "Tutorial",
-      createdAt: new Date('2024-01-15'),
-      publishedAt: new Date('2024-01-15')
-    }
-  ],
-  recentPosts: [
-    {
-      id: "1",
-      title: "Building Scalable Web Applications with Next.js",
-      excerpt: "Learn how to create performant and scalable web applications using Next.js and modern development practices.",
-      slug: "scalable-nextjs-apps",
-      featured: true,
-      tags: ["Next.js", "React", "Performance"],
-      category: "Tutorial",
-      createdAt: new Date('2024-01-15'),
-      publishedAt: new Date('2024-01-15')
-    },
-    {
-      id: "2",
-      title: "TypeScript Best Practices for React Developers",
-      excerpt: "Discover essential TypeScript patterns and best practices that will make your React code more robust and maintainable.",
-      slug: "typescript-react-best-practices",
-      featured: false,
-      tags: ["TypeScript", "React", "Best Practices"],
-      category: "Guide",
-      createdAt: new Date('2024-01-10'),
-      publishedAt: new Date('2024-01-10')
-    }
-  ],
-  totalPosts: 2
-};
-
-export default async function BlogPage() {
-  let blogData: any = fallbackBlogData;
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function BlogList({ searchParams }: { searchParams: any }) {
+  const search = searchParams?.search || ""
+  const category = searchParams?.category || ""
+  const tag = searchParams?.tag || ""
+  
   try {
-    // Optimized: Single database query with error handling
-    const data = await BlogService.getBlogPageData();
-    if (data.totalPosts > 0) {
-      blogData = data;
+         const posts = await BlogService.getAllPosts()
+
+    if (!posts || posts.length === 0) {
+      return <NoBlogs />
     }
+
+    // Get unique categories and tags for filtering
+    const categories = [...new Set(posts.map(post => post.category).filter(Boolean))]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const allTags = posts.reduce((acc: string[], post: any) => {
+      if (post.tags && Array.isArray(post.tags)) {
+        return [...acc, ...post.tags]
+      }
+      return acc
+    }, [])
+    const uniqueTags = [...new Set(allTags)]
+
+    return (
+      <div className="space-y-12">
+        {/* Search and Filters */}
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search articles..."
+                defaultValue={search}
+                className="pl-10"
+                name="search"
+              />
+            </div>
+            <Button type="submit" variant="outline">
+              Search
+            </Button>
+          </div>
+
+          {/* Filter Tags */}
+          {(categories.length > 0 || uniqueTags.length > 0) && (
+            <div className="space-y-4">
+              {categories.length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium text-muted-foreground">Categories</h3>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href="/blog">
+                      <Badge variant={!category ? "default" : "outline"}>
+                        All
+                      </Badge>
+                    </Link>
+                                           {categories.map(cat => (
+                         <Link key={cat} href={`/blog?category=${encodeURIComponent(cat || '')}`}>
+                           <Badge variant={category === cat ? "default" : "outline"}>
+                             {cat}
+                           </Badge>
+                         </Link>
+                       ))}
+                  </div>
+                </div>
+              )}
+
+              {uniqueTags.length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium text-muted-foreground">Tags</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {uniqueTags.slice(0, 10).map(tagItem => (
+                      <Link key={tagItem} href={`/blog?tag=${encodeURIComponent(tagItem)}`}>
+                        <Badge variant={tag === tagItem ? "default" : "outline"} className="text-xs">
+                          {tagItem}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Blog Posts Grid */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {posts.map((post: any) => (
+            <Link key={post.id} href={`/blog/${post.slug}`}>
+              <Card className="h-full transition-all duration-200 hover:shadow-lg group">
+                {post.image && (
+                  <div className="aspect-video overflow-hidden rounded-t-lg">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                    />
+                  </div>
+                )}
+                <CardHeader className="pb-3">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {new Date(post.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {Math.ceil((post.content?.length || 0) / 200)} min read
+                    </div>
+                  </div>
+                  <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors">
+                    {post.title}
+                  </CardTitle>
+                  {post.excerpt && (
+                    <CardDescription className="line-clamp-3">
+                      {post.excerpt}
+                    </CardDescription>
+                  )}
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {post.category && (
+                      <Badge variant="secondary">
+                        {post.category}
+                      </Badge>
+                    )}
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    {post.tags?.slice(0, 2).map((tag: any) => (
+                      <Badge key={tag} variant="outline" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="flex items-center text-sm text-primary font-medium group-hover:gap-2 transition-all">
+                    Read more
+                    <ArrowRight className="h-3 w-3 ml-1 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </div>
+    )
   } catch (error) {
-    console.warn('Database unavailable during build, using fallback data:', error);
-    // Continue with fallback data
+    console.error('Error loading blog posts:', error)
+    return <NoBlogs />
   }
+}
 
-  const { allPosts, featuredPosts, recentPosts, totalPosts } = blogData;
-
-  // Check if there are no published posts
-  const hasNoPosts = totalPosts === 0;
-
-  // Transform posts to match BlogPostPreview interface (optimized)
-  const transformPost = (post: any) => ({
-    title: post.title,
-    excerpt: post.excerpt,
-    date: post.publishedAt?.toISOString().split('T')[0] || post.createdAt.toISOString().split('T')[0],
-    slug: post.slug,
-    tags: post.tags,
-    category: post.category
-  })
-
-  const transformedFeaturedPosts = featuredPosts.map(transformPost)
-  const transformedRecentPosts = recentPosts.map(transformPost)
-  const transformedAllPosts = allPosts.map(transformPost)
-
+export default async function BlogPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   return (
-    <div className="space-y-12">
+    <div className="space-y-16 sm:space-y-24">
       {/* Hero Section */}
-      <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-background to-muted/20 rounded-2xl -z-10" />
-        <div className="relative px-6 py-16 text-center space-y-6">
+      <section className="text-center space-y-6 py-12 sm:py-16">
+        <div className="space-y-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+            <BookOpen className="inline-block h-12 w-12 sm:h-16 sm:w-16 mb-4 text-primary" />
+            <br />
+            Blog
+          </h1>
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Insights, tutorials, and thoughts on web development, React, and building great user experiences.
+          </p>
+        </div>
+      </section>
+
+      {/* Blog Content */}
+      <Suspense fallback={
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {[...Array(6)].map((_, i) => (
+            <Card key={i} className="animate-pulse">
+              <div className="aspect-video bg-muted rounded-t-lg" />
+              <CardHeader>
+                <div className="h-4 bg-muted rounded w-3/4" />
+                <div className="h-3 bg-muted rounded w-1/2" />
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="h-3 bg-muted rounded" />
+                  <div className="h-3 bg-muted rounded w-4/5" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      }>
+        <BlogList searchParams={await searchParams} />
+      </Suspense>
+
+      {/* Newsletter Section */}
+      <section className="py-16 sm:py-24">
+        <div className="text-center space-y-8">
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Blog
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Thoughts, tutorials, and insights on authentication, security, and modern web development practices.
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              Stay Updated
+            </h2>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Get notified when I publish new articles about web development and software engineering.
             </p>
           </div>
-          
-          {/* Stats */}
-          {!hasNoPosts && (
-            <div className="flex items-center justify-center gap-8 text-sm border-t border-b border-border py-6">
-              <div className="text-center">
-                <div className="text-xl font-bold text-foreground">{totalPosts}</div>
-                <div className="text-muted-foreground text-xs uppercase tracking-wide">Articles</div>
-              </div>
-              <div className="w-px h-8 bg-border" />
-              <div className="text-center">
-                <div className="text-xl font-bold text-foreground">{featuredPosts.length}</div>
-                <div className="text-muted-foreground text-xs uppercase tracking-wide">Featured</div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {hasNoPosts ? (
-        <NoBlogs />
-      ) : (
-        <div className="space-y-12">
-          {/* Main Content */}
-          <div className="space-y-12">
-            {/* Featured Posts */}
-            {transformedFeaturedPosts.length > 0 && (
-            <section className="space-y-6">
-              <div className="flex items-center gap-3 pb-3 border-b border-border">
-                <h2 className="text-xl font-bold tracking-tight text-foreground">Featured Articles</h2>
-                <span className="px-2 py-1 text-xs font-medium bg-foreground text-background rounded">
-                  {transformedFeaturedPosts.length}
-                </span>
-              </div>
-              
-              <div className="space-y-4">
-                {transformedFeaturedPosts.slice(0, 3).map((post: any, index: number) => (
-                  <div
-                    key={post.slug}
-                    className="group animate-in fade-in-50 duration-500"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <BlogPostPreview
-                      title={post.title}
-                      excerpt={post.excerpt}
-                      date={post.date}
-                      slug={post.slug}
-                      className="transition-all duration-200 hover:bg-muted/30 border-border"
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Recent Posts */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-3 pb-3 border-b border-border">
-              <h2 className="text-xl font-bold tracking-tight text-foreground">Recent Articles</h2>
-            </div>
-            
-            <div className="space-y-4">
-              {transformedRecentPosts.map((post: any, index: number) => (
-                <div
-                  key={post.slug}
-                  className="group animate-in fade-in-50 duration-500"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <BlogPostPreview
-                    title={post.title}
-                    excerpt={post.excerpt}
-                    date={post.date}
-                    slug={post.slug}
-                    className="transition-all duration-200 hover:bg-muted/30 border-border"
-                  />
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* All Posts */}
-          {transformedAllPosts.length > transformedRecentPosts.length && (
-            <section className="space-y-6">
-              <div className="flex items-center justify-between pb-3 border-b border-border">
-                <h2 className="text-xl font-bold tracking-tight text-foreground">All Articles</h2>
-                <span className="px-3 py-1 text-xs font-medium bg-muted text-muted-foreground rounded border border-border">
-                  {totalPosts} total
-                </span>
-              </div>
-              
-              <div className="space-y-4">
-                {transformedAllPosts.slice(transformedRecentPosts.length).map((post: any, index: number) => (
-                  <div
-                    key={post.slug}
-                    className="group animate-in fade-in-50 duration-500"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <BlogPostPreview
-                      title={post.title}
-                      excerpt={post.excerpt}
-                      date={post.date}
-                      slug={post.slug}
-                      className="transition-all duration-200 hover:bg-muted/30 border-border"
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Newsletter Signup */}
-          <section className="pt-8 border-t border-border">
+          <div className="max-w-md mx-auto">
             <NewsletterSignup source="blog" />
-          </section>
+          </div>
         </div>
-      </div>
-      )}
+      </section>
     </div>
   )
 }

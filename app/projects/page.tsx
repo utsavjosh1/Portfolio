@@ -1,165 +1,178 @@
-import type { Metadata } from "next"
-import { ProjectCard } from "@/components/project-card"
-import { ProjectService } from "@/lib/services/projects"
-import { NewsletterSignup } from "@/components/newsletter-signup"
-import { NoProjects } from "@/components/no-projects"
+"use client";
 
-export const metadata: Metadata = {
-  title: "Projects - Utsav Joshi",
-  description: "A curated collection of my work, side projects, and experiments showcasing modern web development and innovative solutions.",
-}
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Input } from "@/components/ui/input";
+import { ProjectCard } from "@/components/project-card";
+import { Search } from "lucide-react";
+import { Project } from "@/types";
 
-// ISR Configuration for projects page
-export const revalidate = 3600;
+const ProjectSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="aspect-video bg-muted rounded-t-lg" />
+    <div className="p-6 space-y-4">
+      <div className="h-6 bg-muted rounded w-3/4" />
+      <div className="h-4 bg-muted rounded w-full" />
+      <div className="h-4 bg-muted rounded w-2/3" />
+      <div className="flex gap-2">
+        <div className="h-5 bg-muted rounded w-16" />
+        <div className="h-5 bg-muted rounded w-16" />
+      </div>
+    </div>
+  </div>
+);
 
-export default async function ProjectsPage() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let projectsData: any = {
-    allProjects: [],
-    featuredProjects: [],
-    completedProjects: [],
-    totalProjects: 0
-  };
+const DEBOUNCE_DELAY = 300;
+const PAGE_SIZE = 6;
 
-  try {
-    // Optimized: Single database query with error handling
-    const data = await ProjectService.getProjectsPageData();
-    projectsData = data;
-  } catch (error) {
-    console.warn('Failed to fetch projects data:', error);
-    // Continue with empty data
-  }
+export default function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const observerRef = useRef<HTMLDivElement>(null);
 
-  const { allProjects, featuredProjects, totalProjects } = projectsData;
+  const loadProjects = useCallback(async (pageNum: number) => {
+    try {
+      setLoading(true);
+      const res = await fetch(`/api/projects?page=${pageNum}`);
+      const json = await res.json();
+      const newProjects: Project[] = json.data || [];
 
-  // Check if there are no published projects
-  const hasNoProjects = totalProjects === 0;
+      if (pageNum === 0) {
+        setProjects(newProjects);
+      } else {
+        setProjects((prev) => [...prev, ...newProjects]);
+      }
 
-  // Transform projects to match ProjectCard interface (optimized)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const transformProject = (project: any) => ({
-    title: project.title,
-    description: project.description,
-    image: project.image || "/placeholder.svg",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    tags: project.technologies.map((pt: any) => pt.technology.name),
-    link: `/projects/${project.slug}`,
-    priority: false
-  })
+      if (newProjects.length < PAGE_SIZE) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Failed to load projects:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const transformedFeaturedProjects = featuredProjects.map(transformProject)
-  const transformedAllProjects = allProjects.map(transformProject)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const filtered = projects.filter((project) => {
+        const search = searchTerm.toLowerCase();
+        return (
+          project.title.toLowerCase().includes(search) ||
+          project.description.toLowerCase().includes(search) ||
+          project.tags.some((tag) => tag.toLowerCase().includes(search))
+        );
+      });
+      setFilteredProjects(filtered);
+    }, DEBOUNCE_DELAY);
+
+    return () => clearTimeout(handler);
+  }, [projects, searchTerm]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasMore && !loading) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 0.1, rootMargin: "100px" }
+    );
+    if (observerRef.current) observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, loading]);
+
+  useEffect(() => {
+    loadProjects(page);
+  }, [page, loadProjects]);
 
   return (
-    <div className="space-y-16 sm:space-y-24">
-      {/* Minimal Hero Section */}
-      <section className="text-center space-y-6 sm:space-y-8 py-12 sm:py-16">
-        <div className="space-y-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
-            Projects
-          </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            A curated collection of my work showcasing modern web development and innovative solutions.
-          </p>
-        </div>
-
-        {/* Clean Stats */}
-        {!hasNoProjects && (
-          <div className="flex items-center justify-center gap-8 sm:gap-12 pt-8">
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-foreground">{totalProjects}</div>
-              <div className="text-sm text-muted-foreground">Projects</div>
-            </div>
-            {featuredProjects.length > 0 && (
-              <>
-                <div className="w-px h-10 bg-border"></div>
-                <div className="text-center">
-                  <div className="text-2xl sm:text-3xl font-bold text-foreground">{featuredProjects.length}</div>
-                  <div className="text-sm text-muted-foreground">Featured</div>
-                </div>
-              </>
-            )}
+    <div className="min-h-screen pt-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="space-y-12">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              All Projects
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Explore my complete portfolio of projects, from AI-powered
+              applications to automation tools and web platforms.
+            </p>
           </div>
-        )}
-      </section>
 
-      {hasNoProjects ? (
-        <NoProjects />
-      ) : (
-        <div className="space-y-16 sm:space-y-20">
-          {/* Featured Projects */}
-          {transformedFeaturedProjects.length > 0 && (
-            <section className="space-y-8 sm:space-y-12">
-              <div className="text-center space-y-3">
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Featured Work</h2>
-                <p className="text-muted-foreground">My most impactful and innovative projects</p>
-              </div>
+          <div className="space-y-6">
+            <div className="relative max-w-md mx-auto">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search projects..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
 
-              <div className="grid gap-6 sm:gap-8 md:grid-cols-2 xl:grid-cols-3">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {transformedFeaturedProjects.map((project: any, index: number) => (
+          <div className="space-y-8">
+            {filteredProjects.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredProjects.map((project, index) => (
                   <div
-                    key={project.link}
-                    style={{ 
-                      animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
+                    key={project.id}
+                    style={{
+                      animation: `fadeInUp 0.6s ease-out ${
+                        (index % 3) * 0.1
+                      }s both`,
                     }}
                   >
                     <ProjectCard
                       title={project.title}
                       description={project.description}
-                      image={project.image}
+                      image={project.image ?? undefined}
                       tags={project.tags}
-                      link={project.link}
-                      priority={index < 3}
-                      className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50"
+                      link={project.demo ?? undefined}
+                      githubUrl={
+                        !project.private
+                          ? project.github ?? undefined
+                          : undefined
+                      }
+                      featured={project.featured}
+                      stats={{
+                        stars: 0,
+                        forks: 0,
+                        views: project.viewCount,
+                      }}
+                      date={new Date(project.createdAt).toLocaleDateString()}
                     />
                   </div>
                 ))}
               </div>
-            </section>
-          )}
-
-          {/* All Projects (if different from featured) */}
-          {transformedAllProjects.length > transformedFeaturedProjects.length && (
-            <section className="space-y-8 sm:space-y-12">
-              <div className="text-center space-y-3">
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">All Projects</h2>
-                <p className="text-muted-foreground">Exploring ideas and building solutions</p>
+            ) : (
+              <div className="text-center py-16">
+                <h3 className="text-xl font-semibold mb-2">
+                  No projects found
+                </h3>
+                <p className="text-muted-foreground">
+                  Try adjusting your search or filter criteria.
+                </p>
               </div>
+            )}
 
-              <div className="grid gap-6 sm:gap-8 md:grid-cols-2 xl:grid-cols-3">
-                {transformedAllProjects
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  .filter((project: any) => !transformedFeaturedProjects.some((featured: any) => featured.link === project.link))
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  .map((project: any, index: number) => (
-                    <div
-                      key={project.link}
-                      style={{ 
-                        animation: `fadeInUp 0.6s ease-out ${(index + transformedFeaturedProjects.length) * 0.1}s both`
-                      }}
-                    >
-                      <ProjectCard
-                        title={project.title}
-                        description={project.description}
-                        image={project.image}
-                        tags={project.tags}
-                        link={project.link}
-                        priority={false}
-                        className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50"
-                      />
-                    </div>
-                  ))}
+            {loading && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <ProjectSkeleton key={index} />
+                ))}
               </div>
-            </section>
-          )}
+            )}
 
-          {/* Newsletter Section */}
-          <section className="pt-8 sm:pt-12 border-t border-border/50">
-            <NewsletterSignup source="projects" />
-          </section>
+            <div ref={observerRef} className="h-10" />
+          </div>
         </div>
-      )}
+      </div>
     </div>
-  )
+  );
 }

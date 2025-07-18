@@ -7,7 +7,7 @@ import { Suspense } from "react";
 import Script from "next/script";
 
 import { ThemeProvider } from "@/components/theme-provider";
-import { Header } from "@/components/header";
+import Header from "@/components/header";
 import { Footer } from "@/components/footer";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,7 @@ const inter = Inter({
   display: "swap",
   variable: "--font-inter",
   preload: true,
-  fallback: ['system-ui', 'arial'],
+  fallback: ["system-ui", "arial"],
 });
 
 export const metadata: Metadata = {
@@ -85,14 +85,23 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//avatars.githubusercontent.com" />
         <link rel="dns-prefetch" href="//vercel.com" />
-        
+
         {/* Preconnect to critical resources */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+          crossOrigin=""
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+
         {/* Critical CSS inline to prevent FOUC */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
             /* Critical CSS for initial render */
             body { 
               font-family: system-ui, -apple-system, sans-serif; 
@@ -109,8 +118,9 @@ export default function RootLayout({
             .theme-transition {
               transition: background-color 0.3s ease, color 0.3s ease;
             }
-          `
-        }} />
+          `,
+          }}
+        />
       </head>
       <body
         className={cn(
@@ -127,27 +137,23 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <ThemeEffect />
-          <div className="relative flex min-h-screen flex-col">
+          <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1 flex justify-center">
-              {/* Optimized layout container with better performance */}
-              <div className="w-[50%] min-w-[320px] max-w-4xl px-4 sm:px-6 py-8 sm:py-12">
+            <main className="flex-1">
                 <Suspense fallback={<HomepageLoadingSkeleton />}>
                   <PageTransition>{children}</PageTransition>
                 </Suspense>
-              </div>
             </main>
             <Footer />
           </div>
         </ThemeProvider>
 
-        {/* Load analytics scripts with strategy to optimize performance */}
         <Suspense>
           <Analytics />
           <SpeedInsights />
         </Suspense>
 
-        {/* Google Analytics with optimized loading */}
+        
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
           strategy="afterInteractive"

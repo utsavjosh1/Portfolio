@@ -1,14 +1,14 @@
 export interface Project {
-  title: string
-  description: string
-  image: string
-  tags: string[]
-  link: string
-  featured?: boolean
-  status?: 'completed' | 'in-progress' | 'archived'
-  year?: string
-  github?: string
-  demo?: string
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  link: string;
+  featured?: boolean;
+  status?: "completed" | "in-progress" | "archived";
+  year?: string;
+  github?: string;
+  demo?: string;
 }
 
 export const projectsConfig = {
@@ -17,12 +17,13 @@ export const projectsConfig = {
     title: "Projects",
     description: "Explore my portfolio of web development and design projects.",
   },
-  
+
   // Projects data
   projects: [
     {
       title: "E-commerce Platform",
-      description: "A full-featured online store built with Next.js, Stripe, and a headless CMS.",
+      description:
+        "A full-featured online store built with Next.js, Stripe, and a headless CMS.",
       image: "/placeholder.svg?height=300&width=600",
       tags: ["Next.js", "Stripe", "Tailwind CSS"],
       link: "/projects/ecommerce",
@@ -31,9 +32,12 @@ export const projectsConfig = {
       year: "2023",
     },
   ] as Project[],
-  
+
   // Helper functions
-  getFeaturedProjects: () => projectsConfig.projects.filter(project => project.featured),
-  getProjectsByStatus: (status: Project['status']) => projectsConfig.projects.filter(project => project.status === status),
-  getProjectsByYear: (year: string) => projectsConfig.projects.filter(project => project.year === year),
-} 
+  getFeaturedProjects: () =>
+    projectsConfig.projects.filter((project) => project.featured),
+  getProjectsByStatus: (status: Project["status"]) =>
+    projectsConfig.projects.filter((project) => project.status === status),
+  getProjectsByYear: (year: string) =>
+    projectsConfig.projects.filter((project) => project.year === year),
+};

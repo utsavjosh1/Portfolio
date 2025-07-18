@@ -3,19 +3,20 @@
 import type { PutBlobResult } from "@vercel/blob";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Camera, 
-  Upload, 
-  CheckCircle, 
-  AlertCircle, 
-  X, 
-  FileImage, 
+import {
+  Camera,
+  Upload,
+  CheckCircle,
+  AlertCircle,
+  X,
+  FileImage,
   Copy,
   ExternalLink,
   RefreshCw,
   Info,
-  Trash2
+  Trash2,
 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -38,40 +39,81 @@ export function UploadClientPage() {
   const [uploadHistory, setUploadHistory] = useState<UploadedImage[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  // Load existing uploads from localStorage on mount
   useEffect(() => {
-    const savedUploads = localStorage.getItem('uploadedImages');
+    const savedUploads = localStorage.getItem("uploadedImages");
     if (savedUploads) {
       try {
         setUploadHistory(JSON.parse(savedUploads));
       } catch (error) {
-        console.error('Error loading upload history:', error);
+        console.error("Error loading upload history:", error);
       }
     }
   }, []);
 
-  // Save uploads to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('uploadedImages', JSON.stringify(uploadHistory));
+    localStorage.setItem("uploadedImages", JSON.stringify(uploadHistory));
   }, [uploadHistory]);
 
-  // Check if file is duplicate
-  const isDuplicateFile = (file: File): boolean => {
-    return uploadHistory.some(upload => 
-      upload.originalName === file.name && 
-      upload.fileSize === file.size
-    );
-  };
-
-  // Generate unique filename
   const generateUniqueFilename = (originalName: string): string => {
     const timestamp = Date.now();
-    const extension = originalName.split('.').pop();
+    const extension = originalName.split(".").pop();
     const nameWithoutExt = originalName.replace(/\.[^/.]+$/, "");
     return `${nameWithoutExt}_${timestamp}.${extension}`;
   };
 
-  // Handle drag events
+  const handleFile = useCallback(
+    (file: File) => {
+      const isDuplicate = uploadHistory.some(
+        (upload) =>
+          upload.originalName === file.name && upload.fileSize === file.size
+      );
+  
+      setError(null);
+      setSelectedFile(file);
+  
+      if (!file.type.match("image.*")) {
+        setError("Please select an image file (PNG, JPG, WEBP, GIF)");
+        return;
+      }
+  
+      if (file.size > 10 * 1024 * 1024) {
+        setError("Image size should be less than 10MB");
+        return;
+      }
+  
+      if (isDuplicate) {
+        setError("This image has already been uploaded. Please select a different file.");
+        return;
+      }
+  
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+  
+      if (inputFileRef.current) {
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        inputFileRef.current.files = dataTransfer.files;
+      }
+    },
+    [uploadHistory]
+  );
+  
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
+
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    },
+    [handleFile]
+  );
+
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -82,60 +124,12 @@ export function UploadClientPage() {
     }
   }, []);
 
-  // Handle drop event
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      handleFile(file);
-    }
-  }, []);
-
-  // Process the selected file
-  const handleFile = (file: File) => {
-    setError(null);
-    setSelectedFile(file);
-
-    if (!file.type.match("image.*")) {
-      setError("Please select an image file (PNG, JPG, WEBP, GIF)");
-      return;
-    }
-
-    if (file.size > 10 * 1024 * 1024) {
-      setError("Image size should be less than 10MB");
-      return;
-    }
-
-    // Check for duplicates
-    if (isDuplicateFile(file)) {
-      setError("This image has already been uploaded. Please select a different file.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    if (inputFileRef.current) {
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      inputFileRef.current.files = dataTransfer.files;
-    }
-  };
-
-  // Handle file input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       handleFile(e.target.files[0]);
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -148,21 +142,22 @@ export function UploadClientPage() {
       setLoading(true);
       setError(null);
 
-      // Generate unique filename to prevent conflicts
       const uniqueFilename = generateUniqueFilename(selectedFile.name);
 
-      const response = await fetch(`/api/image/upload?filename=${uniqueFilename}`, {
-        method: "POST",
-        body: selectedFile,
-      });
+      const response = await fetch(
+        `/api/image/upload?filename=${uniqueFilename}`,
+        {
+          method: "POST",
+          body: selectedFile,
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Upload failed: ${response.statusText}`);
       }
 
       const newBlob = (await response.json()) as PutBlobResult;
-      
-      // Create enhanced upload object
+
       const uploadedImage: UploadedImage = {
         ...newBlob,
         uploadedAt: new Date().toISOString(),
@@ -171,7 +166,7 @@ export function UploadClientPage() {
       };
 
       setBlob(newBlob);
-      setUploadHistory(prev => [uploadedImage, ...prev.slice(0, 9)]); // Keep last 10 uploads
+      setUploadHistory((prev) => [uploadedImage, ...prev.slice(0, 9)]);
       toast.success("Image uploaded successfully!");
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Upload failed";
@@ -182,7 +177,6 @@ export function UploadClientPage() {
     }
   };
 
-  // Reset the form
   const handleReset = () => {
     setBlob(null);
     setPreview(null);
@@ -193,7 +187,6 @@ export function UploadClientPage() {
     }
   };
 
-  // Copy URL to clipboard
   const copyToClipboard = async (url: string) => {
     try {
       await navigator.clipboard.writeText(url);
@@ -203,30 +196,27 @@ export function UploadClientPage() {
     }
   };
 
-  // Remove image from history
   const removeFromHistory = (url: string) => {
-    setUploadHistory(prev => prev.filter(item => item.url !== url));
+    setUploadHistory((prev) => prev.filter((item) => item.url !== url));
     toast.success("Image removed from history");
   };
 
-  // Format file size
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  // Format upload date
   const formatUploadDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 1) return 'Today';
-    if (diffDays === 2) return 'Yesterday';
+
+    if (diffDays === 1) return "Today";
+    if (diffDays === 2) return "Yesterday";
     if (diffDays <= 7) return `${diffDays - 1} days ago`;
     return date.toLocaleDateString();
   };
@@ -234,7 +224,7 @@ export function UploadClientPage() {
   return (
     <div className="min-h-screen bg-background">
       <AdminNav />
-      
+
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
@@ -279,7 +269,7 @@ export function UploadClientPage() {
                           <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
                         </div>
                       </motion.div>
-                      
+
                       <h3 className="text-lg font-semibold text-foreground mb-2">
                         Upload Complete!
                       </h3>
@@ -289,7 +279,7 @@ export function UploadClientPage() {
 
                       <div className="w-full max-w-xs mx-auto mb-6">
                         <div className="relative group overflow-hidden rounded-lg border border-border">
-                          <img
+                          <Image
                             src={blob.url}
                             alt="Uploaded image"
                             className="w-full h-48 object-cover"
@@ -318,7 +308,7 @@ export function UploadClientPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => window.open(blob.url, '_blank')}
+                            onClick={() => window.open(blob.url, "_blank")}
                             className="flex-1"
                           >
                             <ExternalLink className="h-3 w-3 mr-1" />
@@ -378,7 +368,7 @@ export function UploadClientPage() {
                               className="relative mb-4 group"
                             >
                               <div className="w-32 h-32 rounded-lg overflow-hidden border border-border shadow-sm">
-                                <img
+                                <Image
                                   src={preview}
                                   alt="Image preview"
                                   className="w-full h-full object-cover"
@@ -483,7 +473,7 @@ export function UploadClientPage() {
                         className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors group"
                       >
                         <div className="w-12 h-12 rounded-lg overflow-hidden border border-border flex-shrink-0">
-                          <img
+                          <Image
                             src={item.url}
                             alt="Uploaded image"
                             className="w-full h-full object-cover"
@@ -512,7 +502,7 @@ export function UploadClientPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => window.open(item.url, '_blank')}
+                            onClick={() => window.open(item.url, "_blank")}
                             className="h-8 w-8 p-0"
                             title="View image"
                           >
@@ -554,24 +544,44 @@ export function UploadClientPage() {
               <CardContent className="space-y-3">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">Supported</Badge>
-                    <span className="text-sm text-muted-foreground">PNG, JPG, WEBP, GIF</span>
+                    <Badge variant="secondary" className="text-xs">
+                      Supported
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">
+                      PNG, JPG, WEBP, GIF
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">Max Size</Badge>
-                    <span className="text-sm text-muted-foreground">10MB per image</span>
+                    <Badge variant="secondary" className="text-xs">
+                      Max Size
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">
+                      10MB per image
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">Storage</Badge>
-                    <span className="text-sm text-muted-foreground">Vercel Blob Storage</span>
+                    <Badge variant="secondary" className="text-xs">
+                      Storage
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">
+                      Vercel Blob Storage
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">Features</Badge>
-                    <span className="text-sm text-muted-foreground">Drag & drop, preview, copy URL</span>
+                    <Badge variant="secondary" className="text-xs">
+                      Features
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">
+                      Drag & drop, preview, copy URL
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">Duplicate Check</Badge>
-                    <span className="text-sm text-muted-foreground">Prevents uploading same file twice</span>
+                    <Badge variant="secondary" className="text-xs">
+                      Duplicate Check
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">
+                      Prevents uploading same file twice
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -581,4 +591,4 @@ export function UploadClientPage() {
       </div>
     </div>
   );
-} 
+}

@@ -1,346 +1,458 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Send, Mail, MapPin, Clock, Github, Linkedin, ExternalLink, AlertCircle, CheckCircle } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Mail,
+  Github,
+  Linkedin,
+  Twitter,
+  MapPin,
+  Send,
+  CheckCircle,
+} from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
-import { ContactService, type ContactFormData } from "@/lib/services/contact"
+const contactMethods = [
+  {
+    icon: Mail,
+    title: "Email",
+    description: "Send me an email",
+    value: "hi@joshiutsav.com",
+    href: "mailto:hi@joshiutsav.com",
+    primary: true,
+  },
+  {
+    icon: Github,
+    title: "GitHub",
+    description: "Check out my code",
+    value: "@utsavjosh1",
+    href: "https://github.com/utsavjosh1",
+  },
+  {
+    icon: Linkedin,
+    title: "LinkedIn",
+    description: "Let's connect professionally",
+    value: "@utsavjosh1",
+    href: "https://www.linkedin.com/in/utsavjosh1/",
+  },
+  {
+    icon: Twitter,
+    title: "Twitter",
+    description: "Follow me for updates",
+    value: "@utsavjosh1",
+    href: "https://twitter.com/utsavjosh1",
+  },
+];
 
-interface FormErrors {
-  name?: string
-  email?: string
-  subject?: string
-  message?: string
-}
+const availability = [
+  { label: "Response Time", value: "Within 24 hours" },
+  { label: "Time Zone", value: "UTC+5:30 (IST)" },
+  { label: "Availability", value: "Monday - Friday" },
+  { label: "Status", value: "Available for work", status: "available" },
+];
 
-export default function ContactClientPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [formData, setFormData] = useState<ContactFormData>({
+export default function ContactPage() {
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
-  })
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-    
-    // Clear error when user starts typing
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }))
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-  }
+  };
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required'
-    } else if (formData.name.length > 100) {
-      newErrors.name = 'Name is too long'
+      newErrors.name = "Name is required";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Invalid email address'
+      newErrors.email = "Please enter a valid email address";
     }
 
     if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required'
-    } else if (formData.subject.length > 200) {
-      newErrors.subject = 'Subject is too long'
+      newErrors.subject = "Subject is required";
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = 'Message is required'
-    } else if (formData.message.length < 10) {
-      newErrors.message = 'Message must be at least 10 characters'
-    } else if (formData.message.length > 2000) {
-      newErrors.message = 'Message is too long'
+      newErrors.message = "Message is required";
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters long";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!validateForm()) {
-      toast.error("Please fix the errors in the form")
-      return
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
-      const response = await ContactService.submitContact(formData)
-      
-      if (response.success) {
-        toast.success(response.message)
-        setIsSubmitted(true)
-        setFormData({
-          name: "",
-          email: "",
-          subject: "",
-          message: "",
-        })
-      } else {
-        if (response.errors) {
-          // Handle validation errors from server
-          const serverErrors: FormErrors = {}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          response.errors.forEach((error: any) => {
-            if (error.path && error.path[0]) {
-              serverErrors[error.path[0] as keyof FormErrors] = error.message
-            }
-          })
-          setErrors(serverErrors)
-        }
-        toast.error(response.message)
-      }
-    } catch (error) {
-      console.error('Contact form error:', error)
-      toast.error("Failed to send message. Please try again later.")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-  const resetForm = () => {
-    setIsSubmitted(false)
-    setErrors({})
-  }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+
+      setIsSubmitted(true);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (isSubmitted) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-24">
-        <div className="text-center space-y-8">
-          <div className="w-16 h-16 mx-auto bg-green-50 dark:bg-green-950/20 rounded-full flex items-center justify-center border border-green-200 dark:border-green-800/30">
-            <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+      <div className="min-h-screen pt-16 flex items-center justify-center">
+        <div className="max-w-md mx-auto px-4 text-center">
+          <div className="space-y-6">
+            <div className="h-16 w-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto">
+              <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+            </div>
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold">Message Sent!</h1>
+              <p className="text-muted-foreground">
+                Thank you for reaching out. I'll get back to you within 24
+                hours.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button onClick={() => setIsSubmitted(false)}>
+                Send Another Message
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/">Back to Home</Link>
+              </Button>
+            </div>
           </div>
-          <div className="space-y-4">
-            <h1 className="text-3xl font-light">Message sent successfully</h1>
-            <p className="text-muted-foreground text-lg max-w-md mx-auto">
-                             Thank you for reaching out. I&apos;ll get back to you within 24 hours.
-            </p>
-          </div>
-          <Button 
-            onClick={resetForm}
-            variant="outline" 
-            className="mt-8"
-          >
-            Send another message
-          </Button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-24">
-      {/* Header */}
-      <div className="text-center space-y-6 mb-20">
-        <h1 className="text-5xl md:text-6xl font-light tracking-tight">Contact</h1>
-        <p className="text-xl text-muted-foreground font-light max-w-2xl mx-auto">
-          I&apos;m always open to discussing new opportunities and interesting projects.
-        </p>
-      </div>
-
-      <div className="grid lg:grid-cols-5 gap-16">
-        {/* Contact Information */}
-        <div className="lg:col-span-2 space-y-12">
-          <div className="space-y-8">
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <Mail className="h-4 w-4" />
-                <span className="text-sm font-medium uppercase tracking-wider">Email</span>
-              </div>
-              <Link 
-                href="mailto:hi@joshiutsav.com" 
-                className="text-xl hover:text-muted-foreground transition-colors duration-200 block"
-              >
-                hi@joshiutsav.com
-              </Link>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <MapPin className="h-4 w-4" />
-                <span className="text-sm font-medium uppercase tracking-wider">Location</span>
-              </div>
-              <p className="text-xl">Remote Worldwide</p>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span className="text-sm font-medium uppercase tracking-wider">Response Time</span>
-              </div>
-              <p className="text-xl">Usually within 24 hours</p>
-            </div>
+    <div className="min-h-screen pt-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="space-y-16">
+          {/* Header */}
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              Get in Touch
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              I'm always excited to discuss new opportunities, interesting
+              projects, or just have a chat about technology. Let's connect!
+            </p>
           </div>
 
-          <div className="h-px bg-border"></div>
-
-          <div className="space-y-4">
-            <span className="text-sm font-medium uppercase tracking-wider text-muted-foreground">Connect</span>
-            <div className="flex gap-6">
-              <Link
-                href="https://github.com/utsavjosh1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 group"
-              >
-                <Github className="h-4 w-4" />
-                <span>GitHub</span>
-                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/in/utsavjosh1/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200 group"
-              >
-                <Linkedin className="h-4 w-4" />
-                <span>LinkedIn</span>
-                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Contact Form */}
-        <div className="lg:col-span-3">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  name="name"
-                  placeholder="Your name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={`h-14 border-0 border-b border-border bg-transparent rounded-none focus:border-foreground transition-colors duration-200 ${errors.name ? 'border-red-500 focus:border-red-500' : ''}`}
-                  required
-                />
-                {errors.name && (
-                  <div className="flex items-center gap-2 text-sm text-red-500 mt-2">
-                    <AlertCircle className="h-4 w-4" />
-                    {errors.name}
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`h-14 border-0 border-b border-border bg-transparent rounded-none focus:border-foreground transition-colors duration-200 ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
-                  required
-                />
-                {errors.email && (
-                  <div className="flex items-center gap-2 text-sm text-red-500 mt-2">
-                    <AlertCircle className="h-4 w-4" />
-                    {errors.email}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="subject" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-                Subject
-              </Label>
-              <Input
-                id="subject"
-                name="subject"
-                placeholder="What's this about?"
-                value={formData.subject}
-                onChange={handleChange}
-                className={`h-14 border-0 border-b border-border bg-transparent rounded-none focus:border-foreground transition-colors duration-200 ${errors.subject ? 'border-red-500 focus:border-red-500' : ''}`}
-                required
-              />
-              {errors.subject && (
-                <div className="flex items-center gap-2 text-sm text-red-500 mt-2">
-                  <AlertCircle className="h-4 w-4" />
-                  {errors.subject}
+          <div className="grid lg:grid-cols-3 gap-12">
+            {/* Contact Information */}
+            <div className="lg:col-span-1 space-y-8">
+              {/* Contact Methods */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold">Contact Methods</h2>
+                <div className="space-y-3">
+                  {contactMethods.map((method) => {
+                    const Icon = method.icon;
+                    return (
+                      <Link
+                        key={method.title}
+                        href={method.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                          <CardContent className="p-4">
+                            <div className="flex items-center space-x-3">
+                              <div
+                                className={`p-2 rounded-lg ${
+                                  method.primary
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-muted text-muted-foreground"
+                                }`}
+                              >
+                                <Icon className="h-4 w-4" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium">{method.title}</p>
+                                <p className="text-sm text-muted-foreground truncate">
+                                  {method.value}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    );
+                  })}
                 </div>
-              )}
-            </div>
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="message" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-                Message
-              </Label>
-              <Textarea
-                id="message"
-                name="message"
-                placeholder="Tell me about your project or just say hello..."
-                rows={6}
-                value={formData.message}
-                onChange={handleChange}
-                className={`border-0 border-b border-border bg-transparent rounded-none resize-none focus:border-foreground transition-colors duration-200 ${errors.message ? 'border-red-500 focus:border-red-500' : ''}`}
-                required
-              />
-              <div className="flex justify-between items-center pt-2">
-                {errors.message ? (
-                  <div className="flex items-center gap-2 text-sm text-red-500">
-                    <AlertCircle className="h-4 w-4" />
-                    {errors.message}
-                  </div>
-                ) : (
-                  <span className="text-sm text-muted-foreground">Minimum 10 characters</span>
-                )}
-                <span className={`text-sm ${formData.message.length > 1800 ? 'text-amber-500' : 'text-muted-foreground'}`}>
-                  {formData.message.length}/2000
-                </span>
+              {/* Availability */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold">Availability</h2>
+                <Card>
+                  <CardContent className="p-4 space-y-3">
+                    {availability.map((item) => (
+                      <div
+                        key={item.label}
+                        className="flex justify-between items-center"
+                      >
+                        <span className="text-sm text-muted-foreground">
+                          {item.label}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          {item.status === "available" && (
+                            <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                          )}
+                          <span className="text-sm font-medium">
+                            {item.value}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Location */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold">Location</h2>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-muted rounded-lg">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Remote</p>
+                        <p className="text-sm text-muted-foreground">
+                          Available worldwide
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
 
-            <div className="pt-4">
-              <Button 
-                type="submit" 
-                disabled={isSubmitting} 
-                className="w-full md:w-auto h-14 px-12 bg-foreground hover:bg-foreground/90 text-background"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center gap-3">
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    Sending...
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-3">
-                    Send Message
-                    <Send className="h-4 w-4" />
-                  </span>
-                )}
-              </Button>
+            {/* Contact Form */}
+            <div className="lg:col-span-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl">Send me a message</CardTitle>
+                  <p className="text-muted-foreground">
+                    Fill out the form below and I'll get back to you as soon as
+                    possible.
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label htmlFor="name" className="text-sm font-medium">
+                          Name *
+                        </label>
+                        <Input
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          placeholder="Your full name"
+                          className={errors.name ? "border-red-500" : ""}
+                        />
+                        {errors.name && (
+                          <p className="text-sm text-red-500">{errors.name}</p>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="email" className="text-sm font-medium">
+                          Email *
+                        </label>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="your.email@example.com"
+                          className={errors.email ? "border-red-500" : ""}
+                        />
+                        {errors.email && (
+                          <p className="text-sm text-red-500">{errors.email}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="subject" className="text-sm font-medium">
+                        Subject *
+                      </label>
+                      <Input
+                        id="subject"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                        placeholder="What's this about?"
+                        className={errors.subject ? "border-red-500" : ""}
+                      />
+                      {errors.subject && (
+                        <p className="text-sm text-red-500">{errors.subject}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="message" className="text-sm font-medium">
+                        Message *
+                      </label>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        placeholder="Tell me about your project, question, or just say hello!"
+                        rows={6}
+                        className={errors.message ? "border-red-500" : ""}
+                      />
+                      {errors.message && (
+                        <p className="text-sm text-red-500">{errors.message}</p>
+                      )}
+                    </div>
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={isSubmitting}
+                      className="w-full sm:w-auto"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="mr-2 h-4 w-4" />
+                          Send Message
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
             </div>
-          </form>
+          </div>
+
+          {/* FAQ Section */}
+          <section className="space-y-8">
+            <div className="text-center space-y-4">
+              <h2 className="text-3xl font-bold">Frequently Asked Questions</h2>
+              <p className="text-muted-foreground">
+                Quick answers to common questions
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    What's your typical response time?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    I typically respond to emails within 24 hours during
+                    weekdays. For urgent matters, feel free to mention it in
+                    your subject line.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    What type of projects do you work on?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    I specialize in web applications, AI-powered tools,
+                    automation systems, and SaaS products. I'm particularly
+                    interested in projects that solve real-world problems.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Are you available for freelance work?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Yes! I'm currently available for freelance projects and
+                    consulting. Let's discuss your requirements and see how I
+                    can help.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Do you offer consulting services?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    I provide technical consulting for architecture decisions,
+                    code reviews, and technology strategy. Reach out to discuss
+                    your needs.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
         </div>
       </div>
     </div>
-  )
+  );
 }

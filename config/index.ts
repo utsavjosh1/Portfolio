@@ -10,7 +10,6 @@ export {
   type BlogPostDetail 
 } from './pages'
 export {
-  projectsDetailConfig,
   blogPostsDetailConfig,
   contentHelpers
 } from './content'

@@ -148,7 +148,7 @@ export default function ContactPage() {
             <div className="space-y-2">
               <h1 className="text-2xl font-bold">Message Sent!</h1>
               <p className="text-muted-foreground">
-                Thank you for reaching out. I'll get back to you within 24
+                Thank you for reaching out. I&apos;ll get back to you within 24
                 hours.
               </p>
             </div>
@@ -176,8 +176,8 @@ export default function ContactPage() {
               Get in Touch
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              I'm always excited to discuss new opportunities, interesting
-              projects, or just have a chat about technology. Let's connect!
+              I&apos;m always excited to discuss new opportunities, interesting
+              projects, or just have a chat about technology. Let&apos;s connect!
             </p>
           </div>
 
@@ -279,7 +279,7 @@ export default function ContactPage() {
                 <CardHeader>
                   <CardTitle className="text-2xl">Send me a message</CardTitle>
                   <p className="text-muted-foreground">
-                    Fill out the form below and I'll get back to you as soon as
+                    Fill out the form below and I&apos;ll get back to you as soon as
                     possible.
                   </p>
                 </CardHeader>
@@ -393,7 +393,7 @@ export default function ContactPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">
-                    What's your typical response time?
+                    What&apos;s your typical response time?
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -414,7 +414,7 @@ export default function ContactPage() {
                 <CardContent>
                   <p className="text-muted-foreground">
                     I specialize in web applications, AI-powered tools,
-                    automation systems, and SaaS products. I'm particularly
+                    automation systems, and SaaS products. I&apos;m particularly
                     interested in projects that solve real-world problems.
                   </p>
                 </CardContent>
@@ -428,8 +428,8 @@ export default function ContactPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Yes! I'm currently available for freelance projects and
-                    consulting. Let's discuss your requirements and see how I
+                    Yes! I&apos;m currently available for freelance projects and
+                    consulting. Let&apos;s discuss your requirements and see how I
                     can help.
                   </p>
                 </CardContent>

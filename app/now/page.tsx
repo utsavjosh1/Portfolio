@@ -99,10 +99,10 @@ export default function NowPage() {
                   <span>Last updated: {currentDate}</span>
                 </div>
 
-                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">What I'm doing now</h1>
+                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">What I&apos;m doing now</h1>
 
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                  A glimpse into my current projects, learning journey, and what's keeping me busy these days. Inspired
+                  A glimpse into my current projects, learning journey, and what&apos;s keeping me busy these days. Inspired
                   by{" "}
                   <Link
                     href="https://nownownow.com"
@@ -133,13 +133,13 @@ export default function NowPage() {
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tight flex items-center gap-3">
                 <Code className="h-7 w-7 text-primary" />
-                Projects I'm Working On
+                Projects I&apos;m Working On
               </h2>
-              <p className="text-muted-foreground text-lg">What I'm actively building and shipping.</p>
+              <p className="text-muted-foreground text-lg">What I&apos;m actively building and shipping.</p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-              {currentProjects.map((project, index) => (
+              {currentProjects.map((project) => (
                 <Card key={project.title} className="group hover:shadow-lg transition-all duration-300">
                   <CardHeader className="space-y-4">
                     <div className="flex items-start justify-between">
@@ -209,11 +209,11 @@ export default function NowPage() {
                 <Book className="h-7 w-7 text-primary" />
                 Currently Learning
               </h2>
-              <p className="text-muted-foreground text-lg">Skills and technologies I'm diving deep into.</p>
+              <p className="text-muted-foreground text-lg">Skills and technologies I&apos;m diving deep into.</p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3">
-              {learningItems.map((item, index) => (
+              {learningItems.map((item) => (
                 <Card key={item.title} className="hover:shadow-lg transition-all duration-300">
                   <CardHeader className="space-y-4">
                     <div className="space-y-2">
@@ -263,24 +263,24 @@ export default function NowPage() {
                 <Coffee className="h-7 w-7 text-primary" />
                 Life Updates
               </h2>
-              <p className="text-muted-foreground text-lg">What's happening in my world outside of code.</p>
+              <p className="text-muted-foreground text-lg">What&apos;s happening in my world outside of code.</p>
             </div>
 
             <Card className="p-8">
               <div className="prose prose-lg dark:prose-invert max-w-none">
                 <p className="text-muted-foreground leading-relaxed">
-                  I'm currently based remotely and enjoying the flexibility it provides. When I'm not coding, you'll
+                  I&apos;m currently based remotely and enjoying the flexibility it provides. When I&apos;m not coding, you&apos;ll
                   find me exploring new coffee shops, reading about technology trends, or planning my next travel
                   adventure.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Recently, I've been fascinated by the intersection of AI and automation, which has led me to build
-                  several tools that help streamline repetitive tasks. I'm also spending time contributing to open
+                  Recently, I&apos;ve been fascinated by the intersection of AI and automation, which has led me to build
+                  several tools that help streamline repetitive tasks. I&apos;m also spending time contributing to open
                   source projects and sharing my learnings through blog posts.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  On the personal side, I've been reading "Designing Data-Intensive Applications" and practicing system
-                  design problems. I'm also learning to play the guitar in my spare time - it's a nice creative outlet
+                  On the personal side, I&apos;ve been reading &quot;Designing Data-Intensive Applications&quot; and practicing system
+                  design problems. I&apos;m also learning to play the guitar in my spare time - it&apos;s a nice creative outlet
                   from all the technical work!
                 </p>
               </div>
@@ -292,7 +292,7 @@ export default function NowPage() {
             <div className="space-y-6">
               <h3 className="text-2xl font-semibold">Want to work together?</h3>
               <p className="text-muted-foreground max-w-xl mx-auto text-lg leading-relaxed">
-                I'm always open to discussing interesting projects and opportunities. Let's chat about how we can create
+                I&apos;m always open to discussing interesting projects and opportunities. Let&apos;s chat about how we can create
                 something amazing together.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

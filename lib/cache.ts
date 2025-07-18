@@ -15,7 +15,7 @@ export interface CacheOptions {
 }
 
 // Generic reusable cache class
-export class GenericCache<T = any> {
+export class GenericCache<T = unknown> {
   private cache: Map<string, CacheEntry<T>> = new Map();
   private defaultTtl: number;
   private maxSize: number;
@@ -180,10 +180,10 @@ export function createCache<T>(options: CacheOptions = {}): GenericCache<T> {
 }
 
 // Predefined cache instances for common use cases
-export const pageCache = createCache<any>({ defaultTtlSeconds: 300 }); // 5 minutes for page data
-export const apiCache = createCache<any>({ defaultTtlSeconds: 180 }); // 3 minutes for API responses
-export const staticCache = createCache<any>({ defaultTtlSeconds: 3600 }); // 1 hour for static content
-export const userCache = createCache<any>({ defaultTtlSeconds: 900 }); // 15 minutes for user data
+export const pageCache = createCache<Record<string, unknown>>({ defaultTtlSeconds: 300 }); // 5 minutes for page data
+export const apiCache = createCache<Record<string, unknown>>({ defaultTtlSeconds: 180 }); // 3 minutes for API responses
+export const staticCache = createCache<Record<string, unknown>>({ defaultTtlSeconds: 3600 }); // 1 hour for static content
+export const userCache = createCache<Record<string, unknown>>({ defaultTtlSeconds: 900 }); // 15 minutes for user data
 
 // Usage examples:
 

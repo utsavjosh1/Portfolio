@@ -11,8 +11,41 @@ function buildProjectCacheKey(...segments: (string | undefined)[]) {
   return ["project", ...segments.filter(Boolean)].join(":");
 }
 
+// Type for raw Prisma project data
+interface RawPrismaProject {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  content: string | null;
+  video: string | null;
+  image: string | null;
+  year: string | null;
+  github: string | null;
+  demo: string | null;
+  duration: string | null;
+  teamSize: number | null;
+  clientName: string | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  status: string;
+  featured: boolean;
+  published: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  technologies: Array<{
+    technology: {
+      name: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+}
+
 // Helper function to transform raw Prisma data to Project type
-function transformProject(project: any): Project {
+function transformProject(project: RawPrismaProject): Project {
   return {
     ...project,
     createdAt: project.createdAt.toISOString(),
@@ -36,7 +69,7 @@ function transformProject(project: any): Project {
 }
 
 async function queryProjects(
-  filter: Record<string, any> = {}
+  filter: Record<string, unknown> = {}
 ): Promise<Project[]> {
   const prisma = safePrisma();
 

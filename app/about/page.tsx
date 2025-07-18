@@ -1,9 +1,16 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, MapPin, Calendar, Mail, Github, Linkedin } from "lucide-react"
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ArrowRight,
+  MapPin,
+  Calendar,
+  Mail,
+  Github,
+  Linkedin,
+} from "lucide-react";
 
 const experience = [
   {
@@ -31,7 +38,7 @@ const experience = [
       "Optimized API performance and database queries for large data volumes",
     ],
   },
-]
+];
 
 const education = [
   {
@@ -40,7 +47,7 @@ const education = [
     period: "2023-2027",
     description: "ahh, not so active here..",
   },
-]
+];
 
 export default function AboutPage() {
   return (
@@ -66,7 +73,9 @@ export default function AboutPage() {
             </div>
 
             <div className="space-y-4">
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">About Me</h1>
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                About Me
+              </h1>
               <div className="flex items-center justify-center gap-4 text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <MapPin className="h-4 w-4" />
@@ -85,19 +94,27 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold">Introduction</h2>
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p className="text-muted-foreground leading-relaxed">
-                Hi! I'm Utsav Joshi, a passionate Software Engineer with over{" "}
-                <strong className="text-foreground">1 year of professional experience</strong> and 3 years of hands-on
-                involvement in the tech field. I specialize in building scalable systems, automation tools, and
+                Hi! I&apos;m Utsav Joshi, a passionate Software Engineer with
+                over{" "}
+                <strong className="text-foreground">
+                  1 year of professional experience
+                </strong>{" "}
+                and 3 years of hands-on involvement in the tech field. I
+                specialize in building scalable systems, automation tools, and
                 AI-driven products that solve real-world problems.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                During my career, I've worked with clients across various industries, contributed to impactful projects,
-                and continuously expanded my knowledge. I'm currently focused on exploring the intersection of AI and
-                automation, building tools that streamline complex workflows and enhance productivity.
+                During my career, I&apos;ve worked with clients across various
+                industries, contributed to impactful projects, and continuously
+                expanded my knowledge. I&apos;m currently focused on exploring
+                the intersection of AI and automation, building tools that
+                streamline complex workflows and enhance productivity.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                When I'm not coding, I'm exploring new technologies, diving deep into system design, or contributing to
-                open source projects. Currently learning <strong className="text-foreground">Golang</strong> to explore
+                When I&apos;m not coding, I&apos;m exploring new technologies,
+                diving deep into system design, or contributing to open source
+                projects. Currently learning{" "}
+                <strong className="text-foreground">Golang</strong> to explore
                 system-level programming and expand my backend expertise.
               </p>
             </div>
@@ -113,18 +130,25 @@ export default function AboutPage() {
                     <div className="flex justify-between items-start">
                       <div>
                         <CardTitle className="text-xl">{exp.title}</CardTitle>
-                        <p className="text-muted-foreground font-medium">{exp.company}</p>
+                        <p className="text-muted-foreground font-medium">
+                          {exp.company}
+                        </p>
                       </div>
                       <Badge variant="outline">{exp.period}</Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-muted-foreground leading-relaxed">{exp.description}</p>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {exp.description}
+                    </p>
                     <div>
                       <h4 className="font-medium mb-2">Key Achievements:</h4>
                       <ul className="space-y-1">
                         {exp.achievements.map((achievement, i) => (
-                          <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                          <li
+                            key={i}
+                            className="text-sm text-muted-foreground flex items-center gap-2"
+                          >
                             <div className="h-1 w-1 bg-primary rounded-full" />
                             {achievement}
                           </li>
@@ -147,13 +171,17 @@ export default function AboutPage() {
                     <div className="flex justify-between items-start">
                       <div>
                         <CardTitle className="text-xl">{edu.degree}</CardTitle>
-                        <p className="text-muted-foreground font-medium">{edu.institution}</p>
+                        <p className="text-muted-foreground font-medium">
+                          {edu.institution}
+                        </p>
                       </div>
                       <Badge variant="outline">{edu.period}</Badge>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground leading-relaxed">{edu.description}</p>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {edu.description}
+                    </p>
                   </CardContent>
                 </Card>
               ))}
@@ -162,12 +190,14 @@ export default function AboutPage() {
 
           {/* Contact & Social */}
           <section className="space-y-6">
-            <h2 className="text-2xl font-bold">Let's Connect</h2>
+            <h2 className="text-2xl font-bold">Let&apos;s Connect</h2>
             <div className="grid sm:grid-cols-3 gap-4">
               <Card className="text-center p-6 hover:shadow-lg transition-shadow">
                 <Mail className="h-8 w-8 mx-auto mb-3 text-primary" />
                 <h3 className="font-semibold mb-2">Email</h3>
-                <p className="text-sm text-muted-foreground">hi@joshiutsav.com</p>
+                <p className="text-sm text-muted-foreground">
+                  hi@joshiutsav.com
+                </p>
               </Card>
               <Card className="text-center p-6 hover:shadow-lg transition-shadow">
                 <Github className="h-8 w-8 mx-auto mb-3 text-primary" />
@@ -187,8 +217,9 @@ export default function AboutPage() {
             <div className="space-y-6">
               <h2 className="text-2xl font-bold">Ready to Work Together?</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                I'm always excited to take on new challenges and collaborate on interesting projects. Let's discuss how
-                we can bring your ideas to life.
+                I&apso;m always excited to take on new challenges and
+                collaborate on interesting projects. Let&apos;s discuss how we
+                can bring your ideas to life.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>
@@ -206,5 +237,5 @@ export default function AboutPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

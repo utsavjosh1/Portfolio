@@ -191,15 +191,92 @@ export function ExperiencePageLoadingSkeleton() {
 // Single Project Page Skeleton
 export function ProjectPostLoadingSkeleton() {
   return (
-    <div className="space-y-8 animate-fade-in">
-      <LoadingSkeleton className="h-12 w-3/4" />
-      <LoadingSkeleton variant="text" lines={2} />
-      <div className="flex gap-4">
-        <LoadingSkeleton className="h-10 w-32" />
-        <LoadingSkeleton className="h-10 w-32" />
+    <div className="min-h-screen pt-16 animate-fade-in">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="space-y-12">
+          {/* Back Navigation Skeleton */}
+          <div>
+            <LoadingSkeleton className="h-8 w-32" />
+          </div>
+
+          {/* Hero Section Skeleton */}
+          <section className="space-y-12">
+            <div className="flex items-center gap-4 justify-center">
+              <LoadingSkeleton className="h-4 w-16" />
+              <LoadingSkeleton className="h-4 w-8" />
+              <LoadingSkeleton className="h-4 w-24" />
+            </div>
+            <div className="space-y-6 max-w-4xl mx-auto text-center">
+              <LoadingSkeleton className="h-12 w-3/4 mx-auto" />
+              <LoadingSkeleton className="h-6 w-2/3 mx-auto" />
+            </div>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <LoadingSkeleton className="h-10 w-32" />
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <LoadingSkeleton key={i} className="h-8 w-20" />
+              ))}
+            </div>
+          </section>
+
+          {/* Project Image Skeleton */}
+          <section>
+            <div className="relative group max-w-4xl mx-auto">
+              <LoadingSkeleton className="h-64 w-full rounded-2xl" />
+            </div>
+          </section>
+
+          {/* Video Section Skeleton */}
+          <section>
+            <div className="space-y-6 max-w-4xl mx-auto">
+              <LoadingSkeleton className="h-8 w-40 mx-auto" />
+              <LoadingSkeleton className="h-64 w-full rounded-2xl" />
+            </div>
+          </section>
+
+          {/* Overview Section Skeleton */}
+          <section className="space-y-8 max-w-4xl mx-auto">
+            <LoadingSkeleton className="h-8 w-40 mx-auto" />
+            <LoadingSkeleton variant="text" lines={6} />
+          </section>
+
+          {/* Technologies Section Skeleton */}
+          <section className="space-y-8">
+            <LoadingSkeleton className="h-8 w-40 mx-auto" />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <LoadingSkeleton key={i} variant="card" />
+              ))}
+            </div>
+          </section>
+
+          {/* Gallery Section Skeleton */}
+          <section className="space-y-8">
+            <LoadingSkeleton className="h-8 w-40 mx-auto" />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <LoadingSkeleton key={i} className="h-40 w-full rounded-xl" />
+              ))}
+            </div>
+          </section>
+
+          {/* Related Projects Skeleton */}
+          <section className="space-y-8">
+            <LoadingSkeleton className="h-8 w-40 mx-auto" />
+            <div className="grid gap-6 md:grid-cols-2">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <LoadingSkeleton key={i} variant="card" />
+              ))}
+            </div>
+          </section>
+
+          {/* Newsletter Signup Skeleton */}
+          <section className="pt-8 border-t border-border/50 max-w-4xl mx-auto">
+            <LoadingSkeleton className="h-12 w-2/3 mx-auto" />
+          </section>
+        </div>
       </div>
-      <LoadingSkeleton className="h-96 w-full" variant="card" />
-      <LoadingSkeleton variant="text" lines={8} />
     </div>
   )
 }

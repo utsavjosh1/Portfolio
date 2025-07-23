@@ -21,12 +21,10 @@ const ProjectSkeleton = () => (
   </div>
 );
 
-const DEBOUNCE_DELAY = 300;
 const PAGE_SIZE = 6;
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
@@ -56,23 +54,9 @@ export default function ProjectsPage() {
     }
   }, []);
 
+  // Only infinite scroll when not searching
   useEffect(() => {
-    const handler = setTimeout(() => {
-      const filtered = projects.filter((project) => {
-        const search = searchTerm.toLowerCase();
-        return (
-          project.title.toLowerCase().includes(search) ||
-          project.description.toLowerCase().includes(search) ||
-          project.tags.some((tag) => tag.toLowerCase().includes(search))
-        );
-      });
-      setFilteredProjects(filtered);
-    }, DEBOUNCE_DELAY);
-
-    return () => clearTimeout(handler);
-  }, [projects, searchTerm]);
-
-  useEffect(() => {
+    if (searchTerm.trim() !== "") return;
     const observer = new IntersectionObserver(
       (entries) => {
         const target = entries[0];
@@ -84,11 +68,33 @@ export default function ProjectsPage() {
     );
     if (observerRef.current) observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [hasMore, loading]);
+  }, [hasMore, loading, searchTerm]);
 
   useEffect(() => {
+    if (searchTerm.trim() !== "") return; // Don't load more when searching
     loadProjects(page);
-  }, [page, loadProjects]);
+  }, [page, loadProjects, searchTerm]);
+
+  // Reset projects and page when search term changes
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setPage(0);
+      setHasMore(true);
+      loadProjects(0);
+    }
+  }, [searchTerm, loadProjects]);
+
+  // Filter projects inline
+  const filteredProjects = searchTerm.trim()
+    ? projects.filter((project) => {
+        const search = searchTerm.toLowerCase();
+        return (
+          project.title.toLowerCase().includes(search) ||
+          project.description.toLowerCase().includes(search) ||
+          project.tags.some((tag) => tag.toLowerCase().includes(search))
+        );
+      })
+    : projects;
 
   return (
     <div className="min-h-screen pt-16">
@@ -161,9 +167,9 @@ export default function ProjectsPage() {
               </div>
             )}
 
-            {loading && (
+            {loading && searchTerm.trim() === "" && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {Array.from({ length: 6 }).map((_, index) => (
+                {Array.from({ length: PAGE_SIZE }).map((_, index) => (
                   <ProjectSkeleton key={index} />
                 ))}
               </div>

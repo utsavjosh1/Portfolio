@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Suspense } from "react";
-import Script from "next/script";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
@@ -152,20 +151,6 @@ export default function RootLayout({
           <Analytics />
           <SpeedInsights />
         </Suspense>
-
-        
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-          `}
-        </Script>
       </body>
     </html>
   );

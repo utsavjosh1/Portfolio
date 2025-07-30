@@ -16,8 +16,13 @@ export const siteConfig = {
     "full-stack",
     "JavaScript",
     "TypeScript",
-
-    // Primary Brand Keywords
+    "Node.js",
+    "Express.js",
+    "MongoDB",
+    "PostgreSQL",
+    "REST API",
+    "GraphQL",
+    "Docker",
     "Utsav Joshi",
     "joshiutsav",
     "utsavjoshi",
@@ -26,7 +31,6 @@ export const siteConfig = {
     "joshiutsav.com",
     "hire Utsav Joshi",
 
-    // Core Professional Titles
     "software engineer",
     "full stack developer",
     "senior software developer",
@@ -38,7 +42,6 @@ export const siteConfig = {
     "React developer",
     "Node.js developer",
 
-    // Technical Skills & Frameworks
     "React specialist",
     "Next.js developer",
     "TypeScript expert",
@@ -50,7 +53,6 @@ export const siteConfig = {
     "REST API developer",
     "GraphQL developer",
 
-    // Service-Oriented Keywords
     "custom web development",
     "web application development",
     "responsive web design",
@@ -62,7 +64,6 @@ export const siteConfig = {
     "code optimization",
     "performance tuning",
 
-    // Long-tail Keywords
     "experienced React developer for hire",
     "senior full stack JavaScript engineer",
     "professional TypeScript Next.js developer",
@@ -74,7 +75,6 @@ export const siteConfig = {
     "contract developer",
     "remote software developer",
 
-    // Problem-Solving Keywords
     "convert design to code",
     "website redesign developer",
     "legacy system modernization",
@@ -86,7 +86,6 @@ export const siteConfig = {
     "secure web applications",
     "user experience optimization",
 
-    // Industry & Domain
     "fintech developer",
     "e-commerce developer",
     "SaaS application developer",
@@ -96,7 +95,6 @@ export const siteConfig = {
     "education platform developer",
     "real estate web applications",
 
-    // Technical Methodologies
     "agile development",
     "test-driven development",
     "clean code practices",
@@ -106,7 +104,6 @@ export const siteConfig = {
     "CI/CD pipeline setup",
     "code review specialist",
 
-    // Hiring Intent Keywords
     "hire experienced developer",
     "freelance web developer",
     "contract software engineer",
@@ -116,13 +113,13 @@ export const siteConfig = {
     "technical consultation services",
     "code audit services",
 
-    // Location-based (customize as needed)
     "software developer India",
     "remote developer worldwide",
     "global software engineer",
     "international web developer",
 
-    // Soft Skills & Qualities
+    "soft skills",
+    "qualities",
     "reliable software engineer",
     "communicative developer",
     "deadline-driven programmer",
@@ -138,15 +135,10 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/in/utsavjosh1/",
     email: "hi@joshiutsav.com",
   },
-  // Important for local SEO
   location: {
     city: "New Delhi",
     region: "Delhi",
     country: "India",
     postalCode: "110018",
-  },
-  // Analytics configuration
-  analytics: {
-    googleAnalyticsId: "G-YGSVWFZS92",
   },
 };

@@ -84,10 +84,24 @@ function CarouselRow({ items, direction, speed, index }: CarouselRowProps) {
   // Duplicate items for seamless infinite scroll
   const duplicatedItems = [...items, ...items];
 
-  const animationClass =
-    direction === "left"
-      ? `animate-scroll-left-${speed}`
-      : `animate-scroll-right-${speed}`;
+  // Get animation class based on direction and speed
+  const getAnimationClass = (dir: "left" | "right", spd: number) => {
+    const animations = {
+      left: {
+        1: "animate-scroll-left-1",
+        2: "animate-scroll-left-2", 
+        3: "animate-scroll-left-3"
+      },
+      right: {
+        1: "animate-scroll-right-1",
+        2: "animate-scroll-right-2",
+        3: "animate-scroll-right-3"
+      }
+    };
+    return animations[dir][spd as keyof typeof animations.left] || animations[dir][1];
+  };
+
+  const animationClass = getAnimationClass(direction, speed);
 
   return (
     <div
@@ -141,8 +155,10 @@ export function TechStackCarousel() {
         if (!response.ok) {
           throw new Error("Failed to fetch technologies");
         }
-        const data = await response.json();
-        setTechnologies(data);
+        const result = await response.json();
+        // The API returns data wrapped in an object with a 'data' property
+        const data = result.data || result;
+        setTechnologies(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
@@ -151,6 +167,32 @@ export function TechStackCarousel() {
     };
 
     fetchTechnologies();
+  }, []);
+
+  // Add CSS keyframes if Tailwind animations don't work
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes scroll-left {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+      @keyframes scroll-right {
+        0% { transform: translateX(-50%); }
+        100% { transform: translateX(0); }
+      }
+      .animate-scroll-left-1 { animation: scroll-left 20s linear infinite; }
+      .animate-scroll-left-2 { animation: scroll-left 25s linear infinite; }
+      .animate-scroll-left-3 { animation: scroll-left 30s linear infinite; }
+      .animate-scroll-right-1 { animation: scroll-right 20s linear infinite; }
+      .animate-scroll-right-2 { animation: scroll-right 25s linear infinite; }
+      .animate-scroll-right-3 { animation: scroll-right 30s linear infinite; }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
   }, []);
 
   // Organize technologies into rows based on category
@@ -206,9 +248,11 @@ export function TechStackCarousel() {
   }
 
   // Filter active technologies and sort by order
-  const activeTechnologies = technologies
-    .filter((tech) => tech.active)
-    .sort((a, b) => a.order - b.order);
+  const activeTechnologies = Array.isArray(technologies)
+    ? technologies
+        .filter((tech) => tech && tech.active)
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+    : [];
 
   const techRows = organizeIntoRows(activeTechnologies);
 

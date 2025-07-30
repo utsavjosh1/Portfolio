@@ -7,12 +7,9 @@ import { ProjectService } from "@/lib/services/projects"
 import { Badge } from "@/components/ui/badge"
 import { MarkdownContent } from "@/components/ui/markdown-content"
 import { OGImages } from "@/lib/og-image"
-import dynamic from "next/dynamic"
-
-// Dynamically import client components for server compatibility
-const ProjectCard = dynamic(() => import("@/components/project-card").then(mod => mod.ProjectCard), { ssr: false })
-const ProjectGallery = dynamic(() => import("@/components/project-gallery").then(mod => mod.ProjectGallery), { ssr: false })
-const NewsletterSignup = dynamic(() => import("@/components/newsletter-signup").then(mod => mod.NewsletterSignup), { ssr: false })
+import { ProjectCard } from "@/components/project-card"
+import { ProjectGallery } from "@/components/project-gallery"
+import { NewsletterSignup } from "@/components/newsletter-signup"
 
 interface ProjectPageProps {
   params: {

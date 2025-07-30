@@ -1,48 +1,86 @@
-// app/api/technologies/route.ts
-import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { NextRequest, NextResponse } from "next/server";
+import { TechnologyService } from "@/lib/services/technology";
 
-const prisma = new PrismaClient()
-
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const startTime = Date.now();
+  
   try {
-    const technologies = await prisma.technology.findMany({
-      where: {
-        active: true, // Only fetch active technologies
-      },
-      select: {
-        id: true,
-        name: true,
-        category: true,
-        color: true,
-        icon: true,
-        order: true,
-        active: true,
-      },
-      orderBy: [
-        { category: 'asc' },
-        { order: 'asc' },
-        { name: 'asc' },
-      ],
-    })
+    // Get category filter from query params if provided
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category');
 
-    const response = NextResponse.json(technologies)
+    let technologies;
+    let cacheStatus = 'MISS';
+
+    if (category) {
+      technologies = await TechnologyService.getTechnologiesByCategory(category);
+    } else {
+      technologies = await TechnologyService.getTechnologies();
+    }
+
+    // Check if this was served from cache (rough estimation)
+    const responseTime = Date.now() - startTime;
+    if (responseTime < 50) {
+      cacheStatus = 'HIT';
+    }
+
+    const response = NextResponse.json({
+      data: technologies,
+      count: technologies.length,
+      meta: {
+        cached: cacheStatus === 'HIT',
+        responseTime: `${responseTime}ms`,
+        timestamp: new Date().toISOString(),
+      }
+    });
+
+    // Enhanced caching headers
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400"
+    );
+    response.headers.set("X-Cache", cacheStatus);
+    response.headers.set("X-Response-Time", `${responseTime}ms`);
+    response.headers.set("Vary", "Accept-Encoding");
     
-    // Cache for 1 hour (3600 seconds)
-    response.headers.set('Cache-Control', 'public, max-age=3600, s-maxage=3600')
-    
-    return response
+    // Add CORS headers if needed
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+
+    console.log(`🚀 API Response: ${responseTime}ms, Cache: ${cacheStatus}, Count: ${technologies.length}`);
+
+    return response;
+
   } catch (error) {
-    console.error('Error fetching technologies:', error)
+    const responseTime = Date.now() - startTime;
+    console.error(`❌ API Error (${responseTime}ms):`, error);
+
     return NextResponse.json(
-      { error: 'Failed to fetch technologies' },
+      { 
+        error: "Failed to fetch technologies",
+        message: process.env.NODE_ENV === 'development' ? (error as Error).message : undefined,
+        meta: {
+          responseTime: `${responseTime}ms`,
+          timestamp: new Date().toISOString(),
+        }
+      },
       { status: 500 }
-    )
-  } finally {
-    await prisma.$disconnect()
+    );
   }
 }
 
-// Enable static generation for this route
-export const dynamic = 'force-static'
-export const revalidate = 3600 // Revalidate every hour
+// Handle OPTIONS for CORS preflight
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  });
+}
+
+// Configuration for Next.js
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";

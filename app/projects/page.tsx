@@ -1,100 +1,30 @@
-"use client";
-
-import { useState, useEffect, useCallback, useRef } from "react";
+import { Suspense } from "react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ProjectCard } from "@/components/project-card";
-import { Search } from "lucide-react";
+import { ProjectService } from "@/lib/query/projects";
 import { Project } from "@/types";
+import { notFound } from "next/navigation";
 
-const ProjectSkeleton = () => (
-  <div className="animate-pulse">
-    <div className="aspect-video bg-muted rounded-t-lg" />
-    <div className="p-6 space-y-4">
-      <div className="h-6 bg-muted rounded w-3/4" />
-      <div className="h-4 bg-muted rounded w-full" />
-      <div className="h-4 bg-muted rounded w-2/3" />
-      <div className="flex gap-2">
-        <div className="h-5 bg-muted rounded w-16" />
-        <div className="h-5 bg-muted rounded w-16" />
-      </div>
-    </div>
-  </div>
-);
+// Helper to filter projects by search term
+function filterProjects(projects: Project[], searchTerm: string): Project[] {
+  if (!searchTerm.trim()) return projects;
+  const search = searchTerm.toLowerCase();
+  return projects.filter((project) =>
+    project.title.toLowerCase().includes(search) ||
+    project.description.toLowerCase().includes(search) ||
+    project.tags.some((tag) => tag.toLowerCase().includes(search))
+  );
+}
 
-const PAGE_SIZE = 6;
+export default async function ProjectsPage({ searchParams }: { searchParams?: { search?: string } }) {
+  // Fetch all projects on the server
+  const allProjects = await ProjectService.getAllProjects();
+  if (!allProjects) notFound();
 
-export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const observerRef = useRef<HTMLDivElement>(null);
-
-  const loadProjects = useCallback(async (pageNum: number) => {
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/projects?page=${pageNum}`);
-      const json = await res.json();
-      const newProjects: Project[] = json.data || [];
-
-      if (pageNum === 0) {
-        setProjects(newProjects);
-      } else {
-        setProjects((prev) => [...prev, ...newProjects]);
-      }
-
-      if (newProjects.length < PAGE_SIZE) {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Failed to load projects:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Only infinite scroll when not searching
-  useEffect(() => {
-    if (searchTerm.trim() !== "") return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const target = entries[0];
-        if (target.isIntersecting && hasMore && !loading) {
-          setPage((prev) => prev + 1);
-        }
-      },
-      { threshold: 0.1, rootMargin: "100px" }
-    );
-    if (observerRef.current) observer.observe(observerRef.current);
-    return () => observer.disconnect();
-  }, [hasMore, loading, searchTerm]);
-
-  useEffect(() => {
-    if (searchTerm.trim() !== "") return; // Don't load more when searching
-    loadProjects(page);
-  }, [page, loadProjects, searchTerm]);
-
-  // Reset projects and page when search term changes
-  useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setPage(0);
-      setHasMore(true);
-      loadProjects(0);
-    }
-  }, [searchTerm, loadProjects]);
-
-  // Filter projects inline
-  const filteredProjects = searchTerm.trim()
-    ? projects.filter((project) => {
-        const search = searchTerm.toLowerCase();
-        return (
-          project.title.toLowerCase().includes(search) ||
-          project.description.toLowerCase().includes(search) ||
-          project.tags.some((tag) => tag.toLowerCase().includes(search))
-        );
-      })
-    : projects;
+  // Get search term from query param
+  const searchTerm = searchParams?.search || "";
+  const filteredProjects = filterProjects(allProjects, searchTerm);
 
   return (
     <div className="min-h-screen pt-16">
@@ -111,15 +41,17 @@ export default function ProjectsPage() {
           </div>
 
           <div className="space-y-6">
-            <div className="relative max-w-md mx-auto">
+            {/* Search form submits to the same page with search param */}
+            <form className="relative max-w-md mx-auto" method="GET">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search projects..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                name="search"
+                defaultValue={searchTerm}
                 className="pl-10"
+                autoComplete="off"
               />
-            </div>
+            </form>
           </div>
 
           <div className="space-y-8">
@@ -129,30 +61,28 @@ export default function ProjectsPage() {
                   <div
                     key={project.id}
                     style={{
-                      animation: `fadeInUp 0.6s ease-out ${
-                        (index % 3) * 0.1
-                      }s both`,
+                      animation: `fadeInUp 0.6s ease-out ${(index % 3) * 0.1}s both`,
                     }}
                   >
-                    <ProjectCard
-                      title={project.title}
-                      description={project.description}
-                      image={project.image ?? undefined}
-                      tags={project.tags}
-                      link={project.demo ?? undefined}
-                      githubUrl={
-                        !project.private
-                          ? project.github ?? undefined
-                          : undefined
-                      }
-                      featured={project.featured}
-                      stats={{
-                        stars: 0,
-                        forks: 0,
-                        views: project.viewCount,
-                      }}
-                      date={new Date(project.createdAt).toLocaleDateString()}
-                    />
+                    <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-xl" />}>
+                      <ProjectCard
+                        title={project.title}
+                        description={project.description}
+                        image={project.image ?? undefined}
+                        tags={project.tags}
+                        link={project.demo ?? undefined}
+                        githubUrl={
+                          !project.private ? project.github ?? undefined : undefined
+                        }
+                        featured={project.featured}
+                        stats={{
+                          stars: 0,
+                          forks: 0,
+                          views: project.viewCount,
+                        }}
+                        date={new Date(project.createdAt).toLocaleDateString()}
+                      />
+                    </Suspense>
                   </div>
                 ))}
               </div>
@@ -166,16 +96,6 @@ export default function ProjectsPage() {
                 </p>
               </div>
             )}
-
-            {loading && searchTerm.trim() === "" && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {Array.from({ length: PAGE_SIZE }).map((_, index) => (
-                  <ProjectSkeleton key={index} />
-                ))}
-              </div>
-            )}
-
-            <div ref={observerRef} className="h-10" />
           </div>
         </div>
       </div>

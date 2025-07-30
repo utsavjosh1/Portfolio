@@ -68,10 +68,24 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "scroll-left": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "scroll-right": {
+          "0%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "scroll-left-1": "scroll-left 20s linear infinite",
+        "scroll-left-2": "scroll-left 25s linear infinite",
+        "scroll-left-3": "scroll-left 30s linear infinite",
+        "scroll-right-1": "scroll-right 20s linear infinite",
+        "scroll-right-2": "scroll-right 25s linear infinite",
+        "scroll-right-3": "scroll-right 30s linear infinite",
       },
       typography: {
         DEFAULT: {

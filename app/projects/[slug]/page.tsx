@@ -1,39 +1,36 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, ExternalLink, Github, Calendar, Code } from "lucide-react"
-
+import type { Metadata } from "next"
 import { ProjectService } from "@/lib/services/projects"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ProjectCard } from "@/components/project-card"
 import { MarkdownContent } from "@/components/ui/markdown-content"
-import { NewsletterSignup } from "@/components/newsletter-signup"
-import { ProjectGallery } from "@/components/project-gallery"
 import { OGImages } from "@/lib/og-image"
+import dynamic from "next/dynamic"
+
+// Dynamically import client components for server compatibility
+const ProjectCard = dynamic(() => import("@/components/project-card").then(mod => mod.ProjectCard), { ssr: false })
+const ProjectGallery = dynamic(() => import("@/components/project-gallery").then(mod => mod.ProjectGallery), { ssr: false })
+const NewsletterSignup = dynamic(() => import("@/components/newsletter-signup").then(mod => mod.NewsletterSignup), { ssr: false })
 
 interface ProjectPageProps {
-  params: Promise<{
+  params: {
     slug: string
-  }>
+  }
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
-  const { slug } = await params
+  const { slug } = params
   const project = await ProjectService.getProjectBySlug(slug)
-  
   if (!project) {
     return {
       title: "Project Not Found",
       description: "The requested project could not be found.",
     }
   }
-
   const technologies = project.technologies.map((pt: any) => pt.technology.name)
   const ogImageUrl = OGImages.project(project.title, project.description, technologies)
-
   return {
     title: `${project.title} | Utsav Joshi`,
     description: project.description,
@@ -71,13 +68,11 @@ export async function generateStaticParams() {
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { slug } = await params
+  const { slug } = params
   const project = await ProjectService.getProjectBySlug(slug)
-
   if (!project) {
     notFound()
   }
-
   // Get related projects (other featured projects)
   const allProjects = await ProjectService.getAllProjects()
   const relatedProjects = allProjects
@@ -98,10 +93,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {/* Back Navigation */}
           <div style={{ animation: `fadeInUp 0.6s ease-out both` }}>
             <Link href="/projects">
-              <Button variant="ghost" size="sm" className="gap-2 hover:bg-muted/50 transition-colors -ml-2">
+              <button type="button" className="gap-2 hover:bg-muted/50 transition-colors -ml-2 flex items-center px-3 py-2 rounded bg-transparent border-none">
                 <ArrowLeft className="h-4 w-4" />
                 Back to Projects
-              </Button>
+              </button>
             </Link>
           </div>
 
@@ -126,25 +121,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <div className="flex flex-wrap gap-4 justify-center">
               {project.demo && (
                 <Link href={project.demo} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="gap-3">
+                  <button type="button" className="gap-3 px-5 py-2 rounded bg-primary text-primary-foreground flex items-center">
                     <ExternalLink className="h-4 w-4" />
                     Live Demo
-                  </Button>
+                  </button>
                 </Link>
               )}
               {project.github && (
                 <Link href={project.github} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="lg" className="gap-3">
+                  <button type="button" className="gap-3 px-5 py-2 rounded border border-border flex items-center">
                     <Github className="h-4 w-4" />
                     View Code
-                  </Button>
+                  </button>
                 </Link>
               )}
               {!project.github && (
-                <Button variant="outline" size="lg" className="gap-3 opacity-50 cursor-not-allowed" disabled>
+                <button type="button" className="gap-3 px-5 py-2 rounded border border-border flex items-center opacity-50 cursor-not-allowed" disabled>
                   <Github className="h-4 w-4" />
                   Private Repository
-                </Button>
+                </button>
               )}
             </div>
             <div className="flex flex-wrap gap-2 justify-center">

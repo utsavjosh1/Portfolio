@@ -1,5 +1,3 @@
-import { CacheMonitor } from '@/lib/performance'
-
 // Generic cache entry interface
 interface CacheEntry<T> {
   data: T;
@@ -58,18 +56,15 @@ export class GenericCache<T = unknown> {
   get(key: string): T | null {
     const entry = this.cache.get(key);
     if (!entry) {
-      CacheMonitor.recordMiss();
       return null;
     }
 
     const now = Date.now();
     if (now - entry.timestamp > entry.ttl) {
       this.cache.delete(key);
-      CacheMonitor.recordMiss();
       return null;
     }
 
-    CacheMonitor.recordHit();
     return entry.data;
   }
 

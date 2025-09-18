@@ -1,165 +1,104 @@
-import type { Metadata } from "next"
-import { ProjectCard } from "@/components/project-card"
-import { ProjectService } from "@/lib/services/projects"
-import { NewsletterSignup } from "@/components/newsletter-signup"
-import { NoProjects } from "@/components/no-projects"
+import { Suspense } from "react";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ProjectCard } from "@/components/project-card";
+import { ProjectService } from "@/lib/query/projects";
+import { Project } from "@/types";
+import { notFound } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Projects - Utsav Joshi",
-  description: "A curated collection of my work, side projects, and experiments showcasing modern web development and innovative solutions.",
+// Helper to filter projects by search term
+function filterProjects(projects: Project[], searchTerm: string): Project[] {
+  if (!searchTerm.trim()) return projects;
+  const search = searchTerm.toLowerCase();
+  return projects.filter((project) =>
+    project.title.toLowerCase().includes(search) ||
+    project.description.toLowerCase().includes(search) ||
+    project.tags.some((tag) => tag.toLowerCase().includes(search))
+  );
 }
 
-// ISR Configuration for projects page
-export const revalidate = 3600;
+export default async function ProjectsPage({ searchParams }: { searchParams?: { search?: string } }) {
+  // Fetch all projects on the server
+  const allProjects = await ProjectService.getAllProjects();
+  if (!allProjects) notFound();
 
-export default async function ProjectsPage() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let projectsData: any = {
-    allProjects: [],
-    featuredProjects: [],
-    completedProjects: [],
-    totalProjects: 0
-  };
-
-  try {
-    // Optimized: Single database query with error handling
-    const data = await ProjectService.getProjectsPageData();
-    projectsData = data;
-  } catch (error) {
-    console.warn('Failed to fetch projects data:', error);
-    // Continue with empty data
-  }
-
-  const { allProjects, featuredProjects, totalProjects } = projectsData;
-
-  // Check if there are no published projects
-  const hasNoProjects = totalProjects === 0;
-
-  // Transform projects to match ProjectCard interface (optimized)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const transformProject = (project: any) => ({
-    title: project.title,
-    description: project.description,
-    image: project.image || "/placeholder.svg",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    tags: project.technologies.map((pt: any) => pt.technology.name),
-    link: `/projects/${project.slug}`,
-    priority: false
-  })
-
-  const transformedFeaturedProjects = featuredProjects.map(transformProject)
-  const transformedAllProjects = allProjects.map(transformProject)
+  // Get search term from query param
+  const searchTerm = searchParams?.search || "";
+  const filteredProjects = filterProjects(allProjects, searchTerm);
 
   return (
-    <div className="space-y-16 sm:space-y-24">
-      {/* Minimal Hero Section */}
-      <section className="text-center space-y-6 sm:space-y-8 py-12 sm:py-16">
-        <div className="space-y-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
-            Projects
-          </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            A curated collection of my work showcasing modern web development and innovative solutions.
-          </p>
-        </div>
-
-        {/* Clean Stats */}
-        {!hasNoProjects && (
-          <div className="flex items-center justify-center gap-8 sm:gap-12 pt-8">
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-foreground">{totalProjects}</div>
-              <div className="text-sm text-muted-foreground">Projects</div>
-            </div>
-            {featuredProjects.length > 0 && (
-              <>
-                <div className="w-px h-10 bg-border"></div>
-                <div className="text-center">
-                  <div className="text-2xl sm:text-3xl font-bold text-foreground">{featuredProjects.length}</div>
-                  <div className="text-sm text-muted-foreground">Featured</div>
-                </div>
-              </>
-            )}
+    <div className="min-h-screen pt-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="space-y-12">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              All Projects
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Explore my complete portfolio of projects, from AI-powered
+              applications to automation tools and web platforms.
+            </p>
           </div>
-        )}
-      </section>
 
-      {hasNoProjects ? (
-        <NoProjects />
-      ) : (
-        <div className="space-y-16 sm:space-y-20">
-          {/* Featured Projects */}
-          {transformedFeaturedProjects.length > 0 && (
-            <section className="space-y-8 sm:space-y-12">
-              <div className="text-center space-y-3">
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Featured Work</h2>
-                <p className="text-muted-foreground">My most impactful and innovative projects</p>
-              </div>
+          <div className="space-y-6">
+            {/* Search form submits to the same page with search param */}
+            <form className="relative max-w-md mx-auto" method="GET">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search projects..."
+                name="search"
+                defaultValue={searchTerm}
+                className="pl-10"
+                autoComplete="off"
+              />
+            </form>
+          </div>
 
-              <div className="grid gap-6 sm:gap-8 md:grid-cols-2 xl:grid-cols-3">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {transformedFeaturedProjects.map((project: any, index: number) => (
+          <div className="space-y-8">
+            {filteredProjects.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredProjects.map((project, index) => (
                   <div
-                    key={project.link}
-                    style={{ 
-                      animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
+                    key={project.id}
+                    style={{
+                      animation: `fadeInUp 0.6s ease-out ${(index % 3) * 0.1}s both`,
                     }}
                   >
-                    <ProjectCard
-                      title={project.title}
-                      description={project.description}
-                      image={project.image}
-                      tags={project.tags}
-                      link={project.link}
-                      priority={index < 3}
-                      className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50"
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* All Projects (if different from featured) */}
-          {transformedAllProjects.length > transformedFeaturedProjects.length && (
-            <section className="space-y-8 sm:space-y-12">
-              <div className="text-center space-y-3">
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">All Projects</h2>
-                <p className="text-muted-foreground">Exploring ideas and building solutions</p>
-              </div>
-
-              <div className="grid gap-6 sm:gap-8 md:grid-cols-2 xl:grid-cols-3">
-                {transformedAllProjects
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  .filter((project: any) => !transformedFeaturedProjects.some((featured: any) => featured.link === project.link))
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  .map((project: any, index: number) => (
-                    <div
-                      key={project.link}
-                      style={{ 
-                        animation: `fadeInUp 0.6s ease-out ${(index + transformedFeaturedProjects.length) * 0.1}s both`
-                      }}
-                    >
+                    <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-xl" />}>
                       <ProjectCard
                         title={project.title}
                         description={project.description}
-                        image={project.image}
+                        image={project.image ?? undefined}
                         tags={project.tags}
-                        link={project.link}
-                        priority={false}
-                        className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50"
+                        link={project.demo ?? undefined}
+                        githubUrl={
+                          !project.private ? project.github ?? undefined : undefined
+                        }
+                        featured={project.featured}
+                        stats={{
+                          stars: 0,
+                          forks: 0,
+                          views: project.viewCount,
+                        }}
+                        date={new Date(project.createdAt).toLocaleDateString()}
                       />
-                    </div>
-                  ))}
+                    </Suspense>
+                  </div>
+                ))}
               </div>
-            </section>
-          )}
-
-          {/* Newsletter Section */}
-          <section className="pt-8 sm:pt-12 border-t border-border/50">
-            <NewsletterSignup source="projects" />
-          </section>
+            ) : (
+              <div className="text-center py-16">
+                <h3 className="text-xl font-semibold mb-2">
+                  No projects found
+                </h3>
+                <p className="text-muted-foreground">
+                  Try adjusting your search or filter criteria.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
-  )
+  );
 }

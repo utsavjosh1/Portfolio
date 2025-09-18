@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { NewsletterSignup } from "@/components/newsletter-signup"
 import { NoBlogs } from "@/components/no-blogs"
+import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "Blog | Utsav Joshi",
@@ -131,7 +132,7 @@ async function BlogList({ searchParams }: { searchParams: any }) {
               <Card className="h-full transition-all duration-200 hover:shadow-lg group">
                 {post.image && (
                   <div className="aspect-video overflow-hidden rounded-t-lg">
-                    <img
+                    <Image
                       src={post.image}
                       alt={post.title}
                       className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"

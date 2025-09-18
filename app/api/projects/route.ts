@@ -1,55 +1,20 @@
-import { NextResponse } from 'next/server'
-import { ProjectService } from '@/lib/services/projects'
+import { NextRequest, NextResponse } from "next/server";
+import { ProjectService } from "@/lib/query/projects";
 
-// Cache for 3 minutes with stale-while-revalidate for 30 minutes
-const CACHE_HEADERS = {
-  'Cache-Control': 'public, s-maxage=180, stale-while-revalidate=1800',
-  'CDN-Cache-Control': 'public, s-maxage=180',
-  'Vercel-CDN-Cache-Control': 'public, s-maxage=180'
-}
+const PAGE_SIZE = 6;
 
-export async function GET(request: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status')
-    const year = searchParams.get('year')
-    const featured = searchParams.get('featured')
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get("page") || "0");
 
-    let projects
+    const all = await ProjectService.getAllProjects();
+    const start = page * PAGE_SIZE;
+    const paginated = all.slice(start, start + PAGE_SIZE);
 
-    if (featured === 'true') {
-      projects = await ProjectService.getFeaturedProjects()
-    } else if (status) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      projects = await ProjectService.getProjectsByStatus(status as any)
-    } else if (year) {
-      projects = await ProjectService.getProjectsByYear(year)
-    } else {
-      projects = await ProjectService.getAllProjects()
-    }
-
-    // Transform the data to match the expected format
-    const transformedProjects = projects.map(project => ({
-      ...project,
-      tags: Array.isArray(project.technologies) 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ? project.technologies.map((pt: any) => pt.technology.name)
-        : [],
-      link: `/projects/${project.slug}`
-    }))
-
-    return new NextResponse(JSON.stringify(transformedProjects), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        ...CACHE_HEADERS
-      }
-    })
+    return NextResponse.json({ data: paginated });
   } catch (error) {
-    console.error('Error fetching projects:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch projects' },
-      { status: 500 }
-    )
+    console.error("[API] Failed to fetch projects", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
-} 
+}

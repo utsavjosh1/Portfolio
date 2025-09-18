@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,25 +8,38 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// Project model
 model Project {
   id          String   @id @default(cuid())
-  title       String
-  description String
-  content     String?  // Detailed markdown content
-  image       String?
-  video       String?  // Video URL for demo/setup
+  title       String   @db.VarChar(200)
+  description String   @db.Text
+  content     String?  @db.Text // Detailed markdown content
+  image       String?  @db.VarChar(500)
+  video       String?  @db.VarChar(500) // Video URL for demo/setup
   gallery     String[] // Array of image URLs
   tags        String[]
   status      ProjectStatus @default(COMPLETED)
   featured    Boolean  @default(false)
-  year        String?
-  github      String?
-  demo        String?
-  slug        String   @unique
+  private     Boolean  @default(false) // Whether project is private/public
+  year        String?  @db.VarChar(4)
+  github      String?  @db.VarChar(500)
+  demo        String?  @db.VarChar(500)
+  slug        String   @unique @db.VarChar(100)
   published   Boolean  @default(true)
+  priority    Int      @default(0) // For ordering projects
+  viewCount   Int      @default(0) // Track project views
+  difficulty  ProjectDifficulty @default(MEDIUM)
+  duration    String?  @db.VarChar(50) // e.g., "2 weeks", "1 month"
+  teamSize    Int?     // Number of team members
+  clientName  String?  @db.VarChar(100) // For client projects
+  
+  // SEO fields
+  metaTitle       String? @db.VarChar(60)
+  metaDescription String? @db.VarChar(160)
+  
+  // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  publishedAt DateTime? // When it was actually published
 
   // Relations
   technologies ProjectTechnology[]
@@ -41,17 +48,25 @@ model Project {
   @@index([published, featured])
   @@index([published, status])
   @@index([published, createdAt])
+  @@index([slug])
+  @@index([private, published])
+  @@index([priority])
   @@map("projects")
 }
 
-// Technology model for projects
 model Technology {
   id          String   @id @default(cuid())
-  name        String   @unique
-  description String?
-  image       String?  // Technology logo/image
-  icon        String?
-  category    String?
+  name        String   @unique @db.VarChar(100)
+  description String?  @db.Text
+  image       String?  @db.VarChar(500) // Technology logo/image
+  icon        String?  @db.VarChar(100) // Icon class or SVG
+  category    String?  @db.VarChar(50)
+  color       String?  @db.VarChar(200) // Hex color for UI
+  website     String?  @db.VarChar(500) // Official website
+  order       Int      @default(0) // For ordering in lists
+  active      Boolean  @default(true) // Hide deprecated technologies
+  
+  // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -59,14 +74,16 @@ model Technology {
   projects    ProjectTechnology[]
   skills      Skill[]
   
+  @@index([category, order])
+  @@index([active])
   @@map("technologies")
 }
 
-// Junction table for Project-Technology many-to-many relationship
 model ProjectTechnology {
   id           String @id @default(cuid())
   projectId    String
   technologyId String
+  isPrimary    Boolean @default(false) // Mark primary technologies
   
   project      Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
@@ -74,66 +91,113 @@ model ProjectTechnology {
   @@unique([projectId, technologyId])
   @@index([projectId])
   @@index([technologyId])
+  @@index([isPrimary])
   @@map("project_technologies")
 }
 
-// Blog post model
 model BlogPost {
   id          String   @id @default(cuid())
-  title       String
-  excerpt     String
-  content     String   // Markdown content
-  slug        String   @unique
+  title       String   @db.VarChar(200)
+  excerpt     String   @db.VarChar(500)
+  content     String   @db.Text // Markdown content
+  slug        String   @unique @db.VarChar(100)
   featured    Boolean  @default(false)
   published   Boolean  @default(false)
   tags        String[]
-  category    String?
-  readingTime String?
-  image       String?
+  category    String?  @db.VarChar(50)
+  readingTime String?  @db.VarChar(20)
+  image       String?  @db.VarChar(500)
+  viewCount   Int      @default(0)
+  likeCount   Int      @default(0)
+  
+  // SEO fields
+  metaTitle       String? @db.VarChar(60)
+  metaDescription String? @db.VarChar(160)
+  
+  // Author info (for multi-author blogs)
+  authorName  String?  @db.VarChar(100)
+  authorEmail String?  @db.VarChar(100)
+  
+  // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   publishedAt DateTime?
 
   // Relations
+  comments    BlogComment[]
   
   // Performance indexes
   @@index([published, featured])
   @@index([published, publishedAt])
   @@index([published, category])
+  @@index([slug])
+  @@index([viewCount])
   @@map("blog_posts")
 }
 
-// Experience model
+model BlogComment {
+  id        String   @id @default(cuid())
+  postId    String
+  name      String   @db.VarChar(100)
+  email     String   @db.VarChar(100)
+  website   String?  @db.VarChar(500)
+  content   String   @db.Text
+  approved  Boolean  @default(false)
+  parentId  String?  // For nested comments
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  post      BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent    BlogComment? @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   BlogComment[] @relation("CommentReplies")
+  
+  @@index([postId, approved])
+  @@index([parentId])
+  @@map("blog_comments")
+}
+
 model Experience {
   id          String   @id @default(cuid())
-  company     String
-  position    String
-  description String?
+  company     String   @db.VarChar(100)
+  position    String   @db.VarChar(100)
+  description String?  @db.Text
   startDate   DateTime
   endDate     DateTime?
   current     Boolean  @default(false)
-  location    String?
-  website     String?
-  logo        String?
+  location    String?  @db.VarChar(100)
+  website     String?  @db.VarChar(500)
+  logo        String?  @db.VarChar(500)
   order       Int      @default(0)
+  employmentType ExperienceType @default(FULL_TIME)
+  
+  // Additional fields
+  achievements String[] // Key achievements
+  skills       String[] // Skills used in this role
+  
+  // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Relations
-  
+  // Validation: endDate should be after startDate if not current
   @@index([order, startDate])
+  @@index([current])
   @@map("experiences")
 }
 
-// Skills model
 model Skill {
   id           String   @id @default(cuid())
-  name         String
+  name         String   @db.VarChar(100)
   level        SkillLevel @default(INTERMEDIATE)
-  category     String?
-  description  String?
-  yearsOfExp   Int?
+  category     String?  @db.VarChar(50)
+  description  String?  @db.Text
+  yearsOfExp   Int?     @db.SmallInt
   order        Int      @default(0)
+  endorsed     Boolean  @default(false) // Professionally endorsed
+  
+  // Timestamps
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -142,71 +206,90 @@ model Skill {
   technology   Technology? @relation(fields: [technologyId], references: [id])
   
   @@index([category, order])
+  @@index([level])
   @@map("skills")
 }
 
-// Contact form submissions
 model ContactSubmission {
   id        String   @id @default(cuid())
-  name      String
-  email     String
-  subject   String?
-  message   String
+  name      String   @db.VarChar(100)
+  email     String   @db.VarChar(100)
+  subject   String?  @db.VarChar(200)
+  message   String   @db.Text
   status    ContactStatus @default(UNREAD)
+  ipAddress String?  @db.Inet // For spam prevention
+  userAgent String?  @db.VarChar(500)
+  
+  // Honeypot and spam detection
+  honeypot  String?  @db.VarChar(100) // Should be empty
+  spamScore Float?   @default(0.0) // Spam detection score
+  
+  // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  repliedAt DateTime? // When reply was sent
   
   @@index([status, createdAt])
+  @@index([email])
+  @@index([spamScore])
   @@map("contact_submissions")
 }
 
-// Newsletter subscriptions
 model NewsletterSubscription {
   id          String   @id @default(cuid())
-  email       String   @unique
+  email       String   @unique @db.VarChar(100)
   active      Boolean  @default(true)
-  source      String?  // Where they subscribed from
+  source      String?  @db.VarChar(100) // Where they subscribed from
+  ipAddress   String?  @db.Inet
+  confirmed   Boolean  @default(false) // Email confirmation
+  
+  // Preferences
+  frequency   NewsletterFrequency @default(WEEKLY)
+  categories  String[] // What topics they're interested in
+  
+  // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  confirmedAt DateTime? // When email was confirmed
   
   @@index([active, createdAt])
+  @@index([confirmed, active])
   @@map("newsletter_subscriptions")
 }
 
-// Analytics for tracking page views, project clicks, etc.
-model Analytics {
+model PageView {
   id        String   @id @default(cuid())
-  event     String   // 'page_view', 'project_click', 'blog_view', etc.
-  page      String?
-  projectId String?
-  postId    String?
-  userAgent String?
-  ip        String?
-  country   String?
-  city      String?
+  path      String   @db.VarChar(500)
+  userAgent String?  @db.VarChar(500)
+  ipAddress String?  @db.Inet
+  referer   String?  @db.VarChar(500)
+  country   String?  @db.VarChar(2) // ISO country code
+  city      String?  @db.VarChar(100)
+  
+  // Timestamps
   createdAt DateTime @default(now())
   
-  @@index([event, createdAt])
-  @@index([page, createdAt])
-  @@map("analytics")
+  @@index([path, createdAt])
+  @@index([createdAt])
+  @@map("page_views")
 }
 
-// Testimonials
-model Testimonial {
+// User sessions for admin panel
+model AdminSession {
   id        String   @id @default(cuid())
-  name      String
-  role      String?
-  company   String?
-  content   String
-  avatar    String?
-  rating    Int?     @default(5)
-  featured  Boolean  @default(false)
-  approved  Boolean  @default(false)
+  userId    String   @db.VarChar(100)
+  token     String   @unique @db.VarChar(500)
+  expiresAt DateTime
+  ipAddress String?  @db.Inet
+  userAgent String?  @db.VarChar(500)
+  
+  // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
-  @@index([approved, featured])
-  @@map("testimonials")
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("admin_sessions")
 }
 
 // Enums
@@ -215,6 +298,14 @@ enum ProjectStatus {
   IN_PROGRESS
   COMPLETED
   ARCHIVED
+  ON_HOLD
+}
+
+enum ProjectDifficulty {
+  EASY
+  MEDIUM
+  HARD
+  EXPERT
 }
 
 enum SkillLevel {
@@ -229,4 +320,21 @@ enum ContactStatus {
   READ
   REPLIED
   ARCHIVED
+  SPAM
+}
+
+enum ExperienceType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  FREELANCE
+  INTERNSHIP
+  VOLUNTEER
+}
+
+enum NewsletterFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
 }

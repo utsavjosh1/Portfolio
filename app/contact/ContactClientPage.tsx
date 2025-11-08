@@ -57,7 +57,6 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -89,10 +88,6 @@ export default function ContactPage() {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = "Subject is required";
     }
 
     if (!formData.message.trim()) {
@@ -129,7 +124,7 @@ export default function ContactPage() {
       }
 
       setIsSubmitted(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
@@ -282,23 +277,6 @@ export default function ContactPage() {
                           <p className="text-sm text-red-500">{errors.email}</p>
                         )}
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label htmlFor="subject" className="text-sm font-medium">
-                        Subject *
-                      </label>
-                      <Input
-                        id="subject"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        placeholder="What's this about?"
-                        className={errors.subject ? "border-red-500" : ""}
-                      />
-                      {errors.subject && (
-                        <p className="text-sm text-red-500">{errors.subject}</p>
-                      )}
                     </div>
 
                     <div className="space-y-2">

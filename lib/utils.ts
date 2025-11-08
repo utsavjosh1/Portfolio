@@ -14,6 +14,5 @@ export function formatDate(date: string | Date) {
 }
 
 export function sanitizeHtml(html: string) {
-  // Basic HTML sanitization
   return html.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")
 }

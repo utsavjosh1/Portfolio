@@ -1,54 +1,61 @@
-import { NextResponse } from "next/server"
-import { siteConfig } from "@/config/site"
+import { NextResponse } from "next/server";
+import { siteConfig } from "@/config/site";
+
+const staticRoutes = [
+  {
+    path: "",
+    lastmod: "2024-11-06",
+    changefreq: "weekly" as const,
+    priority: 1.0,
+  },
+  {
+    path: "/contact",
+    lastmod: "2025-11-06",
+    changefreq: "monthly" as const,
+    priority: 0.8,
+  },
+];
+
+function generateSitemapXML(routes: typeof staticRoutes): string {
+  const baseUrl = siteConfig.url.replace(/\/$/, "");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${routes
+  .map(
+    (route) => `  <url>
+    <loc>${baseUrl}${route.path}</loc>
+    <lastmod>${route.lastmod}</lastmod>
+    <changefreq>${route.changefreq}</changefreq>
+    <priority>${route.priority}</priority>
+  </url>`
+  )
+  .join("\n")}
+</urlset>`;
+}
 
 export async function GET() {
-  const baseUrl = siteConfig.url
+  try {
+    const xml = generateSitemapXML(staticRoutes);
 
-  // Main pages
-  const routes = ["", "/projects", "/experience", "/blog", "/contact"]
+    return new NextResponse(xml, {
+      headers: {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control":
+          "public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200",
+      },
+    });
+  } catch (error) {
+    console.error("Error generating sitemap:", error);
 
-  // Project pages
-  const projectSlugs = [
-    "/projects/ecommerce",
-    "/projects/task-app",
-    "/projects/finance-dashboard",
-    "/projects/ai-content-generator",
-    "/projects/real-estate",
-    "/projects/fitness-tracker",
-  ]
-
-  // Blog pages
-  const blogSlugs = [
-    "/blog/building-accessible-web-applications",
-    "/blog/future-of-react-server-components",
-    "/blog/optimizing-nextjs-applications",
-    "/blog/design-system-with-tailwind",
-    "/blog/authentication-best-practices",
-    "/blog/state-management-2023",
-  ]
-
-  const allRoutes = [...routes, ...projectSlugs, ...blogSlugs]
-
-  // Generate XML sitemap
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${allRoutes
-    .map(
-      (route) => `
-  <url>
-    <loc>${baseUrl}${route}</loc>
-    <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
-    <changefreq>${route === "" ? "weekly" : "monthly"}</changefreq>
-    <priority>${route === "" ? "1.0" : "0.8"}</priority>
-  </url>
-  `,
-    )
-    .join("")}
-</urlset>`
-
-  return new NextResponse(xml, {
-    headers: {
-      "Content-Type": "application/xml",
-    },
-  })
+    return new NextResponse("Error generating sitemap", {
+      status: 500,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
+  }
 }
+
+export const dynamic = "force-static";
+export const revalidate = 3600;

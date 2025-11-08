@@ -5,39 +5,22 @@ import { Github, Linkedin, Mail, Twitter, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const socialLinks = [
-  {
-    name: "GitHub",
-    href: "https://github.com/utsavjosh1",
-    icon: Github,
-  },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/in/utsavjosh1/",
-    icon: Linkedin,
-  },
-  {
-    name: "Email",
-    href: "mailto:hi@joshiutsav.com",
-    icon: Mail,
-  },
-  {
-    name: "Twitter",
-    href: "https://twitter.com/utsavjosh1",
-    icon: Twitter,
-  },
+  { name: "GitHub", href: "https://github.com/utsavjosh1", icon: Github },
+  { name: "LinkedIn", href: "https://www.linkedin.com/in/utsavjosh1/", icon: Linkedin },
+  { name: "Email", href: "mailto:hi@joshiutsav.com", icon: Mail },
+  { name: "Twitter", href: "https://twitter.com/utsavjosh1", icon: Twitter },
 ]
 
 const footerLinks = [
   { name: "Home", href: "/" },
-  { name: "Projects", href: "/projects" },
-  { name: "About", href: "/about" },
-  { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
 ]
 
 export function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
   }
 
   return (
@@ -111,7 +94,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-border/50 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Utsav Joshi. All rights reserved.
+            © 2024 Utsav Joshi. All rights reserved.
           </p>
           <Button variant="ghost" size="sm" onClick={scrollToTop} className="flex items-center space-x-2">
             <ArrowUp className="h-4 w-4" />

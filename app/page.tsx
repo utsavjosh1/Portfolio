@@ -12,15 +12,8 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ProjectCard } from "@/components/project-card";
-import { TechStackCarousel } from "@/components/tech-stack-carousel";
-import {
-  PersonStructuredData,
-  WebsiteStructuredData,
-} from "@/components/structured-data";
-import { ProjectService } from "@/lib/query/projects";
+// import { TechStackCarousel } from "@/components/tech-stack-carousel";
 import { OGImages } from "@/lib/og-image";
-import type { Project } from "@/types";
 
 export const metadata: Metadata = {
   title: "Utsav Joshi | Software Engineer",
@@ -68,19 +61,10 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function Home() {
-  let featuredProjects: Project[] = [];
-
-  try {
-    featuredProjects = await ProjectService.getFeaturedProjects();
-  } catch (error) {
-    console.error("Failed to load featured projects:", error);
-  }
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
       <section className="pt-32 pb-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-12">
             <div className="flex items-center gap-6">
               <div className="relative">
@@ -160,45 +144,11 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Featured Projects */}
       <section className="py-20 bg-muted/20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-              Featured Projects
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              A showcase of my recent work and personal projects. Each project
-              demonstrates different skills and technologies.
-            </p>
-          </div>
-
-          {featuredProjects.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredProjects.map((project, index) => (
-                <ProjectCard
-                  key={project.slug}
-                  title={project.title}
-                  description={project.description}
-                  image={project.image || "/placeholder.svg"}
-                  tags={project.technologies.map(
-                    (tech) => tech.technology.name
-                  )}
-                  link={`/projects/${project.slug}`}
-                  priority={index < 3}
-                  className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-border/50 bg-card"
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center text-muted-foreground">
-              No featured projects found.
-            </div>
-          )}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">What I&apos;m working on</h2>
         </div>
       </section>
-
-      {/* About Me + Tech Stack */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-12">
           <div className="space-y-4">
@@ -229,21 +179,11 @@ export default async function Home() {
 
           <div className="space-y-6">
             <h3 className="text-2xl font-bold">Technologies I Work With</h3>
-            <TechStackCarousel />
-          </div>
-
-          <div className="flex justify-center">
-            <Button variant="outline" asChild>
-              <Link href="/about">
-                Learn more about me
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            {/* <TechStackCarousel /> */}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-20 bg-muted/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
@@ -259,31 +199,12 @@ export default async function Home() {
             <Button size="lg" asChild>
               <Link href="/contact">
                 Start a conversation
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="ml-2 h-4 w-4" /> 
               </Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <Link href="/blog">Read my blog</Link>
             </Button>
           </div>
         </div>
       </section>
-
-      {/* Structured Data */}
-      <PersonStructuredData
-        name="Utsav Joshi"
-        jobTitle="Software Engineer"
-        url="https://www.joshiutsav.com"
-        image="https://f2idqsaenr3pv3f7.public.blob.vercel-storage.com/Me.jpg"
-        email="hi@joshiutsav.com"
-        location="Remote"
-        description="Software Engineer specializing in AI, automation, and building scalable web systems with React and Next.js."
-        sameAs={[
-          "https://github.com/utsavjosh1",
-          "https://www.linkedin.com/in/utsavjosh1/",
-        ]}
-      />
-      <WebsiteStructuredData />
     </div>
   );
 }

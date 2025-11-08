@@ -30,9 +30,7 @@ export async function POST(request: NextRequest) {
       data: {
         name: validatedData.name,
         email: validatedData.email,
-        subject: validatedData.subject,
         message: validatedData.message,
-        status: "UNREAD",
       },
     });
 
@@ -62,60 +60,6 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         message: "Failed to send message. Please try again later.",
-      },
-      { status: 500 }
-    );
-  }
-}
-
-// GET - Retrieve contact submissions (admin only)
-export async function GET(request: NextRequest) {
-  try {
-    const prisma = safePrisma();
-    const { searchParams } = new URL(request.url);
-    const status = searchParams.get("status");
-    const limit = parseInt(searchParams.get("limit") || "50");
-    const offset = parseInt(searchParams.get("offset") || "0");
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where = status ? { status: status as any } : {};
-
-    const [submissions, total] = await Promise.all([
-      prisma.contactSubmission.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        take: limit,
-        skip: offset,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          subject: true,
-          message: true,
-          status: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      }),
-      prisma.contactSubmission.count({ where }),
-    ]);
-
-    return NextResponse.json({
-      success: true,
-      data: submissions,
-      pagination: {
-        total,
-        limit,
-        offset,
-        hasMore: offset + limit < total,
-      },
-    });
-  } catch (error) {
-    console.error("Failed to fetch contact submissions:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to fetch submissions",
       },
       { status: 500 }
     );

@@ -6,270 +6,554 @@ export const runtime = "edge";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
-    // Extract parameters
-    const title = searchParams.get('title') || 'Utsav Joshi';
-    const subtitle = searchParams.get('subtitle') || 'Full Stack Developer & Software Engineer';
-    const type = searchParams.get('type') || 'default'; // default, project, blog, experience
-    const tags = searchParams.get('tags')?.split(',') || ['React', 'Next.js', 'TypeScript'];
-    const description = searchParams.get('description');
-    const date = searchParams.get('date');
-    const readingTime = searchParams.get('readingTime');
 
-    // Dynamic background based on type
-    const getBackground = (type: string) => {
+    // Extract and validate all parameters
+    const title = searchParams.get("title") || "Utsav Joshi";
+    const subtitle = searchParams.get("subtitle") || "Software Engineer";
+    const type = searchParams.get("type") || "default";
+    const description =
+      searchParams.get("description") || "Building the future with code";
+    const date = searchParams.get("date");
+    const readingTime = searchParams.get("readingTime");
+
+    // Handle tags properly
+    const tagsParam = searchParams.get("tags");
+    const tags = tagsParam
+      ? tagsParam.split(",").filter((t) => t && t.trim())
+      : ["React", "Next.js", "TypeScript", "Full-Stack"];
+
+    // Ultra-modern color schemes
+    const getColorScheme = (type: string) => {
       switch (type) {
-        case 'project':
-          return "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
-        case 'blog':
-          return "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
-        case 'experience':
-          return "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)";
+        case "contact":
+          return {
+            bg: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+            text: "#ffffff",
+            textSecondary: "#fef3c7",
+            accent: "#ec4899",
+            accentGlow: "rgba(236, 72, 153, 0.5)",
+            border: "rgba(255, 255, 255, 0.2)",
+            pattern: "rgba(255, 255, 255, 0.05)",
+            glow1: "#f59e0b",
+            glow2: "#ef4444",
+          };
         default:
-          return "linear-gradient(135deg, #000000 0%, #1a1a1a 100%)";
+          return {
+            bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            text: "#ffffff",
+            textSecondary: "#e0e7ff",
+            accent: "#fbbf24",
+            accentGlow: "rgba(251, 191, 36, 0.5)",
+            border: "rgba(255, 255, 255, 0.2)",
+            pattern: "rgba(255, 255, 255, 0.05)",
+            glow1: "#a78bfa",
+            glow2: "#ec4899",
+          };
       }
     };
 
-    // Dynamic icon based on type
-    const getIcon = (type: string) => {
-      switch (type) {
-        case 'project':
-          return '🚀';
-        case 'blog':
-          return '📝';
-        case 'experience':
-          return '💼';
-        default:
-          return '👨‍💻';
-      }
-    };
+    const colors = getColorScheme(type);
 
-    const response = new ImageResponse(
+    return new ImageResponse(
       (
         <div
           style={{
-            background: getBackground(type),
+            background: colors.bg,
             width: "100%",
             height: "100%",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            padding: "60px",
+            position: "relative",
+            overflow: "hidden",
             fontFamily: "system-ui, -apple-system, sans-serif",
           }}
         >
-          {/* Header */}
+          {/* Animated Background Effects */}
           <div
             style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
               display: "flex",
-              alignItems: "center",
-              gap: "20px",
-              marginBottom: "40px",
             }}
           >
+            {/* Grid Pattern */}
             <div
               style={{
-                fontSize: "40px",
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                backgroundImage: `linear-gradient(${colors.pattern} 2px, transparent 2px), linear-gradient(90deg, ${colors.pattern} 2px, transparent 2px)`,
+                backgroundSize: "60px 60px",
+                opacity: 0.4,
+                transform: "rotate(-12deg) scale(1.5)",
               }}
-            >
-              {getIcon(type)}
-            </div>
+            />
+
+            {/* Glowing Orbs */}
             <div
               style={{
-                fontSize: "24px",
-                color: "#ffffff",
-                opacity: 0.9,
-                textTransform: "uppercase",
-                letterSpacing: "2px",
-                fontWeight: "600",
+                position: "absolute",
+                width: "500px",
+                height: "500px",
+                borderRadius: "50%",
+                background: `radial-gradient(circle, ${colors.glow1} 0%, transparent 70%)`,
+                top: "-200px",
+                right: "-100px",
+                opacity: 0.6,
+                filter: "blur(60px)",
               }}
-            >
-              {type === 'default' ? 'Portfolio' : type}
-            </div>
+            />
+            <div
+              style={{
+                position: "absolute",
+                width: "400px",
+                height: "400px",
+                borderRadius: "50%",
+                background: `radial-gradient(circle, ${colors.glow2} 0%, transparent 70%)`,
+                bottom: "-150px",
+                left: "-50px",
+                opacity: 0.5,
+                filter: "blur(50px)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                width: "300px",
+                height: "300px",
+                borderRadius: "50%",
+                background: `radial-gradient(circle, ${colors.accent} 0%, transparent 70%)`,
+                top: "50%",
+                left: "50%",
+                opacity: 0.3,
+                filter: "blur(70px)",
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+
+            {/* Geometric Shapes */}
+            <div
+              style={{
+                position: "absolute",
+                width: "150px",
+                height: "150px",
+                border: `3px solid ${colors.border}`,
+                borderRadius: "30px",
+                top: "80px",
+                right: "100px",
+                opacity: 0.3,
+                transform: "rotate(25deg)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                width: "100px",
+                height: "100px",
+                border: `2px solid ${colors.border}`,
+                borderRadius: "50%",
+                bottom: "120px",
+                right: "250px",
+                opacity: 0.2,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                width: "80px",
+                height: "80px",
+                background: colors.accentGlow,
+                borderRadius: "20px",
+                top: "200px",
+                left: "150px",
+                opacity: 0.2,
+                transform: "rotate(-15deg)",
+              }}
+            />
           </div>
 
-          {/* Main Content */}
+          {/* Main Content Container */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start",
-              justifyContent: "center",
-              flex: 1,
               width: "100%",
+              height: "100%",
+              padding: "64px 72px",
+              position: "relative",
+              zIndex: 10,
             }}
           >
-            <h1
-              style={{
-                fontSize: title.length > 30 ? "48px" : "64px",
-                fontWeight: "bold",
-                color: "#ffffff",
-                marginBottom: "20px",
-                lineHeight: 1.1,
-                maxWidth: "90%",
-              }}
-            >
-              {title}
-            </h1>
-            
-            {subtitle && (
-              <h2
-                style={{
-                  fontSize: "32px",
-                  color: "#ffffff",
-                  opacity: 0.8,
-                  marginBottom: description ? "20px" : "40px",
-                  fontWeight: "400",
-                  maxWidth: "90%",
-                }}
-              >
-                {subtitle}
-              </h2>
-            )}
-
-            {description && (
-              <p
-                style={{
-                  fontSize: "24px",
-                  color: "#ffffff",
-                  opacity: 0.7,
-                  marginBottom: "40px",
-                  lineHeight: 1.4,
-                  maxWidth: "90%",
-                }}
-              >
-                {description.length > 120 ? description.substring(0, 120) + '...' : description}
-              </p>
-            )}
-
-            {/* Meta information for blog posts */}
-            {(date || readingTime) && (
-              <div
-                style={{
-                  display: "flex",
-                  gap: "30px",
-                  marginBottom: "30px",
-                  fontSize: "20px",
-                  color: "#ffffff",
-                  opacity: 0.7,
-                }}
-              >
-                {date && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    📅 {new Date(date).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
-                  </div>
-                )}
-                {readingTime && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    ⏱️ {readingTime}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Tags */}
-            <div
-              style={{
-                display: "flex",
-                gap: "15px",
-                flexWrap: "wrap",
-                maxWidth: "90%",
-              }}
-            >
-              {tags.slice(0, 4).map((tag, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    borderRadius: "25px",
-                    color: "#ffffff",
-                    fontSize: "18px",
-                    fontWeight: "500",
-                    backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                  }}
-                >
-                  {tag.trim()}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-              marginTop: "40px",
-            }}
-          >
+            {/* Header */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "15px",
+                justifyContent: "space-between",
+                marginBottom: "48px",
               }}
             >
+              {/* Glowing Badge */}
               <div
                 style={{
-                  width: "60px",
-                  height: "60px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "24px",
+                  padding: "12px 28px",
+                  background: "rgba(255, 255, 255, 0.15)",
+                  backdropFilter: "blur(10px)",
+                  border: `2px solid ${colors.border}`,
+                  borderRadius: "50px",
+                  fontSize: "16px",
+                  color: colors.text,
+                  textTransform: "uppercase",
+                  letterSpacing: "2px",
+                  fontWeight: "700",
+                  boxShadow: `0 0 30px ${colors.accentGlow}`,
                 }}
               >
-                👨‍💻
+                <div
+                  style={{
+                    width: "12px",
+                    height: "12px",
+                    borderRadius: "50%",
+                    background: colors.accent,
+                    marginRight: "12px",
+                    boxShadow: `0 0 20px ${colors.accentGlow}`,
+                  }}
+                />
+                {type === "default" ? "Portfolio" : type}
               </div>
+
+              {/* Logo Dots */}
               <div
                 style={{
                   display: "flex",
-                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "10px",
                 }}
               >
                 <div
                   style={{
-                    fontSize: "20px",
-                    color: "#ffffff",
-                    fontWeight: "600",
+                    width: "14px",
+                    height: "14px",
+                    borderRadius: "50%",
+                    background: colors.accent,
+                    boxShadow: `0 0 20px ${colors.accentGlow}`,
                   }}
-                >
-                  Utsav Joshi
-                </div>
+                />
                 <div
                   style={{
-                    fontSize: "16px",
-                    color: "#ffffff",
+                    width: "14px",
+                    height: "14px",
+                    borderRadius: "50%",
+                    background: colors.text,
                     opacity: 0.7,
                   }}
-                >
-                  www.joshiutsav.com
-                </div>
+                />
+                <div
+                  style={{
+                    width: "14px",
+                    height: "14px",
+                    borderRadius: "50%",
+                    background: colors.text,
+                    opacity: 0.4,
+                  }}
+                />
               </div>
             </div>
 
-            {/* Social links indicator */}
+            {/* Hero Content */}
             <div
               style={{
                 display: "flex",
-                gap: "10px",
-                opacity: 0.6,
+                flexDirection: "column",
+                flex: 1,
+                justifyContent: "center",
               }}
             >
-              <div style={{ fontSize: "24px" }}>🔗</div>
-              <div style={{ fontSize: "24px" }}>💼</div>
-              <div style={{ fontSize: "24px" }}>📧</div>
+              {/* Accent Lines */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  marginBottom: "32px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "80px",
+                    height: "8px",
+                    background: colors.accent,
+                    borderRadius: "4px",
+                    boxShadow: `0 0 30px ${colors.accentGlow}`,
+                  }}
+                />
+                <div
+                  style={{
+                    width: "40px",
+                    height: "8px",
+                    background: colors.accent,
+                    borderRadius: "4px",
+                    opacity: 0.6,
+                  }}
+                />
+                <div
+                  style={{
+                    width: "20px",
+                    height: "8px",
+                    background: colors.accent,
+                    borderRadius: "4px",
+                    opacity: 0.3,
+                  }}
+                />
+              </div>
+
+              {/* Title */}
+              <h1
+                style={{
+                  fontSize: title.length > 35 ? "58px" : "76px",
+                  fontWeight: "900",
+                  color: colors.text,
+                  marginBottom: "20px",
+                  lineHeight: 1.1,
+                  letterSpacing: "-0.03em",
+                  maxWidth: "95%",
+                  textShadow: `0 4px 20px rgba(0, 0, 0, 0.3)`,
+                }}
+              >
+                {title}
+              </h1>
+
+              {/* Subtitle */}
+              {subtitle && (
+                <h2
+                  style={{
+                    fontSize: "36px",
+                    color: colors.accent,
+                    marginBottom: "24px",
+                    fontWeight: "700",
+                    letterSpacing: "-0.01em",
+                    textShadow: `0 0 30px ${colors.accentGlow}`,
+                  }}
+                >
+                  {subtitle}
+                </h2>
+              )}
+
+              {/* Description */}
+              {description && (
+                <p
+                  style={{
+                    fontSize: "24px",
+                    color: colors.textSecondary,
+                    marginBottom: "40px",
+                    lineHeight: 1.6,
+                    maxWidth: "85%",
+                  }}
+                >
+                  {description.length > 120
+                    ? description.substring(0, 120) + "..."
+                    : description}
+                </p>
+              )}
+
+              {/* Meta Pills */}
+              {(date || readingTime) && (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "16px",
+                    marginBottom: "36px",
+                  }}
+                >
+                  {date && (
+                    <div
+                      style={{
+                        padding: "10px 20px",
+                        background: "rgba(255, 255, 255, 0.15)",
+                        backdropFilter: "blur(10px)",
+                        borderRadius: "50px",
+                        border: `1px solid ${colors.border}`,
+                        fontSize: "16px",
+                        color: colors.text,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {new Date(date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </div>
+                  )}
+                  {readingTime && (
+                    <div
+                      style={{
+                        padding: "10px 20px",
+                        background: "rgba(255, 255, 255, 0.15)",
+                        backdropFilter: "blur(10px)",
+                        borderRadius: "50px",
+                        border: `1px solid ${colors.border}`,
+                        fontSize: "16px",
+                        color: colors.text,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {readingTime}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Tech Tags */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  flexWrap: "wrap",
+                }}
+              >
+                {tags.slice(0, 5).map((tag: string, index: number) => (
+                  <div
+                    key={index}
+                    style={{
+                      padding: "12px 24px",
+                      background: "rgba(255, 255, 255, 0.2)",
+                      backdropFilter: "blur(10px)",
+                      border: `2px solid ${colors.border}`,
+                      borderRadius: "12px",
+                      color: colors.text,
+                      fontSize: "16px",
+                      fontWeight: "700",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    {tag.trim()}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingTop: "40px",
+                borderTop: `2px solid ${colors.border}`,
+              }}
+            >
+              {/* Author */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "20px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    borderRadius: "50%",
+                    background: `linear-gradient(135deg, ${colors.accent}, ${colors.glow1})`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "28px",
+                    fontWeight: "900",
+                    color: colors.text,
+                    border: `3px solid ${colors.border}`,
+                    boxShadow: `0 0 30px ${colors.accentGlow}`,
+                  }}
+                >
+                  UJ
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "6px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "22px",
+                      color: colors.text,
+                      fontWeight: "800",
+                    }}
+                  >
+                    Utsav Joshi
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      color: colors.textSecondary,
+                      fontWeight: "600",
+                    }}
+                  >
+                    www.joshiutsav.com
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Arrow */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "18px",
+                    color: colors.text,
+                    fontWeight: "700",
+                    textTransform: "uppercase",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  View More
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "12px",
+                      height: "12px",
+                      borderRadius: "50%",
+                      background: colors.accent,
+                      boxShadow: `0 0 20px ${colors.accentGlow}`,
+                    }}
+                  />
+                  <div
+                    style={{
+                      width: "40px",
+                      height: "4px",
+                      background: colors.accent,
+                      borderRadius: "2px",
+                    }}
+                  />
+                  <div
+                    style={{
+                      width: "0",
+                      height: "0",
+                      borderTop: "10px solid transparent",
+                      borderBottom: "10px solid transparent",
+                      borderLeft: `15px solid ${colors.accent}`,
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -277,18 +561,34 @@ export async function GET(request: NextRequest) {
       {
         width: 1200,
         height: 630,
-        headers: {
-          "Content-Type": "image/png",
-          "Cache-Control": "public, max-age=31536000, immutable",
-        },
       }
     );
-
-    return response;
   } catch (error) {
-    console.error('Error generating OG image:', error);
-    
-    // Return a fallback image or error response
-    return new Response('Error generating image', { status: 500 });
+    console.error("OG Image Error:", error);
+
+    // Return a fallback error image
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "32px",
+            fontWeight: "700",
+            color: "#ffffff",
+          }}
+        >
+          Error generating image
+        </div>
+      ),
+      {
+        width: 1200,
+        height: 630,
+      }
+    );
   }
 }

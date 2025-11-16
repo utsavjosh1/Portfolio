@@ -21,14 +21,3 @@ model ContactSubmission {
   @@index([email])
   @@map("contact_submissions")
 }
-
-model PageView {
-  id        String   @id @default(cuid())
-  path      String   @db.VarChar(300)
-  ipAddress String?  @db.Inet
-  userAgent String?  @db.VarChar(300)
-  createdAt DateTime @default(now())
-
-  @@index([path])
-  @@map("page_views")
-}

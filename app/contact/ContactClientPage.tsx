@@ -180,10 +180,6 @@ export default function ContactPage() {
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
               Get in Touch
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              I&apos;m always excited to discuss new opportunities, interesting
-              projects, or just have a chat about technology. Let&apos;s connect!
-            </p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-12">

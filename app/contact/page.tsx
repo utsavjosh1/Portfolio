@@ -41,9 +41,6 @@ export default function ContactPage() {
             Get in touch with me for work inquiries, collaborations, or just to say hello.
           </p>
         </div>
-        <div className="animate-pulse">
-          <div className="h-64 bg-muted rounded-lg"></div>
-        </div>
       </div>
     }>
       <ContactClientPage />

@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,9 +14,9 @@ import {
   Github,
   Linkedin,
   Twitter,
-  MapPin,
   Send,
   CheckCircle,
+  ArrowLeft,
 } from "lucide-react";
 
 const contactMethods = [
@@ -50,23 +51,21 @@ const contactMethods = [
   },
 ];
 
-const availability = [
-  { label: "Response Time", value: "Within 24 hours" },
-  { label: "Time Zone", value: "UTC+5:30 (IST)" },
-  { label: "Availability", value: "Monday - Friday" },
-  { label: "Status", value: "Available for work", status: "available" },
-];
 
 export default function ContactPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleBack = () => {
+    router.back();
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -89,10 +88,6 @@ export default function ContactPage() {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = "Subject is required";
     }
 
     if (!formData.message.trim()) {
@@ -129,7 +124,7 @@ export default function ContactPage() {
       }
 
       setIsSubmitted(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
@@ -156,8 +151,9 @@ export default function ContactPage() {
               <Button onClick={() => setIsSubmitted(false)}>
                 Send Another Message
               </Button>
-              <Button variant="outline" asChild>
-                <Link href="/">Back to Home</Link>
+              <Button variant="outline" onClick={handleBack}>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
               </Button>
             </div>
           </div>
@@ -171,14 +167,19 @@ export default function ContactPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="space-y-16">
           {/* Header */}
-          <div className="text-center space-y-4">
+          <div className="relative text-center space-y-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBack}
+              className="absolute left-0 top-0 group"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
+              Back
+            </Button>
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
               Get in Touch
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              I&apos;m always excited to discuss new opportunities, interesting
-              projects, or just have a chat about technology. Let&apos;s connect!
-            </p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-12">
@@ -223,53 +224,6 @@ export default function ContactPage() {
                     );
                   })}
                 </div>
-              </div>
-
-              {/* Availability */}
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Availability</h2>
-                <Card>
-                  <CardContent className="p-4 space-y-3">
-                    {availability.map((item) => (
-                      <div
-                        key={item.label}
-                        className="flex justify-between items-center"
-                      >
-                        <span className="text-sm text-muted-foreground">
-                          {item.label}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          {item.status === "available" && (
-                            <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-                          )}
-                          <span className="text-sm font-medium">
-                            {item.value}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Location */}
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Location</h2>
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-muted rounded-lg">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Remote</p>
-                        <p className="text-sm text-muted-foreground">
-                          Available worldwide
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
             </div>
 
@@ -322,23 +276,6 @@ export default function ContactPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <label htmlFor="subject" className="text-sm font-medium">
-                        Subject *
-                      </label>
-                      <Input
-                        id="subject"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        placeholder="What's this about?"
-                        className={errors.subject ? "border-red-500" : ""}
-                      />
-                      {errors.subject && (
-                        <p className="text-sm text-red-500">{errors.subject}</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
                       <label htmlFor="message" className="text-sm font-medium">
                         Message *
                       </label>
@@ -379,78 +316,6 @@ export default function ContactPage() {
               </Card>
             </div>
           </div>
-
-          {/* FAQ Section */}
-          <section className="space-y-8">
-            <div className="text-center space-y-4">
-              <h2 className="text-3xl font-bold">Frequently Asked Questions</h2>
-              <p className="text-muted-foreground">
-                Quick answers to common questions
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    What&apos;s your typical response time?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    I typically respond to emails within 24 hours during
-                    weekdays. For urgent matters, feel free to mention it in
-                    your subject line.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    What type of projects do you work on?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    I specialize in web applications, AI-powered tools,
-                    automation systems, and SaaS products. I&apos;m particularly
-                    interested in projects that solve real-world problems.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    Are you available for freelance work?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Yes! I&apos;m currently available for freelance projects and
-                    consulting. Let&apos;s discuss your requirements and see how I
-                    can help.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    Do you offer consulting services?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    I provide technical consulting for architecture decisions,
-                    code reviews, and technology strategy. Reach out to discuss
-                    your needs.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </section>
         </div>
       </div>
     </div>

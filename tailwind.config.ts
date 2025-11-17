@@ -76,6 +76,41 @@ const config = {
           "0%": { transform: "translateX(-50%)" },
           "100%": { transform: "translateX(0)" },
         },
+        glitch: {
+          "0%, 100%": { transform: "translate(0)" },
+          "20%": { transform: "translate(-2px, 2px)" },
+          "40%": { transform: "translate(-2px, -2px)" },
+          "60%": { transform: "translate(2px, 2px)" },
+          "80%": { transform: "translate(2px, -2px)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-20px) rotate(5deg)" },
+        },
+        "float-medium": {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-15px) rotate(-5deg)" },
+        },
+        "float-fast": {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-10px) rotate(3deg)" },
+        },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "0.3" },
+          "50%": { opacity: "1" },
+        },
+        "pulse-medium": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "1" },
+        },
+        "pulse-fast": {
+          "0%, 100%": { opacity: "0.5" },
+          "50%": { opacity: "1" },
+        },
+        "fade-in-up": {
+          from: { opacity: "0", transform: "translateY(20px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -86,6 +121,15 @@ const config = {
         "scroll-right-1": "scroll-right 20s linear infinite",
         "scroll-right-2": "scroll-right 25s linear infinite",
         "scroll-right-3": "scroll-right 30s linear infinite",
+        glitch: "glitch 5s infinite",
+        "float-slow": "float-slow 6s ease-in-out infinite",
+        "float-medium": "float-medium 5s ease-in-out infinite",
+        "float-fast": "float-fast 4s ease-in-out infinite",
+        "pulse-slow": "pulse-slow 3s ease-in-out infinite",
+        "pulse-medium": "pulse-medium 2.5s ease-in-out infinite 0.3s",
+        "pulse-fast": "pulse-fast 2s ease-in-out infinite 0.6s",
+        "fade-in-up": "fade-in-up 0.8s ease-out 0.2s both",
+        "fade-in-up-delay": "fade-in-up 0.8s ease-out 0.4s both",
       },
       typography: {
         DEFAULT: {
@@ -328,7 +372,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 } satisfies Config
 
 export default config

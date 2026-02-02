@@ -8,51 +8,48 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Mail,
-  Github,
-  Linkedin,
-  Twitter,
-  Send,
-  CheckCircle,
-  ArrowLeft,
-} from "lucide-react";
+  GithubIcon,
+  LinkedinIcon,
+  TwitterIcon,
+  MailIcon,
+} from "@/components/animated-icons";
+import { Send, CheckCircle, ArrowLeft, ArrowRight } from "lucide-react";
 
+// Use our animated icons for better consistency
 const contactMethods = [
   {
-    icon: Mail,
+    icon: MailIcon,
     title: "Email",
-    description: "Send me an email",
+    description: "Send me a direct email",
     value: "hi@joshiutsav.com",
     href: "mailto:hi@joshiutsav.com",
     primary: true,
   },
   {
-    icon: Github,
+    icon: GithubIcon,
     title: "GitHub",
-    description: "Check out my code",
+    description: "Review my code",
     value: "@utsavjosh1",
     href: "https://github.com/utsavjosh1",
   },
   {
-    icon: Linkedin,
+    icon: LinkedinIcon,
     title: "LinkedIn",
-    description: "Let's connect professionally",
+    description: "Connect professionally",
     value: "@utsavjosh1",
     href: "https://www.linkedin.com/in/utsavjosh1/",
   },
   {
-    icon: Twitter,
+    icon: TwitterIcon,
     title: "Twitter",
-    description: "Follow me for updates",
+    description: "Follow my updates",
     value: "@utsavjosh1",
     href: "https://twitter.com/utsavjosh1",
   },
 ];
 
-
-export default function ContactPage() {
+export default function ContactClientPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
@@ -68,7 +65,7 @@ export default function ContactPage() {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -135,26 +132,27 @@ export default function ContactPage() {
   if (isSubmitted) {
     return (
       <div className="min-h-screen pt-16 flex items-center justify-center">
-        <div className="max-w-md mx-auto px-4 text-center">
+        <div className="max-w-md mx-auto px-4 text-center animate-fade-in-up">
           <div className="space-y-6">
-            <div className="h-16 w-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto">
-              <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+            <div className="h-20 w-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto border border-green-500/20">
+              <CheckCircle className="h-10 w-10 text-green-500" />
             </div>
             <div className="space-y-2">
-              <h1 className="text-2xl font-bold">Message Sent!</h1>
-              <p className="text-muted-foreground">
-                Thank you for reaching out. I&apos;ll get back to you within 24
-                hours.
+              <h1 className="text-3xl font-bold">Message Received</h1>
+              <p className="text-muted-foreground leading-relaxed">
+                I'll review your message and get back to you shortly. Usually
+                within 24 hours.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button onClick={() => setIsSubmitted(false)}>
-                Send Another Message
+            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+              <Button
+                onClick={() => setIsSubmitted(false)}
+                variant="outline"
+                className="border-primary/20 hover:bg-primary/5"
+              >
+                Send Another
               </Button>
-              <Button variant="outline" onClick={handleBack}>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
-              </Button>
+              <Button onClick={handleBack}>Return Home</Button>
             </div>
           </div>
         </div>
@@ -163,32 +161,44 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen pt-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen pt-24 pb-12 overflow-x-hidden">
+      <div className="page-container relative z-10">
+        {/* Background Gradients */}
+        <div className="absolute top-0 right-0 -z-10 h-[300px] w-[300px] sm:h-[500px] sm:w-[500px] bg-primary/5 blur-[100px] sm:blur-[120px] rounded-full pointer-events-none opacity-50 sm:opacity-100" />
+        <div className="absolute bottom-0 left-0 -z-10 h-[300px] w-[300px] sm:h-[500px] sm:w-[500px] bg-blue-500/5 blur-[100px] sm:blur-[120px] rounded-full pointer-events-none opacity-50 sm:opacity-100" />
+
         <div className="space-y-16">
           {/* Header */}
-          <div className="relative text-center space-y-4">
+          <div className="space-y-6 max-w-2xl animate-fade-in-up">
             <Button
               variant="ghost"
               size="sm"
               onClick={handleBack}
-              className="absolute left-0 top-0 group"
+              className="pl-0 hover:bg-transparent hover:text-primary transition-colors group"
             >
               <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Back
             </Button>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              Get in Touch
-            </h1>
+
+            <div className="space-y-2">
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+                Let's Build Something
+              </h1>
+              <p className="text-xl text-muted-foreground">
+                Whether you have a project in mind or just want to talk shop,
+                I'm all ears.
+              </p>
+            </div>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-12">
+          <div className="grid lg:grid-cols-12 gap-12 items-start">
             {/* Contact Information */}
-            <div className="lg:col-span-1 space-y-8">
-              {/* Contact Methods */}
+            <div className="lg:col-span-4 space-y-8 animate-fade-in-up-delay">
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Contact Methods</h2>
-                <div className="space-y-3">
+                <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+                  Find me on
+                </h2>
+                <div className="grid gap-3">
                   {contactMethods.map((method) => {
                     const Icon = method.icon;
                     return (
@@ -197,29 +207,22 @@ export default function ContactPage() {
                         href={method.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block"
+                        className="group flex items-center gap-4 p-4 rounded-xl border bg-card/50 hover:bg-card hover:border-primary/20 transition-all duration-300"
                       >
-                        <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                          <CardContent className="p-4">
-                            <div className="flex items-center space-x-3">
-                              <div
-                                className={`p-2 rounded-lg ${
-                                  method.primary
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-muted text-muted-foreground"
-                                }`}
-                              >
-                                <Icon className="h-4 w-4" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium">{method.title}</p>
-                                <p className="text-sm text-muted-foreground truncate">
-                                  {method.value}
-                                </p>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <div
+                          className={`p-2.5 rounded-lg bg-background border group-hover:border-primary/20 transition-colors`}
+                        >
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-foreground group-hover:text-primary transition-colors">
+                            {method.title}
+                          </p>
+                          <p className="text-sm text-muted-foreground truncate">
+                            {method.description}
+                          </p>
+                        </div>
+                        <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                       </Link>
                     );
                   })}
@@ -228,92 +231,85 @@ export default function ContactPage() {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-2xl">Send me a message</CardTitle>
-                  <p className="text-muted-foreground">
-                    Fill out the form below and I&apos;ll get back to you as soon as
-                    possible.
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label htmlFor="name" className="text-sm font-medium">
-                          Name *
-                        </label>
-                        <Input
-                          id="name"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          placeholder="Your full name"
-                          className={errors.name ? "border-red-500" : ""}
-                        />
-                        {errors.name && (
-                          <p className="text-sm text-red-500">{errors.name}</p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium">
-                          Email *
-                        </label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder="your.email@example.com"
-                          className={errors.email ? "border-red-500" : ""}
-                        />
-                        {errors.email && (
-                          <p className="text-sm text-red-500">{errors.email}</p>
-                        )}
-                      </div>
-                    </div>
-
+            <div className="lg:col-span-8 animate-fade-in-up-delay">
+              <div className="rounded-2xl border bg-card/30 backdrop-blur-sm p-6 sm:p-10">
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="grid sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label htmlFor="message" className="text-sm font-medium">
-                        Message *
+                      <label htmlFor="name" className="text-sm font-medium">
+                        Name
                       </label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
+                      <Input
+                        id="name"
+                        name="name"
+                        value={formData.name}
                         onChange={handleInputChange}
-                        placeholder="Tell me about your project, question, or just say hello!"
-                        rows={6}
-                        className={errors.message ? "border-red-500" : ""}
+                        placeholder="John Doe"
+                        className={`h-12 bg-background/50 ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                       />
-                      {errors.message && (
-                        <p className="text-sm text-red-500">{errors.message}</p>
+                      {errors.name && (
+                        <p className="text-sm text-red-500">{errors.name}</p>
                       )}
                     </div>
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email
+                      </label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="john@example.com"
+                        className={`h-12 bg-background/50 ${errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                      />
+                      {errors.email && (
+                        <p className="text-sm text-red-500">{errors.email}</p>
+                      )}
+                    </div>
+                  </div>
 
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium">
+                      Message
+                    </label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Tell me about your project..."
+                      rows={6}
+                      className={`resize-none bg-background/50 ${errors.message ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    />
+                    {errors.message && (
+                      <p className="text-sm text-red-500">{errors.message}</p>
+                    )}
+                  </div>
+
+                  <div className="flex justify-end">
                     <Button
                       type="submit"
                       size="lg"
                       disabled={isSubmitting}
-                      className="w-full sm:w-auto"
+                      className="w-full sm:w-auto h-12 px-8 rounded-full text-base font-medium shadow-glow-sm hover:shadow-glow transition-all"
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-inherit mr-2" />
                           Sending...
                         </>
                       ) : (
                         <>
-                          <Send className="mr-2 h-4 w-4" />
                           Send Message
+                          <Send className="ml-2 h-4 w-4" />
                         </>
                       )}
                     </Button>
-                  </form>
-                </CardContent>
-              </Card>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>

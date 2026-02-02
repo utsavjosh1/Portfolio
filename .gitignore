@@ -29,10 +29,6 @@ next-env.d.ts
 
 .vercel
 
-<<<<<<< HEAD
-.kiro
-=======
 .kiro
 
-todo.md
->>>>>>> 57a8178e4f5dd7f85f31f115586794bd5dc36346
+CLAUDE.md

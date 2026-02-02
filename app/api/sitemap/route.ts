@@ -28,7 +28,7 @@ ${routes
     <lastmod>${route.lastmod}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${route.priority}</priority>
-  </url>`
+  </url>`,
   )
   .join("\n")}
 </urlset>`;
@@ -57,5 +57,4 @@ export async function GET() {
   }
 }
 
-export const dynamic = "force-static";
-export const revalidate = 3600;
+// dynamic and revalidate removed for cacheComponents compatibility

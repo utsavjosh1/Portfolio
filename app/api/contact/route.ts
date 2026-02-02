@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { safePrisma } from "@/lib/prisma";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 // Validation schema for contact form
 const contactSchema = z.object({
@@ -15,28 +16,24 @@ const contactSchema = z.object({
 // POST - Create new contact submission
 export async function POST(request: NextRequest) {
   try {
-    const prisma = safePrisma();
     const body = await request.json();
 
     // Validate the request body
     const validatedData = contactSchema.parse(body);
 
-    // Create contact submission in database
-    const submission = await prisma.contactSubmission.create({
-      data: {
-        name: validatedData.name,
-        email: validatedData.email,
-        message: validatedData.message,
-      },
+    // Create contact submission in Firestore
+    const docRef = await addDoc(collection(db, "contact_submissions"), {
+      ...validatedData,
+      createdAt: serverTimestamp(),
     });
 
     return NextResponse.json(
       {
         success: true,
         message: "Message sent successfully! I'll get back to you soon.",
-        id: submission.id,
+        id: docRef.id,
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Contact form error:", error);
@@ -48,7 +45,7 @@ export async function POST(request: NextRequest) {
           message: "Validation error",
           errors: error.errors,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -57,7 +54,7 @@ export async function POST(request: NextRequest) {
         success: false,
         message: "Failed to send message. Please try again later.",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

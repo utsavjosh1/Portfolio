@@ -77,11 +77,11 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <Analytics />
-          <SpeedInsights />
-          <FirebaseAnalytics />
-          <JsonLd />
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
+        <FirebaseAnalytics />
+        <JsonLd />
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+import { siteConfig } from "@/config/site";
+
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
   process.env.VERCEL_URL ||
@@ -7,56 +9,78 @@ export interface OGImageOptions {
   title?: string;
   subtitle?: string;
   description?: string;
-  type?: "default" | "project";
+  type?: "default" | "project" | "blog"; // Added blog type
+  style?: "terminal" | "bento" | "abstract"; // Added style options
   tags?: string[];
+  date?: string;
+  readingTime?: string;
 }
- 
+
 export function generateOGImageURL(options: OGImageOptions = {}): string {
   const {
     title = "Utsav Joshi | Software Engineer Portfolio",
-    subtitle = "Portfolio of Utsav Joshi, a software engineer specializing in AI, automation, and building scalable web systems with React and Next.js.",
-    description = "Portfolio of Utsav Joshi, a software engineer specializing in AI, automation, and building scalable web systems with React and Next.js.",
+    subtitle = "Software Engineer",
+    description = "Building high-performance systems.",
     type = "default",
-    tags = ["React", "Next.js", "TypeScript", "Full-Stack"],
+    style = "bento", // Default style
+    tags = ["React", "Next.js", "System Design"],
+    date,
+    readingTime,
   } = options;
 
   const params = new URLSearchParams();
 
-  if (title) params.set("title", encodeURIComponent(title));
-  if (subtitle) params.set("subtitle", encodeURIComponent(subtitle));
-  if (description) params.set("description", encodeURIComponent(description)); 
+  if (title) params.set("title", title);
+  if (subtitle) params.set("subtitle", subtitle);
+  if (description) params.set("description", description);
   if (type) params.set("type", type);
-  if (tags.length > 0) params.set("tags", tags.map(tag => encodeURIComponent(tag)).join(","));
+  if (style) params.set("style", style);
+  if (tags.length > 0) params.set("tags", tags.join(","));
+  if (date) params.set("date", date);
+  if (readingTime) params.set("readingTime", readingTime);
 
-  // Ensure we have a proper URL
-  const baseUrl = BASE_URL.startsWith("http")
+  // Ensure proper URL construction
+  const validBaseUrl = BASE_URL.startsWith("http")
     ? BASE_URL
     : `https://${BASE_URL}`;
-  
-  const url = `${baseUrl}/api/og?${params.toString()}`;
-  
-  return url;
+
+  return `${validBaseUrl}/api/og?${params.toString()}`;
 }
 
-// Predefined OG images for common pages - these are cached
 export const OGImages = {
   home: () =>
     generateOGImageURL({
-      title: "Utsav Joshi | Software Engineer Portfolio",
-      subtitle: "Portfolio of Utsav Joshi, a software engineer specializing in AI, automation, and building scalable web systems with React and Next.js.",
-      description:
-        "Portfolio of Utsav Joshi, a software engineer specializing in AI, automation, and building scalable web systems with React and Next.js.",
+      title: "Utsav Joshi",
+      subtitle: "Software Engineer",
       type: "default",
-      tags: ["React", "Next.js", "TypeScript", "Full-Stack"],
+      style: "bento",
+      tags: ["Full Stack", "Systems", "AI"],
+    }),
+
+  project: (title: string, description: string, tags: string[]) =>
+    generateOGImageURL({
+      title,
+      description,
+      tags,
+      type: "project",
+      style: "terminal", // Projects get terminal style
+    }),
+
+  post: (title: string, date: string, readingTime: string, tags: string[]) =>
+    generateOGImageURL({
+      title,
+      date,
+      readingTime,
+      tags,
+      type: "blog",
+      style: "abstract", // Blog posts get abstract style
     }),
 
   contact: () =>
     generateOGImageURL({
-      title: "Contact | Utsav Joshi | Software Engineer Portfolio",
-      subtitle: "Get in touch with me for work inquiries, collaborations, or just to say hello. I'll get back to you as soon as possible.",
-      description:
-        "Get in touch with me for work inquiries, collaborations, or just to say hello. I'll get back to you as soon as possible.",
+      title: "Get in Touch",
+      subtitle: "Let's build something extraordinary.",
       type: "default",
-      tags: ["Contact", "Inquiries", "Collaborations", "Hello"],
+      style: "abstract",
     }),
 };

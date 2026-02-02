@@ -1,5 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  // Enable Cache Components (Partial Prerendering)
+  cacheComponents: true,
+
   images: {
     formats: ["image/webp", "image/avif"],
     deviceSizes: [480, 768, 1080, 1440],

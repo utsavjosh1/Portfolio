@@ -35,9 +35,11 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export const revalidate = 60;
+import { cacheLife } from "next/cache";
 
-export default function Home() {
+export default async function Home() {
+  "use cache";
+  cacheLife("minutes");
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="page-container relative">

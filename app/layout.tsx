@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Footer } from "@/components/footer";
 import { FirebaseAnalytics } from "@/components/firebase-analytics";
+import { JsonLd } from "@/components/json-ld";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -79,6 +80,7 @@ export default function RootLayout({
           <Analytics />
           <SpeedInsights />
           <FirebaseAnalytics />
+          <JsonLd />
         </ThemeProvider>
       </body>
     </html>

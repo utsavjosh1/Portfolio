@@ -1,15 +1,18 @@
-import type { Metadata } from "next"
-import { Suspense } from "react"
-import ContactClientPage from "./ContactClientPage"
-import { OGImages } from "@/lib/og-image"
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import ContactClientPage from "./ContactClientPage";
+import { OGImages } from "@/lib/og-image";
 
 export const metadata: Metadata = {
   title: "Contact | Utsav Joshi",
-  description: "Get in touch with me for work inquiries, collaborations, or just to say hello. I'll get back to you as soon as possible.",
-  keywords: "contact, hire, collaboration, freelance, web developer, portfolio",
+  description:
+    "Let's build something efficient. Whether it's high-performance systems or automation tools, I'm ready to discuss your next technical challenge.",
+  keywords:
+    "contact, hire, Go developer, automation, freelance, software engineer",
   openGraph: {
     title: "Contact - Utsav Joshi",
-    description: "Get in touch with me for work inquiries, collaborations, or just to say hello.",
+    description:
+      "Ready to optimize? Get in touch for high-performance engineering collaborations.",
     url: "https://www.joshiutsav.com/contact",
     siteName: "Utsav Joshi Portfolio",
     images: [
@@ -26,24 +29,25 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Contact | Utsav Joshi",
-    description: "Get in touch with me for work inquiries, collaborations, or just to say hello.",
+    description: "Let's build something efficient. Get in touch.",
     images: [OGImages.contact()],
   },
-}
+};
 
 export default function ContactPage() {
   return (
-    <Suspense fallback={
-      <div className="space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">Contact</h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Get in touch with me for work inquiries, collaborations, or just to say hello.
-          </p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen pt-32 px-4">
+          <div className="max-w-2xl mx-auto space-y-8 animate-pulse">
+            <div className="h-12 w-3/4 bg-muted rounded-lg" />
+            <div className="h-6 w-1/2 bg-muted rounded-lg" />
+            <div className="h-96 bg-muted rounded-xl" />
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <ContactClientPage />
     </Suspense>
-  )
+  );
 }

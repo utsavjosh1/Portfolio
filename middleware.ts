@@ -2,10 +2,8 @@ import { NextResponse } from "next/server"
 
 
 export function middleware() {
-  // Get the response
   const response = NextResponse.next()
 
-  // Add security headers
   response.headers.set("X-XSS-Protection", "1; mode=block")
   response.headers.set("X-Content-Type-Options", "nosniff")
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin")

@@ -1,62 +1,54 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import { ThemeProvider } from "@/components/theme-provider";
-import { Footer } from "@/components/footer";
+import { CursorEffect } from "@/components/ui/CursorEffect";
+import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
 import { FirebaseAnalytics } from "@/components/firebase-analytics";
 import { JsonLd } from "@/components/json-ld";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/data/config";
+import { dmSerif, dmMono, outfit } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: siteConfig.name,
+    default: `${siteConfig.name} — ${siteConfig.role}`,
     template: `%s | ${siteConfig.name}`,
   },
-  description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  authors: [{ name: siteConfig.author, url: siteConfig.url }],
-  creator: siteConfig.author,
+  description: siteConfig.bio,
+  keywords: [
+    "software engineer",
+    "full-stack developer",
+    "Go",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "AI",
+    "automation",
+  ],
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
   openGraph: {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    title: siteConfig.name,
-    description: siteConfig.description,
+    title: `${siteConfig.name} — ${siteConfig.role}`,
+    description: siteConfig.bio,
     siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: siteConfig.twitterHandle,
+    title: `${siteConfig.name} — ${siteConfig.role}`,
+    description: siteConfig.bio,
   },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -65,19 +57,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          inter.variable,
-        )}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex min-h-screen flex-col">
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </ThemeProvider>
+    <html
+      lang="en"
+      className={cn("dark", dmSerif.variable, dmMono.variable, outfit.variable)}
+    >
+      <body className="bg-[var(--bg)] text-[var(--text)] font-body font-light antialiased">
+        {/* <CursorEffect /> */}
+        <NoiseOverlay />
+        <div className="flex min-h-screen flex-col">
+          <main className="flex-1">{children}</main>
+        </div>
         <Analytics />
         <SpeedInsights />
         <FirebaseAnalytics />

@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/data/config";
 
 export function JsonLd() {
   const personJsonLd = {
@@ -6,18 +6,18 @@ export function JsonLd() {
     "@type": "Person",
     name: siteConfig.name,
     url: siteConfig.url,
-    image: `${siteConfig.url}/me.jpg`, // Assuming me.jpg is at root or update path
+    image: `${siteConfig.url}/me.jpg`,
     sameAs: [
-      siteConfig.links?.github,
-      siteConfig.links?.linkedin,
-      siteConfig.links?.twitter,
+      siteConfig.githubUrl,
+      siteConfig.linkedinUrl,
+      siteConfig.twitterUrl,
     ].filter(Boolean),
-    jobTitle: "Software Engineer",
+    jobTitle: siteConfig.role,
     worksFor: {
       "@type": "Organization",
       name: "Freelance / Self-Employed",
     },
-    description: siteConfig.description,
+    description: siteConfig.bio,
   };
 
   return (

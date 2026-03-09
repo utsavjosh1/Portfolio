@@ -63,7 +63,7 @@ export default function Hero() {
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-8 pt-4 border-t border-[var(--border)] opacity-0 animate-fade-up-7">
+            <div className="flex items-center gap-8 pt-4 opacity-0 animate-fade-up-7">
               {siteConfig.stats.map((stat) => (
                 <div key={stat.label}>
                   <span className="block text-2xl font-display text-[var(--text)]">

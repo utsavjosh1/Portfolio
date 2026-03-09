@@ -3,6 +3,7 @@ import { ArrowUpRight, Github } from "lucide-react";
 import { RevealWrapper } from "@/components/ui/RevealWrapper";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { projects } from "@/data/projects";
+import Image from "next/image";
 
 export default function Projects() {
   return (
@@ -27,14 +28,17 @@ export default function Projects() {
               >
                 {/* Visual Panel */}
                 <div
-                  className={`relative flex items-center justify-center min-h-[240px] md:min-h-[320px] bg-gradient-to-br ${project.gradient} transition-transform duration-500 group-hover:scale-[1.02] ${
+                  className={`relative flex items-center justify-center min-h-[240px] md:min-h-[320px] bg-gradient-to-br ${project.gradient} transition-transform duration-500 ${
                     index % 2 !== 0 ? "md:[direction:ltr]" : ""
                   }`}
                 >
-                  {/* <span className="text-6xl md:text-7xl transition-transform duration-500 group-hover:scale-110">
-                    {project.emoji}
-                  </span> */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] to-transparent opacity-30" />
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-500"
+                  />
                 </div>
 
                 {/* Info Panel */}

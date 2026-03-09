@@ -10,7 +10,7 @@ export function TerminalMockup() {
           <span className="block h-3 w-3 rounded-full bg-[var(--amber)]" />
           <span className="block h-3 w-3 rounded-full bg-green-500" />
         </div>
-        <span className="flex-1 text-center text-[11px] font-mono text-[var(--text-3)]">
+        <span className="flex-1 text-center items-center text-[11px] font-mono text-[var(--text-3)]">
           ~/developer.ts
         </span>
       </div>
@@ -42,7 +42,7 @@ export function TerminalMockup() {
           <span className="t-str">&quot;{siteConfig.location}&quot;</span>
           <span className="t-punct">,</span>
         </p>
-        <p className="pl-6">
+        {/* <p className="pl-6">
           <span className="t-key">focus</span>
           <span className="t-punct">:</span>{" "}
           <span className="t-bracket">[</span>
@@ -53,13 +53,13 @@ export function TerminalMockup() {
           <span className="t-str">&quot;DX&quot;</span>
           <span className="t-bracket">]</span>
           <span className="t-punct">,</span>
-        </p>
-        <p className="pl-6">
+        </p> */}
+        {/* <p className="pl-6">
           <span className="t-key">available</span>
           <span className="t-punct">:</span>{" "}
           <span className="t-bool">true</span>
           <span className="t-punct">,</span>
-        </p>
+        </p> */}
         <p>
           <span className="t-bracket">{"}"}</span>
           <span className="t-punct">;</span>

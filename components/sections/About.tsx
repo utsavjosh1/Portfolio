@@ -2,33 +2,6 @@ import { RevealWrapper } from "@/components/ui/RevealWrapper";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { siteConfig } from "@/data/config";
 
-const values = [
-  {
-    emoji: "⚡",
-    title: "Performance First",
-    description:
-      "Every millisecond counts. I build systems optimized for speed and efficiency.",
-  },
-  {
-    emoji: "🧩",
-    title: "Clean Architecture",
-    description:
-      "Modular, maintainable code that scales with your team and product.",
-  },
-  {
-    emoji: "🤖",
-    title: "AI-Driven",
-    description:
-      "Leveraging machine learning and LLMs to build intelligent, adaptive systems.",
-  },
-  {
-    emoji: "🔒",
-    title: "Reliability",
-    description:
-      "Battle-tested solutions with monitoring, alerting, and graceful error handling.",
-  },
-];
-
 export default function About() {
   return (
     <section id="about" className="py-24 bg-[var(--bg-2)]">
@@ -59,9 +32,9 @@ export default function About() {
 
             <RevealWrapper delay={100}>
               <h2 className="text-3xl md:text-4xl font-display leading-tight text-[var(--text)]">
-                Crafting digital experiences with{" "}
+                I build software and systems{" "}
                 <span className="italic text-accent block sm:inline">
-                  precision.
+                  that people rely on.
                 </span>
               </h2>
             </RevealWrapper>
@@ -73,48 +46,47 @@ export default function About() {
                   <strong className="text-[var(--text)] font-medium">
                     {siteConfig.name}
                   </strong>
-                  , a software engineer who thrives at the intersection of
-                  performance engineering and intelligent systems.
-                </p>
-                <p>
-                  My work spans from building{" "}
+                  , a full stack engineer with around{" "}
                   <strong className="text-[var(--text)] font-medium">
-                    real-time monitoring tools
-                  </strong>{" "}
-                  in Go to architecting{" "}
-                  <strong className="text-[var(--text)] font-medium">
-                    full-stack web platforms
-                  </strong>{" "}
-                  with Next.js and TypeScript. I believe in writing code that is
-                  not only functional but elegant.
+                    two years of professional experience
+                  </strong>
+                  . I enjoy working across the stack, though I tend to spend
+                  more of my time building and thinking about backend systems.
                 </p>
+
                 <p>
-                  When I&apos;m not coding, I&apos;m exploring open-source
-                  projects, experimenting with AI models, or optimizing systems
-                  to squeeze out every last bit of performance.
+                  Over the past few years I&apos;ve worked on a range of
+                  projects, from simple websites to full web applications. These
+                  include{" "}
+                  <strong className="text-[var(--text)] font-medium">
+                    booking systems for gaming sessions
+                  </strong>
+                  ,
+                  <strong className="text-[var(--text)] font-medium">
+                    {" "}
+                    chatbot systems with vector search
+                  </strong>
+                  , LMS platforms, and tools like{" "}
+                  <strong className="text-[var(--text)] font-medium">
+                    Postly
+                  </strong>
+                  , which combines scraping, automation, a Discord bot, and
+                  chatbot functionality.
+                </p>
+
+                <p>
+                  When I&apos;m not coding I&apos;m usually{" "}
+                  <strong className="text-[var(--text)] font-medium">
+                    exploring music
+                  </strong>{" "}
+                  or spending time{" "}
+                  <strong className="text-[var(--text)] font-medium">
+                    learning new technologies
+                  </strong>
+                  .
                 </p>
               </div>
             </RevealWrapper>
-
-            {/* Values Grid */}
-            {/* <RevealWrapper delay={300}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                {values.map((value) => (
-                  <div
-                    key={value.title}
-                    className="group bg-surface border border-[var(--border)] rounded-xl p-5 transition-all duration-300 hover:border-[var(--border-2)] hover:-translate-y-1"
-                  >
-                    <span className="text-2xl mb-3 block">{value.emoji}</span>
-                    <h3 className="font-body font-medium text-sm text-[var(--text)] mb-1">
-                      {value.title}
-                    </h3>
-                    <p className="text-xs text-[var(--text-3)] leading-relaxed">
-                      {value.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </RevealWrapper> */}
           </div>
         </div>
       </div>

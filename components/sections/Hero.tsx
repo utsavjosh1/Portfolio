@@ -37,11 +37,9 @@ export default function Hero() {
             </div>
 
             {/* Headline */}
-            <h1 className="opacity-0 animate-fade-up-1">
-              <span className="block text-4xl sm:text-5xl md:text-6xl font-display font-normal leading-[1.1] text-[var(--text)]">
-                Building things{" "}
-              </span>
-              <span className="block text-4xl sm:text-5xl md:text-6xl font-display italic leading-[1.1] text-accent">
+            <h1 className="opacity-0 animate-fade-up-1 text-4xl sm:text-5xl md:text-6xl font-display leading-[1.1] text-[var(--text)]">
+              Building things{" "}
+              <span className="italic text-accent block sm:inline">
                 that matter.
               </span>
             </h1>

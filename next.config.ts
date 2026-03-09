@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // @ts-ignore - Required at root in Next.js 16
   cacheComponents: true,
+  // @ts-ignore - Required for cross-origin dev access (Inter-device testing)
+  allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS
+    ? process.env.ALLOWED_DEV_ORIGINS.split(",").map((v) => v.trim())
+    : ["http://localhost:3000"],
   images: {
     formats: ["image/webp", "image/avif"],
     deviceSizes: [480, 768, 1080, 1440],

@@ -60,7 +60,9 @@ export default function About() {
             <RevealWrapper delay={100}>
               <h2 className="text-3xl md:text-4xl font-display leading-tight text-[var(--text)]">
                 Crafting digital experiences with{" "}
-                <span className="italic text-accent">precision</span>
+                <span className="italic text-accent block sm:inline">
+                  precision.
+                </span>
               </h2>
             </RevealWrapper>
 

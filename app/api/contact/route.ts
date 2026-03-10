@@ -5,9 +5,10 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { Resend } from "resend";
 import { ContactFormEmail } from "@/components/emails/contact-form-email";
 import { waitUntil } from "@vercel/functions";
+import { env } from "@/lib/env";
 
 // Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(env.resendApiKey);
 
 // Validation schema for contact form
 const contactSchema = z.object({
@@ -43,8 +44,8 @@ export async function POST(request: NextRequest) {
             // Email to Admin
             emailPromises.push(
               resend.emails.send({
-                from: "Portfolio <onboarding@resend.dev>",
-                to: "hello@joshiutsav.com",
+                from: "Portfolio <no-reply@joshiutsav.com>",
+                to: process.env.contactEmail || "",
                 subject: `New Message from ${validatedData.name}`,
                 react: ContactFormEmail({
                   name: validatedData.name,
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
             // Email to User
             emailPromises.push(
               resend.emails.send({
-                from: "Utsav Joshi <onboarding@resend.dev>",
+                from: "Utsav Joshi <no-reply@joshiutsav.com>",
                 to: validatedData.email,
                 subject: "Thanks for getting in touch!",
                 react: ContactFormEmail({

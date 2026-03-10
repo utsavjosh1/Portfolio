@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/data/config";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||

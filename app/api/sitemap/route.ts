@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/data/config";
 
 const staticRoutes = [
   {

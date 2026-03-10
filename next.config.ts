@@ -1,9 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable Cache Components (Partial Prerendering)
+  // @ts-ignore - Required at root in Next.js 16
   cacheComponents: true,
-
+  // @ts-ignore - Required for cross-origin dev access (Inter-device testing)
+  allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS
+    ? process.env.ALLOWED_DEV_ORIGINS.split(",").map((v) => v.trim())
+    : ["http://localhost:3000"],
   images: {
     formats: ["image/webp", "image/avif"],
     deviceSizes: [480, 768, 1080, 1440],
@@ -39,7 +42,7 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' https:; frame-src 'self' https:;",
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://va.vercel-scripts.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: https://vitals.vercel-insights.com; media-src 'self' https:; frame-src 'self' https:;",
           },
         ],
       },

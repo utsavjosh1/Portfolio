@@ -1,294 +1,340 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
-export const runtime = "edge";
+// runtime = 'edge' removed for cacheComponents compatibility
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
-    // Extract parameters
-    const title = searchParams.get('title') || 'Utsav Joshi';
-    const subtitle = searchParams.get('subtitle') || 'Full Stack Developer & Software Engineer';
-    const type = searchParams.get('type') || 'default'; // default, project, blog, experience
-    const tags = searchParams.get('tags')?.split(',') || ['React', 'Next.js', 'TypeScript'];
-    const description = searchParams.get('description');
-    const date = searchParams.get('date');
-    const readingTime = searchParams.get('readingTime');
 
-    // Dynamic background based on type
-    const getBackground = (type: string) => {
-      switch (type) {
-        case 'project':
-          return "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
-        case 'blog':
-          return "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)";
-        case 'experience':
-          return "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)";
-        default:
-          return "linear-gradient(135deg, #000000 0%, #1a1a1a 100%)";
-      }
-    };
+    // Params
+    const title = searchParams.get("title") || "Utsav Joshi";
+    const subtitle = searchParams.get("subtitle") || "Software Engineer";
+    const description =
+      searchParams.get("description") || "Building high-performance systems.";
+    const style = searchParams.get("style") || "bento"; // 'terminal' | 'bento' | 'abstract'
+    const tags = (
+      searchParams.get("tags") || "Engineering,System Design,Next.js"
+    ).split(",");
 
-    // Dynamic icon based on type
-    const getIcon = (type: string) => {
-      switch (type) {
-        case 'project':
-          return '🚀';
-        case 'blog':
-          return '📝';
-        case 'experience':
-          return '💼';
-        default:
-          return '👨‍💻';
-      }
-    };
+    // Shared config
+    const width = 1200;
+    const height = 630;
 
-    const response = new ImageResponse(
-      (
+    // --- STYLES ---
+
+    // 1. TERMINAL STYLE
+    if (style === "terminal") {
+      return new ImageResponse(
         <div
           style={{
-            background: getBackground(type),
-            width: "100%",
             height: "100%",
+            width: "100%",
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
+            backgroundColor: "#0a0a0a",
+            color: "#22c55e",
+            fontFamily: "monospace",
+            padding: "40px",
             justifyContent: "space-between",
-            padding: "60px",
-            fontFamily: "system-ui, -apple-system, sans-serif",
           }}
         >
-          {/* Header */}
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "20px",
-              marginBottom: "40px",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "40px",
-              }}
-            >
-              {getIcon(type)}
-            </div>
-            <div
-              style={{
-                fontSize: "24px",
-                color: "#ffffff",
-                opacity: 0.9,
-                textTransform: "uppercase",
-                letterSpacing: "2px",
-                fontWeight: "600",
-              }}
-            >
-              {type === 'default' ? 'Portfolio' : type}
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              justifyContent: "center",
-              flex: 1,
-              width: "100%",
-            }}
-          >
-            <h1
-              style={{
-                fontSize: title.length > 30 ? "48px" : "64px",
-                fontWeight: "bold",
-                color: "#ffffff",
-                marginBottom: "20px",
-                lineHeight: 1.1,
-                maxWidth: "90%",
-              }}
-            >
-              {title}
-            </h1>
-            
-            {subtitle && (
-              <h2
-                style={{
-                  fontSize: "32px",
-                  color: "#ffffff",
-                  opacity: 0.8,
-                  marginBottom: description ? "20px" : "40px",
-                  fontWeight: "400",
-                  maxWidth: "90%",
-                }}
-              >
-                {subtitle}
-              </h2>
-            )}
-
-            {description && (
-              <p
-                style={{
-                  fontSize: "24px",
-                  color: "#ffffff",
-                  opacity: 0.7,
-                  marginBottom: "40px",
-                  lineHeight: 1.4,
-                  maxWidth: "90%",
-                }}
-              >
-                {description.length > 120 ? description.substring(0, 120) + '...' : description}
-              </p>
-            )}
-
-            {/* Meta information for blog posts */}
-            {(date || readingTime) && (
-              <div
-                style={{
-                  display: "flex",
-                  gap: "30px",
-                  marginBottom: "30px",
-                  fontSize: "20px",
-                  color: "#ffffff",
-                  opacity: 0.7,
-                }}
-              >
-                {date && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    📅 {new Date(date).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
-                  </div>
-                )}
-                {readingTime && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    ⏱️ {readingTime}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Tags */}
-            <div
-              style={{
-                display: "flex",
-                gap: "15px",
-                flexWrap: "wrap",
-                maxWidth: "90%",
-              }}
-            >
-              {tags.slice(0, 4).map((tag, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: "12px 24px",
-                    backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    borderRadius: "25px",
-                    color: "#ffffff",
-                    fontSize: "18px",
-                    fontWeight: "500",
-                    backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                  }}
-                >
-                  {tag.trim()}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-              marginTop: "40px",
-            }}
+            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "15px",
+                gap: "10px",
+                color: "#6b7280",
               }}
             >
-              <div
-                style={{
-                  width: "60px",
-                  height: "60px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "24px",
-                }}
-              >
-                👨‍💻
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "20px",
-                    color: "#ffffff",
-                    fontWeight: "600",
-                  }}
-                >
-                  Utsav Joshi
-                </div>
-                <div
-                  style={{
-                    fontSize: "16px",
-                    color: "#ffffff",
-                    opacity: 0.7,
-                  }}
-                >
-                  www.joshiutsav.com
-                </div>
-              </div>
+              <span>root@portfolio</span>
+              <span>~/{searchParams.get("type") || "project"}</span>
             </div>
-
-            {/* Social links indicator */}
             <div
               style={{
                 display: "flex",
-                gap: "10px",
-                opacity: 0.6,
+                flexDirection: "column",
+                marginTop: "20px",
               }}
             >
-              <div style={{ fontSize: "24px" }}>🔗</div>
-              <div style={{ fontSize: "24px" }}>💼</div>
-              <div style={{ fontSize: "24px" }}>📧</div>
+              <span
+                style={{ color: "#fff", fontSize: "60px", fontWeight: "bold" }}
+              >
+                {">"} {title}
+              </span>
+              <span
+                style={{
+                  color: "#9ca3af",
+                  fontSize: "30px",
+                  marginTop: "10px",
+                }}
+              >
+                {subtitle}
+              </span>
             </div>
           </div>
-        </div>
-      ),
-      {
-        width: 1200,
-        height: 630,
-        headers: {
-          "Content-Type": "image/png",
-          "Cache-Control": "public, max-age=31536000, immutable",
-        },
-      }
-    );
 
-    return response;
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              borderTop: "1px solid #374151",
+              paddingTop: "20px",
+            }}
+          >
+            <div style={{ display: "flex", gap: "20px" }}>
+              {tags.slice(0, 3).map((tag, i) => (
+                <span
+                  key={i}
+                  style={{
+                    background: "#1f2937",
+                    padding: "5px 15px",
+                    borderRadius: "4px",
+                    color: "#e5e7eb",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                color: "#22c55e",
+              }}
+            >
+              <div
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  background: "#22c55e",
+                }}
+              ></div>
+              <span>System Operational</span>
+            </div>
+          </div>
+        </div>,
+        { width, height },
+      );
+    }
+
+    // 2. ABSTRACT STYLE
+    if (style === "abstract") {
+      return new ImageResponse(
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#000000",
+            color: "white",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Gradient Orb */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "600px",
+              height: "600px",
+              background:
+                "radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 70%)",
+              borderRadius: "50%",
+              filter: "blur(40px)",
+            }}
+          ></div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              zIndex: 10,
+              gap: "20px",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "24px",
+                letterSpacing: "4px",
+                textTransform: "uppercase",
+                color: "#a1a1aa",
+              }}
+            >
+              {subtitle}
+            </span>
+            <span
+              style={{
+                fontSize: "80px",
+                fontWeight: "900",
+                letterSpacing: "-2px",
+                lineHeight: "1",
+              }}
+            >
+              {title}
+            </span>
+            <div
+              style={{
+                width: "100px",
+                height: "2px",
+                background: "white",
+                marginTop: "20px",
+              }}
+            ></div>
+          </div>
+        </div>,
+        { width, height },
+      );
+    }
+
+    // 3. BENTO STYLE (Default)
+    return new ImageResponse(
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          backgroundColor: "#050505",
+          color: "white",
+          padding: "40px",
+          gap: "20px",
+        }}
+      >
+        {/* Left Panel */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            flex: 2,
+            background: "#121212",
+            borderRadius: "24px",
+            padding: "40px",
+            border: "1px solid #262626",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: "20px",
+                color: "#a1a1aa",
+                marginBottom: "10px",
+              }}
+            >
+              {subtitle}
+            </div>
+            <div
+              style={{
+                fontSize: "60px",
+                fontWeight: "bold",
+                lineHeight: "1.1",
+              }}
+            >
+              {title}
+            </div>
+            <div
+              style={{
+                fontSize: "24px",
+                color: "#d4d4d4",
+                marginTop: "20px",
+                opacity: 0.8,
+              }}
+            >
+              {description}
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            {tags.map((tag, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "100px",
+                  border: "1px solid #404040",
+                  background: "rgba(255,255,255,0.05)",
+                  fontSize: "16px",
+                }}
+              >
+                {tag}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Panel */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 1,
+            background: "#121212",
+            borderRadius: "24px",
+            border: "1px solid #262626",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Decorative Grid */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                "linear-gradient(#262626 1px, transparent 1px), linear-gradient(90deg, #262626 1px, transparent 1px)",
+              backgroundSize: "20px 20px",
+              opacity: 0.2,
+            }}
+          ></div>
+
+          <div
+            style={{
+              fontSize: "120px",
+              fontWeight: "900",
+              background: "linear-gradient(to bottom right, #fff, #666)",
+              backgroundClip: "text",
+              color: "transparent",
+              zIndex: 10,
+            }}
+          >
+            UJ
+          </div>
+        </div>
+      </div>,
+      { width, height },
+    );
   } catch (error) {
-    console.error('Error generating OG image:', error);
-    
-    // Return a fallback image or error response
-    return new Response('Error generating image', { status: 500 });
+    return new ImageResponse(
+      <div
+        style={{
+          background: "black",
+          color: "white",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Error
+      </div>,
+      { width: 1200, height: 630 },
+    );
   }
 }

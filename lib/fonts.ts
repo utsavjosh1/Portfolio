@@ -1,6 +1,6 @@
-import { DM_Serif_Display, DM_Mono, Outfit } from "next/font/google";
+import { Instrument_Serif, JetBrains_Mono, Inter } from "next/font/google";
 
-export const dmSerif = DM_Serif_Display({
+export const instrumentSerif = Instrument_Serif({
   weight: ["400"],
   style: ["normal", "italic"],
   subsets: ["latin"],
@@ -8,14 +8,14 @@ export const dmSerif = DM_Serif_Display({
   display: "swap",
 });
 
-export const dmMono = DM_Mono({
+export const jetbrainsMono = JetBrains_Mono({
   weight: ["300", "400", "500"],
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
 });
 
-export const outfit = Outfit({
+export const inter = Inter({
   weight: ["300", "400", "500", "600"],
   subsets: ["latin"],
   variable: "--font-body",

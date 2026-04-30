@@ -31,17 +31,16 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/utsavjosh1/postly",
     liveUrl: "https://postly.learnest.asia/",
   },
-  // {
-  //   id: "02",
-  //   type: "EdTech Platform",
-  //   title: "Learnest",
-  //   image: "/postly.png",
-  //   description:
-  //     "A modern Learning Management System focused on intuitive UX and seamless content delivery. Features real-time progress tracking, Stripe-powered payments, and a fully responsive design.",
-  //   tags: ["Next.js", "TypeScript", "Prisma", "Stripe"],
-  //   gradient: "from-[#0a2818] to-[#0d4528]",
-  //   // emoji: "📚",
-  //   githubUrl: "https://github.com/utsavjosh1/learnest",
-  //   liveUrl: "https://learnest.asia/",
-  // },
+  {
+    id: "02",
+    type: "EdTech Platform",
+    title: "Learnest",
+    image: "/postly.png",
+    description:
+      "A modern Learning Management System focused on intuitive UX and seamless content delivery. Features real-time progress tracking, Stripe-powered payments, and a fully responsive design.",
+    tags: ["Next.js", "TypeScript", "Prisma", "Stripe"],
+    gradient: "from-[#0a2818] to-[#0d4528]",
+    githubUrl: "https://github.com/utsavjosh1/learnest",
+    liveUrl: "https://learnest.asia/",
+  },
 ];

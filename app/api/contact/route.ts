@@ -2,13 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { Resend } from "resend";
-import { ContactFormEmail } from "@/components/emails/contact-form-email";
 import { waitUntil } from "@vercel/functions";
-import { env } from "@/lib/env";
-
-// Initialize Resend
-const resend = new Resend(env.resendApiKey);
 
 // Validation schema for contact form
 const contactSchema = z.object({
@@ -25,71 +19,28 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // 1. Instant Validation (The only thing that blocks the response)
+    // 1. Instant Validation
     const validatedData = contactSchema.parse(body);
 
-    // 2. Offload heavy network IO to background tasks
-    // This allows us to return a response to the user in < 50ms
+    // 2. Offload DB write to background
     waitUntil(
       (async () => {
         try {
-          // Parallelize Database and Email operations in the background
-          const dbPromise = addDoc(collection(db, "contact_submissions"), {
+          await addDoc(collection(db, "contact_submissions"), {
             ...validatedData,
             createdAt: serverTimestamp(),
           });
-
-          const emailPromises = [];
-          if (process.env.RESEND_API_KEY) {
-            // Email to Admin
-            emailPromises.push(
-              resend.emails.send({
-                from: "Portfolio <no-reply@joshiutsav.com>",
-                to: process.env.contactEmail || "",
-                subject: `New Message from ${validatedData.name}`,
-                react: ContactFormEmail({
-                  name: validatedData.name,
-                  email: validatedData.email,
-                  message: validatedData.message,
-                  type: "admin",
-                }),
-              }),
-            );
-
-            // Email to User
-            emailPromises.push(
-              resend.emails.send({
-                from: "Utsav Joshi <no-reply@joshiutsav.com>",
-                to: validatedData.email,
-                subject: "Thanks for getting in touch!",
-                react: ContactFormEmail({
-                  name: validatedData.name,
-                  email: validatedData.email,
-                  message: validatedData.message,
-                  type: "user",
-                }),
-              }),
-            );
-          }
-
-          // Await all background tasks to ensure they complete
-          await Promise.all([
-            dbPromise,
-            ...emailPromises.map((p) =>
-              p.catch((e) => console.error("Background Email error:", e)),
-            ),
-          ]);
         } catch (bgError) {
           console.error("Background processing failed:", bgError);
         }
       })(),
     );
 
-    // 3. Immediate Response (Under 50ms)
+    // 3. Immediate Response
     return NextResponse.json(
       {
         success: true,
-        message: "Message received! I'll get back to you soon.",
+        message: "Message received. I'll get back to you soon.",
       },
       { status: 201 },
     );

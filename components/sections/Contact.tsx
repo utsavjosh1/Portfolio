@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Github, Linkedin, Mail, Download, Check } from "lucide-react";
+import { Github, Linkedin, Mail, Download } from "lucide-react";
 import { RevealWrapper } from "@/components/ui/RevealWrapper";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { siteConfig } from "@/data/config";
@@ -34,27 +34,27 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative py-24 bg-[var(--bg-2)] overflow-hidden"
+      className="relative py-24 bg-[var(--bg)] overflow-hidden"
     >
       {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[var(--accent-glow)] blur-[200px] opacity-20 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[var(--accent-glow)] blur-[200px] opacity-15 pointer-events-none" />
 
       <div className="relative z-10 page-container max-w-2xl mx-auto text-center">
         <RevealWrapper>
-          <SectionLabel label="Get In Touch" align="center" />
+          <SectionLabel label="Contact" align="center" />
         </RevealWrapper>
 
         <RevealWrapper delay={100}>
           <h2 className="text-3xl md:text-5xl font-display text-[var(--text)] mt-6 mb-4">
             Let&apos;s build something{" "}
-            <span className="italic text-accent">remarkable</span>
+            <span className="italic text-accent">together.</span>
           </h2>
         </RevealWrapper>
 
         <RevealWrapper delay={200}>
           <p className="text-[var(--text-2)] font-body font-light mb-10 max-w-[50ch] mx-auto">
-            I&apos;m always open to discussing new projects, creative ideas, or
-            opportunities to be part of something special.
+            Have a project in mind or just want to chat? I&apos;m always open to
+            interesting conversations and new challenges.
           </p>
         </RevealWrapper>
 
@@ -87,10 +87,7 @@ export default function Contact() {
               className="text-2xl md:text-3xl font-display text-[var(--text)] hover:text-accent transition-colors cursor-pointer"
             >
               {copied ? (
-                <span className="flex items-center gap-2 justify-center text-accent">
-                  <Check className="h-6 w-6" />
-                  Copied to clipboard!
-                </span>
+                <span className="text-accent">Copied!</span>
               ) : (
                 siteConfig.email
               )}

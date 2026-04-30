@@ -6,12 +6,12 @@ export default function About() {
   return (
     <section id="about" className="py-24 bg-[var(--bg-2)]">
       <div className="page-container">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-16 items-start">
-          {/* Visual Column — Designed initials element */}
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10 lg:gap-16 items-start">
+          {/* Visual Column — Compact initials element */}
           <RevealWrapper>
-            <div className="relative aspect-[4/5] rounded-2xl bg-surface overflow-hidden border border-[var(--border)]">
+            <div className="relative aspect-square max-w-[280px] rounded-2xl bg-surface overflow-hidden border border-[var(--border)]">
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[120px] sm:text-[140px] font-display font-normal leading-none bg-gradient-to-br from-[var(--text)] to-[var(--text-3)] bg-clip-text text-transparent select-none">
+                <span className="text-[80px] font-display font-normal leading-none bg-gradient-to-br from-[var(--text)] to-[var(--text-3)] bg-clip-text text-transparent select-none">
                   UJ
                 </span>
               </div>
@@ -38,7 +38,9 @@ export default function About() {
             <RevealWrapper delay={100}>
               <h2 className="text-3xl md:text-4xl font-display leading-tight text-[var(--text)]">
                 I build software that{" "}
-                <span className="italic text-accent">people rely on.</span>
+                <span className="italic text-accent">
+                  people rely on.
+                </span>
               </h2>
             </RevealWrapper>
 

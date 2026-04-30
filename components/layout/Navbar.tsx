@@ -8,11 +8,8 @@ import { siteConfig } from "@/data/config";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Work", href: "#projects" },
-  { label: "Skills", href: "#skills" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", href: "/#projects" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export default function Navbar() {
@@ -30,15 +27,10 @@ export default function Navbar() {
       <div className="page-container flex items-center justify-between h-16">
         {/* Logo */}
         <Link
-          href="#home"
+          href="/"
           className="flex items-center gap-2 font-mono text-sm text-accent tracking-wide group"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-pulse-dot absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-          </span>
-          {siteConfig.name.split(" ")[0].toLowerCase()}
-          <span className="text-[var(--text-3)]">_</span>
+          {siteConfig.name}
         </Link>
 
         {/* Desktop Links */}

@@ -1,36 +1,29 @@
-"use client";
-
-import { useState } from "react";
-import { Github, Linkedin, Mail, Download } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { RevealWrapper } from "@/components/ui/RevealWrapper";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { siteConfig } from "@/data/config";
 
 const socialLinks = [
-  { label: "Email", href: `mailto:${siteConfig.email}`, icon: Mail },
+  {
+    label: "Email",
+    href: `mailto:${siteConfig.email}`,
+    icon: Mail,
+  },
   {
     label: "LinkedIn",
     href: siteConfig.linkedinUrl,
     icon: Linkedin,
     external: true,
   },
-  { label: "GitHub", href: siteConfig.githubUrl, icon: Github, external: true },
-  { label: "Download CV", href: siteConfig.cvUrl, icon: Download },
+  {
+    label: "GitHub",
+    href: siteConfig.githubUrl,
+    icon: Github,
+    external: true,
+  },
 ];
 
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(siteConfig.email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback: do nothing
-    }
-  };
-
   return (
     <section
       id="contact"
@@ -60,7 +53,7 @@ export default function Contact() {
 
         {/* Social Link Pills */}
         <RevealWrapper delay={300}>
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="flex flex-wrap justify-center gap-3">
             {socialLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -76,25 +69,6 @@ export default function Contact() {
                 </a>
               );
             })}
-          </div>
-        </RevealWrapper>
-
-        {/* Email Display */}
-        <RevealWrapper delay={400}>
-          <div className="space-y-2">
-            <button
-              onClick={handleCopyEmail}
-              className="text-2xl md:text-3xl font-display text-[var(--text)] hover:text-accent transition-colors cursor-pointer"
-            >
-              {copied ? (
-                <span className="text-accent">Copied!</span>
-              ) : (
-                siteConfig.email
-              )}
-            </button>
-            <p className="font-mono text-[11px] text-[var(--text-3)]">
-              ↑ Click to copy
-            </p>
           </div>
         </RevealWrapper>
       </div>

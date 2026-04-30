@@ -7,6 +7,7 @@ import Skills from "@/components/sections/Skills";
 import Projects from "@/components/sections/Projects";
 import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
+import BlogPreviewWrapper from "@/components/sections/BlogPreviewWrapper";
 import { siteConfig } from "@/data/config";
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function Home() {
       <Projects />
       <Skills />
       <Testimonials />
+      <BlogPreviewWrapper />
       <Contact />
       <Footer />
     </>

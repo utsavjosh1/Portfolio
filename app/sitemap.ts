@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     : siteConfig.url;
 
   // Main pages
-  const routes = ["", "/contact"].map((route) => ({
+  const routes = ["", "/contact", "/blog"].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,

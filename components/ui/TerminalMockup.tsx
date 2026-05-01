@@ -42,24 +42,24 @@ export function TerminalMockup() {
           <span className="t-str">&quot;{siteConfig.location}&quot;</span>
           <span className="t-punct">,</span>
         </p>
-        {/* <p className="pl-6">
+        <p className="pl-6">
           <span className="t-key">focus</span>
           <span className="t-punct">:</span>{" "}
           <span className="t-bracket">[</span>
-          <span className="t-str">&quot;Performance&quot;</span>
+          <span className="t-str">&quot;Backend&quot;</span>
           <span className="t-punct">,</span>{" "}
-          <span className="t-str">&quot;Scalability&quot;</span>
+          <span className="t-str">&quot;AI&quot;</span>
           <span className="t-punct">,</span>{" "}
-          <span className="t-str">&quot;DX&quot;</span>
+          <span className="t-str">&quot;Automation&quot;</span>
           <span className="t-bracket">]</span>
           <span className="t-punct">,</span>
-        </p> */}
-        {/* <p className="pl-6">
+        </p>
+        <p className="pl-6">
           <span className="t-key">available</span>
           <span className="t-punct">:</span>{" "}
           <span className="t-bool">true</span>
           <span className="t-punct">,</span>
-        </p> */}
+        </p>
         <p>
           <span className="t-bracket">{"}"}</span>
           <span className="t-punct">;</span>

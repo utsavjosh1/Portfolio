@@ -8,11 +8,8 @@ import { siteConfig } from "@/data/config";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", href: "/#projects" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export default function Navbar() {
@@ -23,22 +20,17 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-[rgba(13,13,15,0.95)] backdrop-blur-xl border-b border-[var(--border)]"
+          ? "bg-[rgba(9,9,11,0.95)] backdrop-blur-xl border-b border-[var(--border)]"
           : "bg-transparent"
       }`}
     >
       <div className="page-container flex items-center justify-between h-16">
         {/* Logo */}
         <Link
-          href="#home"
+          href="/"
           className="flex items-center gap-2 font-mono text-sm text-accent tracking-wide group"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-pulse-dot absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-          </span>
-          {siteConfig.name.split(" ")[0].toLowerCase()}
-          <span className="text-[var(--text-3)]">_</span>
+          {siteConfig.name}
         </Link>
 
         {/* Desktop Links */}
@@ -54,7 +46,7 @@ export default function Navbar() {
             </Link>
           ))}
           <Button variant="outline" size="sm" asChild>
-            <Link href={`mailto:${siteConfig.email}`}>Let&apos;s Talk</Link>
+            <Link href={`mailto:${siteConfig.email}`}>Say hello</Link>
           </Button>
         </div>
 
@@ -92,7 +84,7 @@ export default function Navbar() {
               asChild
               className="self-start mt-2"
             >
-              <Link href={`mailto:${siteConfig.email}`}>Let&apos;s Talk</Link>
+              <Link href={`mailto:${siteConfig.email}`}>Say hello</Link>
             </Button>
           </div>
         </div>

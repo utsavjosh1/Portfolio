@@ -38,8 +38,8 @@ export default function Contact() {
         </RevealWrapper>
 
         <RevealWrapper delay={100}>
-          <h2 className="text-3xl md:text-5xl font-display text-[var(--text)] mt-6 mb-4">
-            Let&apos;s build something{" "}
+          <h2 className="text-3xl md:text-5xl font-display text-[var(--text)] mt-6 mb-4 lowercase">
+            let&apos;s build something{" "}
             <span className="italic text-accent">together.</span>
           </h2>
         </RevealWrapper>

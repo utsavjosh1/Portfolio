@@ -12,8 +12,8 @@ export default function Projects() {
         <RevealWrapper>
           <div className="space-y-4 mb-16">
             <SectionLabel label="Selected Work" />
-            <h2 className="text-3xl md:text-4xl font-display text-[var(--text)]">
-              Projects I&apos;ve{" "}
+            <h2 className="text-3xl md:text-4xl font-display text-[var(--text)] lowercase">
+              projects i&apos;ve{" "}
               <span className="italic text-accent">built.</span>
             </h2>
           </div>

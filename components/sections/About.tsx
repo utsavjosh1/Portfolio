@@ -36,8 +36,8 @@ export default function About() {
             </RevealWrapper>
 
             <RevealWrapper delay={100}>
-              <h2 className="text-3xl md:text-4xl font-display leading-tight text-[var(--text)]">
-                I build software that{" "}
+              <h2 className="text-3xl md:text-4xl font-display leading-tight text-[var(--text)] lowercase">
+                i build software that{" "}
                 <span className="italic text-accent">
                   people rely on.
                 </span>

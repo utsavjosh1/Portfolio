@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef, useState } from "react";
 import {
   Code,
   Layout,
@@ -18,14 +21,74 @@ const iconMap: Record<string, React.ReactNode> = {
   BrainCircuit: <BrainCircuit className="h-5 w-5" />,
 };
 
+function SkillCard({ category, index }: { category: any; index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    setMousePos({ x });
+  };
+
+  return (
+    <RevealWrapper delay={index * 80}>
+      <div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        className="group relative bg-surface border border-[var(--border)] rounded-xl p-6 transition-all duration-300 overflow-hidden h-full flex flex-col"
+      >
+        {/* Cursor-following highlight line */}
+        <div
+          className="absolute top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent transition-opacity duration-300 pointer-events-none"
+          style={{
+            left: `${mousePos.x - 100}px`,
+            width: "200px",
+            opacity: isHovering ? 1 : 0,
+          }}
+        />
+
+        {/* Static faint line for consistency when not hovering */}
+        <div className="absolute top-0 inset-x-0 h-px bg-[var(--border)] opacity-20" />
+
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[var(--accent-dim)] text-accent shrink-0">
+            {iconMap[category.icon] || <Code className="h-5 w-5" />}
+          </div>
+          <h3 className="font-body font-medium text-sm text-[var(--text)]">
+            {category.title}
+          </h3>
+        </div>
+
+        {/* Skill Tags */}
+        <div className="flex flex-wrap gap-1.5 flex-1">
+          {category.skills.map((skill: string) => (
+            <span
+              key={skill}
+              className="px-2.5 py-1 text-[11px] font-mono rounded-full bg-[var(--bg-3)] border border-[var(--border)] text-[var(--text-2)] transition-all duration-200 hover:border-accent hover:text-accent hover:bg-[var(--accent-dim)] h-fit"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+    </RevealWrapper>
+  );
+}
+
 export default function Skills() {
   return (
     <section id="skills" className="py-24 bg-[var(--bg-2)]">
       <div className="page-container">
         <RevealWrapper>
           <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-4xl font-display text-[var(--text)]">
-              Technical <span className="italic text-accent">stack.</span>
+            <h2 className="text-3xl md:text-4xl font-display text-[var(--text)] lowercase">
+              technical <span className="italic text-accent">stack.</span>
             </h2>
             <p className="text-[var(--text-2)] font-body font-light max-w-[40ch] mx-auto">
               Tools and technologies I use daily.
@@ -35,34 +98,7 @@ export default function Skills() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-fr">
           {skillCategories.map((category, index) => (
-            <RevealWrapper key={category.title} delay={index * 80}>
-              <div className="group relative bg-surface border border-[var(--border)] rounded-xl p-6 transition-all duration-300 overflow-hidden h-full flex flex-col">
-                {/* Top highlight line */}
-                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                {/* Header */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-[var(--accent-dim)] text-accent shrink-0">
-                    {iconMap[category.icon] || <Code className="h-5 w-5" />}
-                  </div>
-                  <h3 className="font-body font-medium text-sm text-[var(--text)]">
-                    {category.title}
-                  </h3>
-                </div>
-
-                {/* Skill Tags */}
-                <div className="flex flex-wrap gap-1.5 flex-1">
-                  {category.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-2.5 py-1 text-[11px] font-mono rounded-full bg-[var(--bg-3)] border border-[var(--border)] text-[var(--text-2)] transition-all duration-200 hover:border-accent hover:text-accent hover:bg-[var(--accent-dim)] h-fit"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </RevealWrapper>
+            <SkillCard key={category.title} category={category} index={index} />
           ))}
         </div>
       </div>

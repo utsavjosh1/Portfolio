@@ -8,31 +8,31 @@ export const skillCategories: SkillCategory[] = [
   {
     title: "Languages",
     icon: "Code",
-    skills: ["JavaScript", "TypeScript", "SQL", "Python", "Go"],
+    skills: ["TypeScript", "Go", "Python", "SQL", "JavaScript"],
   },
   {
-    title: "Frontend",
+    title: "Frontend & Design",
     icon: "Layout",
-    skills: ["React", "Next.js", "Tailwind CSS", "HTML/CSS"],
+    skills: ["React 19", "Next.js 16", "Tailwind CSS v4", "MUI", "Radix UI"],
   },
   {
-    title: "Backend",
+    title: "Backend & Runtime",
     icon: "Server",
-    skills: ["Express", "Node.js", "REST", "Gin", "gRPC"],
+    skills: ["Go (Gin)", "Hono", "Node.js", "Bun", "Prisma", "Supabase"],
   },
   {
-    title: "Databases",
-    icon: "Database",
-    skills: ["PostgreSQL", "Redis", "MongoDB", "Prisma"],
-  },
-  {
-    title: "Cloud & DevOps",
-    icon: "Cloud",
-    skills: ["AWS", "Docker", "Kubernetes", "GitHub Actions", "Vercel"],
-  },
-  {
-    title: "AI & Tools",
+    title: "AI & Real-time",
     icon: "BrainCircuit",
-    skills: ["OpenAI API", "ChromaDB", "LangChain", "Git", "Linux"],
+    skills: ["RAG", "pgvector", "OpenAI API", "LiveKit", "BullMQ", "RabbitMQ"],
+  },
+  {
+    title: "Cloud & Infrastructure",
+    icon: "Cloud",
+    skills: ["AWS Lambda", "Docker", "Prometheus", "Grafana", "Vercel"],
+  },
+  {
+    title: "FinTech & Payments",
+    icon: "CreditCard",
+    skills: ["Stripe", "Cashfree", "Razorpay", "GSTR Engines", "E-Invoicing"],
   },
 ];

@@ -6,31 +6,33 @@ export default function About() {
   return (
     <section id="about" className="py-24 bg-[var(--bg-2)]">
       <div className="page-container">
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10 lg:gap-16 items-start">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
           {/* Visual Column — Compact initials element */}
-          <RevealWrapper>
-            <div className="relative aspect-square max-w-[280px] rounded-2xl bg-surface overflow-hidden border border-[var(--border)]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[80px] font-display font-normal leading-none bg-gradient-to-br from-[var(--text)] to-[var(--text-3)] bg-clip-text text-transparent select-none">
-                  UJ
-                </span>
+          <div className="w-full lg:w-[280px] flex-shrink-0">
+            <RevealWrapper>
+              <div className="relative aspect-square rounded-2xl bg-surface overflow-hidden border border-[var(--border)]">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-[80px] font-display font-normal leading-none bg-gradient-to-br from-[var(--text)] to-[var(--text-3)] bg-clip-text text-transparent select-none">
+                    UJ
+                  </span>
+                </div>
+                {/* Accent gradient overlay */}
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[var(--accent-dim)] to-transparent" />
+                {/* Grid texture */}
+                <div
+                  className="absolute inset-0 opacity-10"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)",
+                    backgroundSize: "24px 24px",
+                  }}
+                />
               </div>
-              {/* Accent gradient overlay */}
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[var(--accent-dim)] to-transparent" />
-              {/* Grid texture */}
-              <div
-                className="absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)",
-                  backgroundSize: "24px 24px",
-                }}
-              />
-            </div>
-          </RevealWrapper>
+            </RevealWrapper>
+          </div>
 
-          {/* Content Column */}
-          <div className="space-y-8">
+          {/* Content Column — min-w-0 prevents content-driven overflow */}
+          <div className="flex-1 min-w-0 space-y-8">
             <RevealWrapper>
               <SectionLabel label="About" />
             </RevealWrapper>
@@ -38,9 +40,7 @@ export default function About() {
             <RevealWrapper delay={100}>
               <h2 className="text-3xl md:text-4xl font-display leading-tight text-[var(--text)] lowercase">
                 i build software that{" "}
-                <span className="italic text-accent">
-                  people rely on.
-                </span>
+                <span className="italic text-accent">people rely on.</span>
               </h2>
             </RevealWrapper>
 
@@ -51,24 +51,38 @@ export default function About() {
                   <strong className="text-[var(--text)] font-medium">
                     {siteConfig.name}
                   </strong>
-                  , a full-stack engineer with around two years of professional
-                  experience. I lean backend — that&apos;s where I spend most of
-                  my thinking.
+                  , a software engineer who thrives at the intersection of
+                  architecture and automation. While I build across the full
+                  stack, my mind lives in the backend—designing systems that
+                  handle complexity with elegance.
                 </p>
 
                 <p>
-                  I&apos;ve built job platforms with{" "}
+                  Over the last two years, I&apos;ve focused on engineering
+                  high-impact solutions: from architecting{" "}
                   <strong className="text-[var(--text)] font-medium">
-                    vector search and AI pipelines
+                    financial engines
+                  </strong>{" "}
+                  that process millions of records for tax compliance, to
+                  building Go-based{" "}
+                  <strong className="text-[var(--text)] font-medium">
+                    microservices
+                  </strong>{" "}
+                  for global LMS platforms. I also enjoy bridging the gap
+                  between data and intelligence, having developed platforms
+                  leveraging{" "}
+                  <strong className="text-[var(--text)] font-medium">
+                    vector search and RAG
                   </strong>
-                  , booking systems, chatbot systems, and LMS tools. My work
-                  tends to involve scraping, automation, and making complex
-                  things work reliably at scale.
+                  .
                 </p>
 
                 <p>
-                  When I&apos;m not coding, I&apos;m usually exploring music or
-                  digging into something new.
+                  My work is defined by a focus on reliability, scale, and the
+                  invisible infrastructure that makes modern software feel
+                  seamless. When I&apos;m not orchestrating data flows, I&apos;m
+                  usually exploring the nuances of music or deep-diving into the
+                  next technical frontier.
                 </p>
               </div>
             </RevealWrapper>

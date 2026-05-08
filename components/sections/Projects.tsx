@@ -29,18 +29,23 @@ export default function Projects() {
               >
                 {/* Visual Panel */}
                 <div
-                  className={`relative flex items-center justify-center min-h-[220px] md:min-h-[300px] bg-gradient-to-br ${project.gradient} transition-transform duration-500 ${
+                  className={`relative flex items-center justify-center min-h-[220px] md:min-h-[300px] bg-[var(--bg-2)] overflow-hidden ${
                     index % 2 !== 0 ? "md:[direction:ltr]" : ""
                   }`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] to-transparent opacity-20" />
                   <Image
                     src={project.image}
                     alt={project.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 55vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                   />
+                  {/* Subtle Dark Shade Overlay */}
+                  <div 
+                    className="absolute inset-0 bg-[var(--bg)] opacity-20 transition-opacity duration-700 group-hover:opacity-0" 
+                  />
+                  {/* Bottom Shadow for Depth */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] to-transparent opacity-50 pointer-events-none" />
                 </div>
 
                 {/* Info Panel */}

@@ -92,7 +92,13 @@ const Earth = forwardRef((props, ref) => {
 
   return (
     <group>
-      <mesh ref={earthRef} castShadow receiveShadow>
+      <mesh 
+        ref={earthRef} 
+        name="Earth"
+        castShadow 
+        receiveShadow
+        userData={{ isPlanet: true, name: "Earth", radius: EARTH_RADIUS }}
+      >
         <sphereGeometry args={[EARTH_RADIUS, 128, 128]} />
         <meshStandardMaterial
           map={map}

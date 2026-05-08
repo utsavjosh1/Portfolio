@@ -9,27 +9,30 @@ export interface Experience {
 export const experiences: Experience[] = [
   {
     role: "Software Engineer",
-    company: "Freelance",
+    company: "Nextbill",
     period: "2023 — Present",
     description:
-      "Building AI-driven solutions, scalable automation tools, and high-performance backend systems for clients across industries.",
+      "Spearheading the full-stack development and architectural evolution of a fintech SaaS platform, leading major technical initiatives from legacy migrations to high-performance financial engine development.",
     achievements: [
-      "Architected and deployed real-time monitoring systems using Go and InfluxDB",
-      "Built end-to-end data pipelines processing millions of records daily",
-      "Developed modern LMS platforms with Next.js, Prisma, and Stripe integration",
-      "Implemented AI-powered features using OpenAI API and vector databases",
+      "Architected a robust GSTR reporting engine, automating complex tax compliance workflows (GSTR-1, 2A/B, 3B) and financial reconciliation for multi-million record datasets.",
+      "Led a large-scale TypeScript migration of the frontend codebase, refactoring hundreds of legacy components to improve type safety and reduce runtime errors by 60%.",
+      "Engineered a unified data normalization and validation layer, standardizing field schemas across 30+ modules and ensuring high-integrity data flow.",
+      "Pioneered the transition to AWS Lambda-based serverless architecture, optimizing deployment pipelines and infrastructure scalability for high-concurrency environments.",
+      "Designed and implemented a scalable subscription management system, supporting dynamic feature toggling and usage-based billing monitoring.",
+      "Developed advanced financial features including automated payment processing, real-time ledger management, and integrated E-Invoicing services.",
     ],
   },
   {
-    role: "Full-Stack Developer",
-    company: "Open Source",
-    period: "2022 — Present",
+    role: "Backend Developer Intern",
+    company: "IIT Madras",
+    period: "2022 — 2023",
     description:
-      "Contributing to open-source projects and building developer tools focused on performance and developer experience.",
+      "Developed the backend for a green-tech crowdfunding platform aimed at reducing carbon emissions, utilizing Supabase and PostgreSQL.",
     achievements: [
-      "Maintained multiple open-source repositories with active community engagement",
-      "Built CLI tools and automation scripts in Go and Python",
-      "Contributed to React and Next.js ecosystem libraries",
+      "Integrated Supabase for real-time backend services, managing project funding cycles and secure user authentication for a global contributor base.",
+      "Built real-time synchronization for platform-wide metrics, ensuring live updates for crowdfunding contributions and carbon impact tracking.",
+      "Optimized database schemas for high-concurrency funding events, ensuring platform stability during peak transaction periods.",
+      "Implemented secure API layers for financial tracking and project management, adhering to strict data privacy and security standards.",
     ],
   },
 ];

@@ -1,3 +1,4 @@
+/** @jsxImportSource react */
 "use client";
 
 import React, { useRef, useMemo, Suspense, useState, useEffect } from "react";
@@ -9,7 +10,7 @@ import * as THREE from "three";
 
 function BackgroundGalaxy() {
   const starsRef = useRef<THREE.Points>(null);
-  
+
   const count = 20000;
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -31,29 +32,29 @@ function BackgroundGalaxy() {
   return (
     <points ref={starsRef}>
       <bufferGeometry>
-        <bufferAttribute 
-          attach="attributes-position" 
-          args={[positions, 3] as [THREE.TypedArray, number]} 
+        <bufferAttribute
+          attach="attributes-position"
+          args={[positions, 3] as [THREE.TypedArray, number]}
         />
-        <bufferAttribute 
-          attach="attributes-color" 
-          args={[colors, 3] as [THREE.TypedArray, number]} 
+        <bufferAttribute
+          attach="attributes-color"
+          args={[colors, 3] as [THREE.TypedArray, number]}
         />
       </bufferGeometry>
-      <pointsMaterial 
-        size={0.6} 
-        vertexColors 
-        transparent 
-        opacity={0.6} 
-        sizeAttenuation={true} 
+      <pointsMaterial
+        size={0.6}
+        vertexColors
+        transparent
+        opacity={0.6}
+        sizeAttenuation={true}
         blending={THREE.AdditiveBlending}
       />
     </points>
   );
 }
 
-function SceneContainer() {
-  useCameraController();
+function SceneContainer({ active }: { active: boolean }) {
+  useCameraController(active);
   return (
     <>
       <SolarSystem />
@@ -88,7 +89,7 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center bg-[var(--bg)] overflow-hidden cursor-none"
     >
       <HUD active={isInView} />
-      
+
       <div className="absolute inset-0 z-0 opacity-90">
         <Canvas
           camera={{ position: [0, 50, 120] as const, fov: 60 }}
@@ -96,7 +97,7 @@ export default function Hero() {
           shadows
         >
           <Suspense fallback={null}>
-            <SceneContainer />
+            <SceneContainer active={isInView} />
           </Suspense>
         </Canvas>
       </div>
@@ -116,7 +117,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div 
+      <div
         className="absolute inset-0 z-[-1] opacity-[0.04] pointer-events-none"
         style={{
           backgroundImage: `radial-gradient(var(--text) 1px, transparent 1px)`,

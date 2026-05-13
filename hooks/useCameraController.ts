@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { useSpaceStore } from "./useSpaceStore";
 import gsap from "gsap";
 
-export function useCameraController() {
+export function useCameraController(isActive: boolean = true) {
   const { camera, gl, scene, raycaster } = useThree();
   const { 
     focusedPlanet, 
@@ -123,6 +123,13 @@ export function useCameraController() {
       }
     };
 
+    if (!isActive) {
+      if (document.pointerLockElement === gl.domElement) {
+        document.exitPointerLock();
+      }
+      return;
+    }
+
     const handlePointerLockChange = () => setIsPointerLocked(document.pointerLockElement === gl.domElement);
 
     document.addEventListener("pointerlockchange", handlePointerLockChange);
@@ -138,9 +145,10 @@ export function useCameraController() {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("mousedown", handleClick);
     };
-  }, [gl, camera, scene, raycaster, isPointerLocked, focusedPlanet]);
+  }, [gl, camera, scene, raycaster, isPointerLocked, focusedPlanet, isActive]);
 
   useFrame((state, delta) => {
+    if (!isActive) return;
     // 1. Update Rotation (First Person Look)
     const targetQuaternion = new THREE.Quaternion().setFromEuler(
       new THREE.Euler(pitch.current, yaw.current, 0, "YXZ")

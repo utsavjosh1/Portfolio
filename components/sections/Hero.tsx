@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, Suspense } from "react";
+import React, { useRef, useMemo, Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import SolarSystem from "./SolarSystem";
 import { useCameraController } from "../../hooks/useCameraController";
@@ -31,8 +31,14 @@ function BackgroundGalaxy() {
   return (
     <points ref={starsRef}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+        <bufferAttribute 
+          attach="attributes-position" 
+          args={[positions, 3] as [THREE.TypedArray, number]} 
+        />
+        <bufferAttribute 
+          attach="attributes-color" 
+          args={[colors, 3] as [THREE.TypedArray, number]} 
+        />
       </bufferGeometry>
       <pointsMaterial 
         size={0.6} 
@@ -57,16 +63,35 @@ function SceneContainer() {
 }
 
 export default function Hero() {
+  const containerRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(true);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 } // Trigger when 10% of the section is visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="home"
+      ref={containerRef}
       className="relative min-h-screen flex items-center justify-center bg-[var(--bg)] overflow-hidden cursor-none"
     >
-      <HUD />
+      <HUD active={isInView} />
       
       <div className="absolute inset-0 z-0 opacity-90">
         <Canvas
-          camera={{ position: [0, 50, 120], fov: 60 }}
+          camera={{ position: [0, 50, 120] as const, fov: 60 }}
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
           shadows
         >

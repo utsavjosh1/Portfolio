@@ -46,6 +46,11 @@
   /* Easing */
   --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Default Font Mappings */
+  --font-display: var(--font-val-display);
+  --font-body: var(--font-val-body);
+  --font-mono: var(--font-val-mono);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -71,6 +76,10 @@
     font-display: swap;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  body, a, button, svg {
+    transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease), fill 0.3s var(--ease), stroke 0.3s var(--ease);
   }
 
   ::selection {

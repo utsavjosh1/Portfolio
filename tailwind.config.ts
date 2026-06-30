@@ -14,6 +14,7 @@ const config: Config = {
         display: ["var(--font-display)"],
         mono: ["var(--font-mono)"],
         body: ["var(--font-body)"],
+        signature: ["var(--font-signature)"],
       },
       colors: {
         bg: "var(--bg)",

@@ -3,10 +3,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
+import { ThemeCustomizer } from "@/components/ThemeCustomizer";
 import { FirebaseAnalytics } from "@/components/firebase-analytics";
 import { JsonLd } from "@/components/json-ld";
 import { siteConfig } from "@/data/config";
-import { instrumentSerif, jetbrainsMono, inter } from "@/lib/fonts";
+import { instrumentSerif, jetbrainsMono, inter, caveat } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
@@ -95,10 +96,12 @@ export default function RootLayout({
         instrumentSerif.variable,
         jetbrainsMono.variable,
         inter.variable,
+        caveat.variable,
       )}
     >
       <body className="bg-[var(--bg)] text-[var(--text)] font-body font-light antialiased">
         <NoiseOverlay />
+        <ThemeCustomizer />
         <div className="flex min-h-screen flex-col">
           <main className="flex-1">{children}</main>
         </div>

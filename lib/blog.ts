@@ -58,8 +58,8 @@ function toPost(id: string, data: FirestoreBlogPost): BlogPost {
     coverImage: data.coverImage,
     tags: data.tags || [],
     published: data.published,
-    createdAt: data.createdAt?.toDate?.() || new Date(),
-    updatedAt: data.updatedAt?.toDate?.() || new Date(),
+    createdAt: data.createdAt?.toDate?.() || new Date("2026-01-01T00:00:00Z"),
+    updatedAt: data.updatedAt?.toDate?.() || new Date("2026-01-01T00:00:00Z"),
     readTime: estimateReadTime(data.content || ""),
   };
 }

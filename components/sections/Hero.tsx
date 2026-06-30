@@ -1,109 +1,57 @@
 /** @jsxImportSource react */
 "use client";
 
-import React, { useRef, useMemo, Suspense, useState, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
-import SolarSystem from "./SolarSystem";
-import { useCameraController } from "../../hooks/useCameraController";
-import HUD from "./HUD";
-import * as THREE from "three";
-
-function BackgroundGalaxy() {
-  const starsRef = useRef<THREE.Points>(null);
-
-  const count = 20000;
-  const [positions, colors] = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    const col = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      const r = 400 + Math.random() * 300;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      pos[i * 3 + 0] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = r * Math.cos(phi);
-      col[i * 3 + 0] = 0.8 + Math.random() * 0.2;
-      col[i * 3 + 1] = 0.8 + Math.random() * 0.2;
-      col[i * 3 + 2] = 1.0;
-    }
-    return [pos, col];
-  }, []);
-
-  return (
-    <points ref={starsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3] as [THREE.TypedArray, number]}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          args={[colors, 3] as [THREE.TypedArray, number]}
-        />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.6}
-        vertexColors
-        transparent
-        opacity={0.6}
-        sizeAttenuation={true}
-        blending={THREE.AdditiveBlending}
-      />
-    </points>
-  );
-}
-
-function SceneContainer({ active }: { active: boolean }) {
-  useCameraController(active);
-  return (
-    <>
-      <SolarSystem />
-      <BackgroundGalaxy />
-    </>
-  );
-}
+import React, { useRef, useState, useEffect } from "react";
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null);
-  const [isInView, setIsInView] = useState(true);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
-      },
-      { threshold: 0.1 } // Trigger when 10% of the section is visible
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center bg-[var(--bg)] overflow-hidden cursor-none"
+      className="relative min-h-screen flex items-center justify-center bg-[var(--bg)] overflow-hidden"
     >
-      <HUD active={isInView} />
+      {/* Premium Ambient Glowing Orbs */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[20%] left-[10%] w-[35vw] h-[35vw] rounded-full bg-[var(--accent-glow)] blur-[120px] opacity-40 animate-orb-float" />
+        <div 
+          className="absolute bottom-[10%] right-[5%] w-[45vw] h-[45vw] rounded-full bg-[rgba(163,58,255,0.06)] blur-[150px] opacity-60 animate-orb-float" 
+          style={{ animationDelay: "-3s" }}
+        />
+        <div 
+          className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[30vw] h-[30vw] rounded-full bg-[rgba(0,229,255,0.04)] blur-[100px] opacity-30 animate-orb-float"
+          style={{ animationDelay: "-6s" }}
+        />
+      </div>
 
-      <div className="absolute inset-0 z-0 opacity-90">
-        <Canvas
-          camera={{ position: [0, 50, 120] as const, fov: 60 }}
-          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-          shadows
-        >
-          <Suspense fallback={null}>
-            <SceneContainer active={isInView} />
-          </Suspense>
-        </Canvas>
+      {/* CSS/SVG Starry Constellation Backdrop */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+        {/* SVG Stars */}
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          {/* Static tiny stars */}
+          <circle cx="12%" cy="15%" r="0.8" fill="#fff" opacity="0.6" />
+          <circle cx="45%" cy="8%" r="1" fill="#fff" opacity="0.4" />
+          <circle cx="78%" cy="25%" r="0.6" fill="#fff" opacity="0.8" />
+          <circle cx="88%" cy="12%" r="1.2" fill="#fff" opacity="0.5" />
+          <circle cx="25%" cy="45%" r="0.7" fill="#fff" opacity="0.7" />
+          <circle cx="65%" cy="50%" r="0.9" fill="#fff" opacity="0.5" />
+          <circle cx="15%" cy="75%" r="1.1" fill="#fff" opacity="0.4" />
+          <circle cx="82%" cy="70%" r="0.8" fill="#fff" opacity="0.6" />
+          <circle cx="50%" cy="85%" r="0.7" fill="#fff" opacity="0.8" />
+          <circle cx="38%" cy="60%" r="1" fill="#fff" opacity="0.3" />
+
+          {/* Pulsing/twinkling stars */}
+          <circle cx="30%" cy="20%" r="1.5" fill="var(--accent)" className="animate-pulse-dot" style={{ animationDuration: "3s" } as any} />
+          <circle cx="70%" cy="15%" r="1.2" fill="#fff" className="animate-pulse-dot" style={{ animationDuration: "4s" } as any} />
+          <circle cx="85%" cy="55%" r="1.8" fill="var(--accent)" className="animate-pulse-dot" style={{ animationDuration: "5s" } as any} />
+          <circle cx="20%" cy="65%" r="1" fill="#fff" className="animate-pulse-dot" style={{ animationDuration: "3.5s" } as any} />
+          <circle cx="55%" cy="75%" r="1.4" fill="#fff" className="animate-pulse-dot" style={{ animationDuration: "4.5s" } as any} />
+        </svg>
       </div>
 
       {/* Hero Content Overlay */}
-      <div className="relative z-10 text-center space-y-12 pointer-events-none">
+      <div className="relative z-10 text-center space-y-12 pointer-events-none select-none">
         <div className="space-y-4">
           <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-display leading-[0.9] text-[var(--text)] tracking-tighter lowercase">
             i build software{" "}
@@ -117,8 +65,9 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* Grid Overlay */}
       <div
-        className="absolute inset-0 z-[-1] opacity-[0.04] pointer-events-none"
+        className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `radial-gradient(var(--text) 1px, transparent 1px)`,
           backgroundSize: "80px 80px",

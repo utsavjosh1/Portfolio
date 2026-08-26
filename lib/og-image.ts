@@ -1,10 +1,5 @@
 import { siteConfig } from "@/data/config";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  process.env.VERCEL_URL ||
-  "https://www.joshiutsav.com";
-
 export interface OGImageOptions {
   title?: string;
   subtitle?: string;
@@ -13,45 +8,23 @@ export interface OGImageOptions {
 }
 
 export function generateOGImageURL(options: OGImageOptions = {}): string {
-  const {
-    title = "Utsav Joshi | Software Engineer",
-    subtitle = "Software Engineer",
-    description = "Building systems that scale.",
-    tags = ["Backend", "AI", "Automation"],
-  } = options;
+  const params = new URLSearchParams({
+    title: (options.title || siteConfig.name).slice(0, 100),
+    subtitle: (options.subtitle || siteConfig.role).slice(0, 80),
+    description: (options.description || siteConfig.bio).slice(0, 180),
+  });
+  const tags = options.tags?.filter(Boolean).slice(0, 5);
+  if (tags?.length) params.set("tags", tags.join(",").slice(0, 120));
 
-  const params = new URLSearchParams();
-
-  if (title) params.set("title", title);
-  if (subtitle) params.set("subtitle", subtitle);
-  if (description) params.set("description", description);
-  if (tags.length > 0) params.set("tags", tags.join(","));
-
-  const validBaseUrl = BASE_URL.startsWith("http")
-    ? BASE_URL
-    : `https://${BASE_URL}`;
-
-  return `${validBaseUrl}/api/og?${params.toString()}`;
+  return `${siteConfig.url}/api/og?${params.toString()}`;
 }
 
 export const OGImages = {
-  home: () =>
-    generateOGImageURL({
-      title: siteConfig.name,
-      subtitle: siteConfig.role,
-      tags: ["Backend", "AI", "Automation"],
-    }),
-
-  project: (title: string, description: string, tags: string[]) =>
-    generateOGImageURL({
-      title,
-      description,
-      tags,
-    }),
-
   contact: () =>
     generateOGImageURL({
-      title: "Get in Touch",
-      subtitle: "Let's build something together.",
+      title: `Contact ${siteConfig.name}`,
+      subtitle: "Software engineering collaborations",
+      description: "Let's build reliable, useful software together.",
+      tags: ["Backend", "Full-Stack", "SaaS"],
     }),
 };

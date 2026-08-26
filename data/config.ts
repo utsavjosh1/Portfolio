@@ -6,14 +6,11 @@ export const siteConfig = {
   location: env.siteLocation,
   email: env.contactEmail,
   bio: env.siteBio,
-  tagline: env.siteTagline,
   url: env.siteUrl,
   githubUrl: env.githubUrl,
   linkedinUrl: env.linkedinUrl,
   twitterUrl: env.twitterUrl,
-  cvUrl: env.cvUrl,
-  available: env.isAvailable,
-  stats: env.stats,
-  keywords: env.siteKeywords,
   knowsAbout: env.knowsAbout,
-};
+} as const;
+
+export const siteTitle = `${siteConfig.name} — ${siteConfig.role} | Backend & Full-Stack Developer`;

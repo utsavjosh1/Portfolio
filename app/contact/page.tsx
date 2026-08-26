@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+
 import ContactClientPage from "./ContactClientPage";
-import { OGImages } from "@/lib/og-image";
+import Footer from "@/components/layout/Footer";
 import { siteConfig } from "@/data/config";
+import { OGImages } from "@/lib/og-image";
+
+const description = `Contact ${siteConfig.name} about software engineering roles, backend systems, full-stack applications, or project collaborations.`;
 
 export const metadata: Metadata = {
-  title: `Contact | ${siteConfig.name}`,
-  description:
-    "Have a project in mind or just want to chat? Get in touch for engineering collaborations.",
-  keywords:
-    "contact, hire, Go developer, automation, freelance, software engineer",
+  title: "Contact",
+  description,
+  alternates: { canonical: "/contact" },
   openGraph: {
-    title: `Contact — ${siteConfig.name}`,
-    description:
-      "Have a project in mind? Get in touch for high-performance engineering collaborations.",
-    url: `${siteConfig.url}/contact`,
-    siteName: `${siteConfig.name} Portfolio`,
+    type: "website",
+    url: "/contact",
+    title: `Contact ${siteConfig.name}`,
+    description,
     images: [
       {
         url: OGImages.contact(),
@@ -24,31 +24,20 @@ export const metadata: Metadata = {
         alt: `Contact ${siteConfig.name}`,
       },
     ],
-    locale: "en_US",
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: `Contact | ${siteConfig.name}`,
-    description: "Have a project in mind? Get in touch.",
+    title: `Contact ${siteConfig.name}`,
+    description,
     images: [OGImages.contact()],
   },
 };
 
 export default function ContactPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen pt-32 px-4">
-          <div className="max-w-2xl mx-auto space-y-8 animate-pulse">
-            <div className="h-12 w-3/4 bg-[var(--bg-3)] rounded-lg" />
-            <div className="h-6 w-1/2 bg-[var(--bg-3)] rounded-lg" />
-            <div className="h-96 bg-[var(--bg-3)] rounded-xl" />
-          </div>
-        </div>
-      }
-    >
+    <>
       <ContactClientPage />
-    </Suspense>
+      <Footer />
+    </>
   );
 }

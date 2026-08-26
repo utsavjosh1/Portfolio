@@ -1,58 +1,62 @@
-"use client";
-
 import Link from "next/link";
-import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
+import { ArrowUp, Github, Linkedin, Mail } from "lucide-react";
+
 import { siteConfig } from "@/data/config";
 
 const socialLinks = [
-  { name: "GitHub", href: siteConfig.githubUrl, icon: Github },
-  { name: "LinkedIn", href: siteConfig.linkedinUrl, icon: Linkedin },
-  { name: "Email", href: `mailto:${siteConfig.email}`, icon: Mail },
+  { name: "GitHub", href: siteConfig.githubUrl, icon: Github, external: true },
+  {
+    name: "LinkedIn",
+    href: siteConfig.linkedinUrl,
+    icon: Linkedin,
+    external: true,
+  },
+  {
+    name: "Email",
+    href: `mailto:${siteConfig.email}`,
+    icon: Mail,
+    external: false,
+  },
 ];
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
-    <footer className="bg-[var(--bg)] border-t border-[var(--border)]">
-      <div className="page-container py-10">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          {/* Left */}
-          <div className="flex items-center gap-4">
-            <span className="font-mono text-xs text-[var(--text-3)]">
-              © {new Date().getFullYear()} {siteConfig.name}
-            </span>
-            <span className="hidden md:block h-4 w-px bg-[var(--border)]" />
-            <div className="flex gap-3">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <Link
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--text-3)] hover:text-accent transition-colors"
-                    aria-label={social.name}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </Link>
-                );
-              })}
-            </div>
+    <footer className="border-t border-[var(--border)]">
+      <div className="mx-auto flex max-w-2xl flex-col items-center justify-between gap-6 px-6 py-10 md:flex-row md:px-8">
+        <div className="flex items-center gap-4">
+          <span className="font-mono text-xs text-[var(--text-2)]">
+            © {siteConfig.name}
+          </span>
+          <span
+            className="hidden h-4 w-px bg-[var(--border)] md:block"
+            aria-hidden="true"
+          />
+          <div className="flex gap-1">
+            {socialLinks.map((social) => {
+              const Icon = social.icon;
+              return (
+                <Link
+                  key={social.name}
+                  href={social.href}
+                  target={social.external ? "_blank" : undefined}
+                  rel={social.external ? "noopener noreferrer" : undefined}
+                  className="flex size-11 items-center justify-center text-[var(--text-2)] hover:text-accent"
+                  aria-label={social.name}
+                >
+                  <Icon className="size-4" aria-hidden="true" />
+                </Link>
+              );
+            })}
           </div>
-
-          {/* Right */}
-          <button
-            onClick={scrollToTop}
-            className="flex items-center gap-2 text-xs text-[var(--text-3)] hover:text-accent transition-colors font-mono cursor-pointer"
-          >
-            <ArrowUp className="h-3 w-3" />
-            Back to top
-          </button>
         </div>
+
+        <a
+          href="#main-content"
+          className="flex min-h-11 items-center gap-2 font-mono text-xs text-[var(--text-2)] hover:text-accent"
+        >
+          <ArrowUp className="size-3" aria-hidden="true" />
+          Back to top
+        </a>
       </div>
     </footer>
   );

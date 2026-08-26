@@ -5,13 +5,19 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const title = searchParams.get("title") || "Utsav Joshi";
-    const subtitle = searchParams.get("subtitle") || "Software Engineer";
-    const description =
-      searchParams.get("description") || "Building systems that scale.";
-    const tags = (
-      searchParams.get("tags") || "Backend,AI,Automation"
-    ).split(",");
+    const title = (searchParams.get("title") || "Utsav Joshi").slice(0, 100);
+    const subtitle = (
+      searchParams.get("subtitle") || "Software Engineer"
+    ).slice(0, 80);
+    const description = (
+      searchParams.get("description") ||
+      "Backend systems, APIs, and full-stack SaaS applications."
+    ).slice(0, 180);
+    const tags = (searchParams.get("tags") || "Backend,Full-Stack,SaaS")
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean)
+      .slice(0, 5);
 
     const width = 1200;
     const height = 630;
@@ -41,7 +47,7 @@ export async function GET(request: NextRequest) {
             border: "1px solid #252529",
           }}
         >
-          <div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <div
               style={{
                 fontSize: "18px",
@@ -131,7 +137,6 @@ export async function GET(request: NextRequest) {
               background: "linear-gradient(to bottom right, #c8ff00, #5c5c58)",
               backgroundClip: "text",
               color: "transparent",
-              zIndex: 10,
               fontFamily: "monospace",
             }}
           >
@@ -141,7 +146,7 @@ export async function GET(request: NextRequest) {
       </div>,
       { width, height },
     );
-  } catch (error) {
+  } catch {
     return new ImageResponse(
       <div
         style={{

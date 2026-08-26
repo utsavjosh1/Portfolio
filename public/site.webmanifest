@@ -1,23 +1,23 @@
 {
-  "name": "Utsav Joshi - Portfolio",
+  "name": "Utsav Joshi — Software Engineer",
   "short_name": "Utsav Joshi",
-  "description": "Software Engineer | Full-Stack Developer specializing in React, Next.js, and modern web technologies.",
+  "description": "Portfolio of Utsav Joshi, a software engineer building backend systems, APIs, and full-stack SaaS applications.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#09090b",
-  "theme_color": "#c8ff00",
-  "orientation": "portrait-primary",
+  "theme_color": "#09090b",
   "icons": [
     {
       "src": "/favicon.ico",
-      "sizes": "32x32",
+      "sizes": "16x16 32x32",
       "type": "image/x-icon"
     },
     {
-      "src": "/logo.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
   "categories": ["portfolio", "developer", "technology"],

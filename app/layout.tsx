@@ -1,36 +1,32 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import { EntityJsonLd } from "@/components/json-ld";
+import Navbar from "@/components/layout/Navbar";
 import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
-import { ThemeCustomizer } from "@/components/ThemeCustomizer";
-import { FirebaseAnalytics } from "@/components/firebase-analytics";
-import { JsonLd } from "@/components/json-ld";
-import { siteConfig } from "@/data/config";
-import { instrumentSerif, jetbrainsMono, inter, caveat } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
+import { siteConfig, siteTitle } from "@/data/config";
+import { instrumentSerif, inter } from "@/lib/fonts";
 
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.role}`,
+    default: siteTitle,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.bio,
-  keywords: siteConfig.keywords,
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
   publisher: siteConfig.name,
+  category: "technology",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   robots: {
     index: true,
     follow: true,
@@ -45,42 +41,39 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: siteConfig.url,
-    title: `${siteConfig.name} — ${siteConfig.role}`,
+    url: "/",
+    title: siteTitle,
     description: siteConfig.bio,
-    siteName: siteConfig.name,
+    siteName: `${siteConfig.name} Portfolio`,
     images: [
       {
         url: "/api/og",
         width: 1200,
         height: 630,
-        alt: `${siteConfig.name} — ${siteConfig.role}`,
+        alt: `${siteConfig.name}, ${siteConfig.role}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — ${siteConfig.role}`,
+    title: siteTitle,
     description: siteConfig.bio,
     creator: "@utsavjosh1",
     images: ["/api/og"],
   },
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-    ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
-  applicationName: siteConfig.name,
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: siteConfig.name,
-  },
+  applicationName: `${siteConfig.name} Portfolio`,
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "dark",
+  themeColor: "#09090b",
 };
 
 export default function RootLayout({
@@ -91,24 +84,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(
-        "dark",
-        instrumentSerif.variable,
-        jetbrainsMono.variable,
-        inter.variable,
-        caveat.variable,
-      )}
+      className={`dark ${instrumentSerif.variable} ${inter.variable}`}
     >
-      <body className="bg-[var(--bg)] text-[var(--text)] font-body font-light antialiased">
+      <body className="min-h-screen bg-[var(--bg)] font-body text-[var(--text)] antialiased">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <NoiseOverlay />
-        <ThemeCustomizer />
-        <div className="flex min-h-screen flex-col">
-          <main className="flex-1">{children}</main>
-        </div>
+        <Navbar />
+        {children}
+        <EntityJsonLd />
         <Analytics />
         <SpeedInsights />
-        <FirebaseAnalytics />
-        <JsonLd />
       </body>
     </html>
   );

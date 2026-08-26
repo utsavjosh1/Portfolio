@@ -1,63 +1,57 @@
-import { projects } from "@/data/projects";
 import { siteConfig } from "@/data/config";
 
-export function JsonLd() {
-  const personJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: siteConfig.name,
-    url: siteConfig.url,
-    image: `${siteConfig.url}/logo.png`,
-    sameAs: [
-      siteConfig.githubUrl,
-      siteConfig.linkedinUrl,
-      siteConfig.twitterUrl,
-    ].filter(Boolean),
-    jobTitle: siteConfig.role,
-    worksFor: {
-      "@type": "Organization",
-      name: "Freelance",
-    },
-    description: siteConfig.bio,
-    knowsAbout: siteConfig.knowsAbout,
-  };
+type JsonLdValue = Record<string, unknown> | Record<string, unknown>[];
 
-  const websiteJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: `${siteConfig.name} Portfolio`,
-    url: siteConfig.url,
-  };
-
-  const projectListJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: projects.map((project, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "CreativeWork",
-        name: project.title,
-        description: project.description,
-        url: project.liveUrl || project.githubUrl,
-      },
-    })),
-  };
+export function JsonLd({ data }: { data: JsonLdValue }) {
+  const json = JSON.stringify(data).replace(/</g, "\\u003c");
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectListJsonLd) }}
-      />
-    </>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: json }}
+    />
+  );
+}
+
+export function EntityJsonLd() {
+  const personId = `${siteConfig.url}/#person`;
+  const websiteId = `${siteConfig.url}/#website`;
+
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": personId,
+            name: siteConfig.name,
+            url: siteConfig.url,
+            image: `${siteConfig.url}/utsav-joshi-avatar.webp`,
+            jobTitle: siteConfig.role,
+            description: siteConfig.bio,
+            homeLocation: {
+              "@type": "Country",
+              name: siteConfig.location,
+            },
+            knowsAbout: siteConfig.knowsAbout,
+            sameAs: [
+              siteConfig.githubUrl,
+              siteConfig.linkedinUrl,
+              siteConfig.twitterUrl,
+            ],
+          },
+          {
+            "@type": "WebSite",
+            "@id": websiteId,
+            name: `${siteConfig.name} Portfolio`,
+            url: siteConfig.url,
+            description: siteConfig.bio,
+            inLanguage: "en",
+            publisher: { "@id": personId },
+          },
+        ],
+      }}
+    />
   );
 }

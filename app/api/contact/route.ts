@@ -1,68 +1,93 @@
+import { addDoc, collection, serverTimestamp } from "firebase/firestore/lite";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { db } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { waitUntil } from "@vercel/functions";
 
-// Validation schema for contact form
-const contactSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name is too long"),
-  email: z.string().email("Invalid email address"),
-  message: z
-    .string()
-    .min(10, "Message must be at least 10 characters")
-    .max(2000, "Message is too long"),
-});
+import { getDatabase, isFirebaseConfigured } from "@/lib/firebase";
 
-// POST - Create new contact submission
+const maxBodyBytes = 10_000;
+const contactSchema = z
+  .object({
+    name: z.string().trim().min(1).max(100),
+    email: z.string().trim().email().max(254),
+    message: z.string().trim().min(10).max(2000),
+    company: z.string().max(200).optional().default(""),
+  })
+  .strict();
+
+function jsonResponse(body: Record<string, unknown>, status: number) {
+  return NextResponse.json(body, {
+    status,
+    headers: { "Cache-Control": "no-store" },
+  });
+}
+
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
+  const contentType = request.headers.get("content-type") || "";
+  const contentLength = Number(request.headers.get("content-length") || 0);
 
-    // 1. Instant Validation
-    const validatedData = contactSchema.parse(body);
-
-    // 2. Offload DB write to background
-    waitUntil(
-      (async () => {
-        try {
-          await addDoc(collection(db, "contact_submissions"), {
-            ...validatedData,
-            createdAt: serverTimestamp(),
-          });
-        } catch (bgError) {
-          console.error("Background processing failed:", bgError);
-        }
-      })(),
+  if (!contentType.toLowerCase().startsWith("application/json")) {
+    return jsonResponse(
+      { success: false, message: "Expected a JSON request." },
+      415,
     );
+  }
 
-    // 3. Immediate Response
-    return NextResponse.json(
+  if (contentLength > maxBodyBytes) {
+    return jsonResponse(
+      { success: false, message: "Request is too large." },
+      413,
+    );
+  }
+
+  try {
+    const body: unknown = await request.json();
+    const parsed = contactSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return jsonResponse(
+        { success: false, message: "Check the form fields and try again." },
+        400,
+      );
+    }
+
+    // Silently accept bot submissions that fill the honeypot field.
+    if (parsed.data.company) {
+      return jsonResponse({ success: true, message: "Message received." }, 201);
+    }
+
+    if (!isFirebaseConfigured()) {
+      return jsonResponse(
+        {
+          success: false,
+          message:
+            "The contact form is temporarily unavailable. Please email me instead.",
+        },
+        503,
+      );
+    }
+
+    await addDoc(collection(getDatabase(), "contact_submissions"), {
+      name: parsed.data.name,
+      email: parsed.data.email,
+      message: parsed.data.message,
+      createdAt: serverTimestamp(),
+    });
+
+    return jsonResponse(
       {
         success: true,
         message: "Message received. I'll get back to you soon.",
       },
-      { status: 201 },
+      201,
     );
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Validation error",
-          errors: error.errors,
-        },
-        { status: 400 },
-      );
-    }
-
-    console.error("Contact form error:", error);
-    return NextResponse.json(
+    console.error("Contact form submission failed", error);
+    return jsonResponse(
       {
         success: false,
-        message: "Failed to process request. Please try again.",
+        message: "Your message could not be sent. Please try again.",
       },
-      { status: 500 },
+      500,
     );
   }
 }

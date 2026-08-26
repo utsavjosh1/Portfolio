@@ -1,13 +1,21 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
-import { getPostBySlug, type BlogPost } from "@/lib/blog";
-import Navbar from "@/components/layout/Navbar";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+import { JsonLd } from "@/components/json-ld";
 import Footer from "@/components/layout/Footer";
-import { RevealWrapper } from "@/components/ui/RevealWrapper";
+import { siteConfig } from "@/data/config";
+import { getPostBySlug } from "@/lib/blog";
+import { generateOGImageURL } from "@/lib/og-image";
+
+export const instant = false;
+
+interface BlogPostPageProps {
+  params: Promise<{ slug: string }>;
+}
 
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat("en-US", {
@@ -17,231 +25,215 @@ function formatDate(date: Date): string {
   }).format(date);
 }
 
-function renderContent(content: string) {
-  // Simple markdown-ish rendering: paragraphs, headers, code blocks, bold, italic, links
-  const blocks = content.split("\n\n");
-
-  return blocks.map((block, i) => {
-    const trimmed = block.trim();
-
-    // Headers
-    if (trimmed.startsWith("### ")) {
-      return (
-        <h3
-          key={i}
-          className="text-xl font-display text-[var(--text)] mt-8 mb-4"
-        >
-          {trimmed.slice(4)}
-        </h3>
-      );
-    }
-    if (trimmed.startsWith("## ")) {
-      return (
-        <h2
-          key={i}
-          className="text-2xl font-display text-[var(--text)] mt-10 mb-4"
-        >
-          {trimmed.slice(3)}
-        </h2>
-      );
-    }
-
-    // Code blocks
-    if (trimmed.startsWith("```")) {
-      const lines = trimmed.split("\n");
-      const code = lines.slice(1, -1).join("\n");
-      return (
-        <pre
-          key={i}
-          className="bg-[var(--bg-3)] border border-[var(--border)] rounded-xl p-5 overflow-x-auto my-6"
-        >
-          <code className="font-mono text-sm text-[var(--text-2)] leading-relaxed">
-            {code}
-          </code>
-        </pre>
-      );
-    }
-
-    // Images: ![alt](url)
-    const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
-    if (imgMatch) {
-      return (
-        <figure key={i} className="my-8">
-          <img
-            src={imgMatch[2]}
-            alt={imgMatch[1]}
-            className="w-full rounded-xl border border-[var(--border)]"
-          />
-          {imgMatch[1] && (
-            <figcaption className="text-center text-xs text-[var(--text-3)] font-mono mt-3">
-              {imgMatch[1]}
-            </figcaption>
-          )}
-        </figure>
-      );
-    }
-
-    // Regular paragraph with inline formatting
-    const formatted = trimmed
-      .replace(/\*\*(.+?)\*\*/g, '<strong class="text-[var(--text)] font-medium">$1</strong>')
-      .replace(/\*(.+?)\*/g, "<em>$1</em>")
-      .replace(
-        /`(.+?)`/g,
-        '<code class="px-1.5 py-0.5 bg-[var(--bg-3)] rounded text-[13px] font-mono text-accent">$1</code>',
-      )
-      .replace(
-        /\[(.+?)\]\((.+?)\)/g,
-        '<a href="$2" class="text-accent underline underline-offset-2 hover:no-underline" target="_blank" rel="noopener noreferrer">$1</a>',
-      );
-
-    return (
-      <p
-        key={i}
-        className="text-[var(--text-2)] font-body font-light leading-[1.85] text-[15px]"
-        dangerouslySetInnerHTML={{ __html: formatted }}
-      />
-    );
-  });
-}
-
-export default function BlogPostPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!slug) return;
-    getPostBySlug(slug)
-      .then(setPost)
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <>
-        <Navbar />
-        <main className="min-h-screen bg-[var(--bg)] pt-32 pb-24">
-          <div className="page-container max-w-3xl animate-pulse space-y-6">
-            <div className="h-4 w-20 bg-[var(--bg-3)] rounded" />
-            <div className="h-12 w-3/4 bg-[var(--bg-3)] rounded-lg" />
-            <div className="h-4 w-1/3 bg-[var(--bg-3)] rounded" />
-            <div className="h-px bg-[var(--border)] my-8" />
-            <div className="space-y-4">
-              <div className="h-4 w-full bg-[var(--bg-3)] rounded" />
-              <div className="h-4 w-5/6 bg-[var(--bg-3)] rounded" />
-              <div className="h-4 w-4/6 bg-[var(--bg-3)] rounded" />
-            </div>
-          </div>
-        </main>
-      </>
-    );
-  }
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   if (!post) {
-    return (
-      <>
-        <Navbar />
-        <main className="min-h-screen bg-[var(--bg)] pt-32 pb-24 flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <p className="text-[var(--text-3)] font-mono text-sm">
-              Post not found.
-            </p>
-            <Link
-              href="/blog"
-              className="text-accent text-sm hover:underline"
-            >
-              ← Back to blog
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </>
-    );
+    return {
+      title: "Post not found",
+      robots: { index: false, follow: false },
+    };
   }
+
+  const canonical = `/blog/${post.slug}`;
+  const image = generateOGImageURL({
+    title: post.title,
+    subtitle: `Writing by ${siteConfig.name}`,
+    description: post.excerpt,
+    tags: post.tags.slice(0, 4),
+  });
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    authors: [{ name: siteConfig.name, url: siteConfig.url }],
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      url: canonical,
+      title: post.title,
+      description: post.excerpt,
+      publishedTime: post.createdAt.toISOString(),
+      modifiedTime: post.updatedAt.toISOString(),
+      authors: [siteConfig.url],
+      tags: post.tags,
+      images: [{ url: image, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [image],
+    },
+  };
+}
+
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) notFound();
+
+  const canonicalUrl = `${siteConfig.url}/blog/${post.slug}`;
+  const structuredImage = post.coverImage || `${siteConfig.url}/api/og`;
 
   return (
     <>
-      <Navbar />
-      <main className="min-h-screen bg-[var(--bg)] pt-32 pb-24">
-        <article className="page-container max-w-3xl">
-          {/* Back */}
-          <RevealWrapper>
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[var(--text-3)] hover:text-accent transition-colors mb-8"
-            >
-              <ArrowLeft className="h-3 w-3" />
-              All posts
-            </Link>
-          </RevealWrapper>
+      <main
+        id="main-content"
+        className="min-h-screen pb-20 pt-28"
+      >
+        <article className="mx-auto max-w-2xl px-6 md:px-8">
+          <Link
+            href="/blog"
+            className="mb-8 inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-widest text-[var(--text-2)] hover:text-accent"
+          >
+            <ArrowLeft className="size-3" aria-hidden="true" />
+            All posts
+          </Link>
 
-          {/* Header */}
-          <RevealWrapper delay={100}>
-            <header className="mb-12">
-              <h1 className="text-3xl md:text-5xl font-display text-[var(--text)] leading-tight mb-6">
-                {post.title}
-              </h1>
-
-              <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono text-[var(--text-3)] mb-6">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="h-3 w-3" />
+          <header className="mb-10">
+            <h1 className="font-display text-3xl leading-tight text-[var(--text)] md:text-5xl">
+              {post.title}
+            </h1>
+            <div className="mt-6 flex flex-wrap items-center gap-4 font-mono text-[11px] text-[var(--text-2)]">
+              <span className="flex items-center gap-1.5">
+                <Calendar className="size-3" aria-hidden="true" />
+                <time dateTime={post.createdAt.toISOString()}>
                   {formatDate(post.createdAt)}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3" />
-                  {post.readTime} min read
-                </span>
-              </div>
+                </time>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Clock className="size-3" aria-hidden="true" />
+                {post.readTime} min read
+              </span>
+            </div>
+            {post.tags.length > 0 && (
+              <ul
+                aria-label="Post topics"
+                className="mt-5 flex flex-wrap gap-2"
+              >
+                {post.tags.map((tag) => (
+                  <li
+                    key={tag}
+                    className="flex items-center gap-1 rounded-full border border-accent/15 bg-[var(--accent-dim)] px-2.5 py-1 font-mono text-[10px] text-accent"
+                  >
+                    <Tag className="size-2.5" aria-hidden="true" />
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </header>
 
-              {/* Tags */}
-              {post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="flex items-center gap-1 px-2.5 py-1 text-[10px] font-mono rounded-full bg-[var(--accent-dim)] border border-accent/10 text-accent"
-                    >
-                      <Tag className="h-2.5 w-2.5" />
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <div className="h-px bg-[var(--border)] mt-8" />
-            </header>
-          </RevealWrapper>
-
-          {/* Cover image */}
           {post.coverImage && (
-            <RevealWrapper delay={150}>
+            <figure className="mb-10">
+              {/* Remote post images are author-controlled and may come from different hosts. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={post.coverImage}
-                alt={post.title}
-                className="w-full rounded-xl border border-[var(--border)] mb-10"
+                alt=""
+                width={1200}
+                height={675}
+                fetchPriority="high"
+                className="h-auto w-full rounded-xl border border-[var(--border)]"
               />
-            </RevealWrapper>
+            </figure>
           )}
 
-          {/* Body */}
-          <RevealWrapper delay={200}>
-            <div className="space-y-5">{renderContent(post.content)}</div>
-          </RevealWrapper>
+          <div className="prose-portfolio">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: ({ href, children }) => {
+                  const external = Boolean(href && /^https?:\/\//.test(href));
+                  return (
+                    <a
+                      href={href}
+                      target={external ? "_blank" : undefined}
+                      rel={external ? "noopener noreferrer" : undefined}
+                    >
+                      {children}
+                    </a>
+                  );
+                },
+                img: ({ src, alt }) => (
+                  <figure>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={typeof src === "string" ? src : undefined}
+                      alt={alt || ""}
+                      width={1200}
+                      height={675}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {alt && <figcaption>{alt}</figcaption>}
+                  </figure>
+                ),
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
 
-          {/* Footer */}
-          <div className="mt-16 pt-8 border-t border-[var(--border)]">
+          <footer className="mt-16 border-t border-[var(--border)] pt-8">
             <Link
               href="/blog"
-              className="text-accent text-sm hover:underline font-mono"
+              className="inline-block py-2 font-mono text-sm text-accent hover:underline"
             >
               ← More posts
             </Link>
-          </div>
+          </footer>
         </article>
       </main>
       <Footer />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Article",
+              "@id": `${canonicalUrl}#article`,
+              headline: post.title,
+              description: post.excerpt,
+              datePublished: post.createdAt.toISOString(),
+              dateModified: post.updatedAt.toISOString(),
+              image: structuredImage,
+              mainEntityOfPage: canonicalUrl,
+              author: { "@id": `${siteConfig.url}/#person` },
+              publisher: { "@id": `${siteConfig.url}/#person` },
+              keywords: post.tags.join(", "),
+              inLanguage: "en",
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: siteConfig.url,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Writing",
+                  item: `${siteConfig.url}/blog`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: post.title,
+                  item: canonicalUrl,
+                },
+              ],
+            },
+          ],
+        }}
+      />
     </>
   );
 }

@@ -1,13 +1,29 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
-import { getPublishedPosts, type BlogPost } from "@/lib/blog";
-import Navbar from "@/components/layout/Navbar";
+import { Calendar, Clock, Tag } from "lucide-react";
+
 import Footer from "@/components/layout/Footer";
-import { RevealWrapper } from "@/components/ui/RevealWrapper";
-import { SectionLabel } from "@/components/ui/SectionLabel";
+import { siteConfig } from "@/data/config";
+import { getPublishedPosts } from "@/lib/blog";
+
+const description = `Engineering notes by ${siteConfig.name} about backend systems, software architecture, TypeScript, Go, and full-stack development.`;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const posts = await getPublishedPosts(1);
+
+  return {
+    title: "Engineering Writing",
+    description,
+    alternates: { canonical: "/blog" },
+    robots: posts.length > 0 ? undefined : { index: false, follow: true },
+    openGraph: {
+      type: "website",
+      url: "/blog",
+      title: `Engineering Writing — ${siteConfig.name}`,
+      description,
+    },
+  };
+}
 
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat("en-US", {
@@ -17,88 +33,77 @@ function formatDate(date: Date): string {
   }).format(date);
 }
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getPublishedPosts()
-      .then(setPosts)
-      .catch(() => {}) // Firebase may not have permissions yet
-      .finally(() => setLoading(false));
-  }, []);
+export default async function BlogPage() {
+  const posts = await getPublishedPosts();
 
   return (
     <>
-      <Navbar />
-      <main className="min-h-screen bg-[var(--bg)] pt-32 pb-24">
-        <div className="page-container max-w-4xl">
-          <RevealWrapper delay={100}>
-            <div className="space-y-4 mb-16">
-              <SectionLabel label="Blog" />
-              <h1 className="text-4xl md:text-5xl font-display text-[var(--text)]">
-                Thoughts & <span className="italic text-accent">writings.</span>
-              </h1>
-              <p className="text-[var(--text-2)] font-body font-light max-w-[50ch]">
-                Notes on engineering, architecture decisions, and things I learn
-                along the way.
-              </p>
-            </div>
-          </RevealWrapper>
+      <main
+        id="main-content"
+        className="min-h-screen pb-20 pt-28"
+      >
+        <div className="mx-auto max-w-2xl px-6 md:px-8">
+          <header className="mb-14 space-y-4">
+            <p className="section-label">Blog</p>
+            <h1 className="font-display text-4xl text-[var(--text)] md:text-5xl">
+              Engineering thoughts &amp;{" "}
+              <span className="italic text-accent">writing.</span>
+            </h1>
+            <p className="max-w-[55ch] text-[var(--text-2)]">
+              Notes on backend engineering, software architecture, and lessons
+              learned while building production systems.
+            </p>
+          </header>
 
-          {/* Posts */}
-          {loading ? (
-            <div className="space-y-6">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="animate-pulse bg-surface border border-[var(--border)] rounded-xl p-6 h-40"
-                />
-              ))}
+          {posts.length === 0 ? (
+            <div className="rounded-xl border border-[var(--border)] py-16 text-center">
+              <p className="font-mono text-sm text-[var(--text-2)]">
+                No published posts yet. Check back soon.
+              </p>
+              <Link
+                href="/"
+                className="mt-4 inline-block py-2 text-sm text-accent hover:underline"
+              >
+                Explore projects instead
+              </Link>
             </div>
-          ) : posts.length === 0 ? (
-            <RevealWrapper delay={200}>
-              <div className="text-center py-20">
-                <p className="text-[var(--text-3)] font-mono text-sm">
-                  No posts yet. Check back soon.
-                </p>
-              </div>
-            </RevealWrapper>
           ) : (
             <div className="space-y-4">
-              {posts.map((post, index) => (
-                <RevealWrapper key={post.id} delay={200 + index * 80}>
-                  <Link href={`/blog/${post.slug}`}>
-                    <article className="group bg-surface border border-[var(--border)] rounded-xl p-6 md:p-8 transition-all duration-300 hover:border-[var(--accent-dim)] hover:-translate-y-0.5 hover:shadow-sm">
-                      <div className="flex flex-col md:flex-row md:items-start gap-4">
-                        <div className="flex-1 space-y-3">
-                          <h2 className="text-xl md:text-2xl font-display text-[var(--text)] group-hover:text-accent transition-colors leading-tight">
-                            {post.title}
-                          </h2>
-                          <p className="text-sm text-[var(--text-2)] font-body font-light leading-relaxed line-clamp-2">
-                            {post.excerpt}
-                          </p>
-                          <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono text-[var(--text-3)]">
-                            <span className="flex items-center gap-1.5">
-                              <Calendar className="h-3 w-3" />
-                              {formatDate(post.createdAt)}
-                            </span>
-                            <span className="flex items-center gap-1.5">
-                              <Clock className="h-3 w-3" />
-                              {post.readTime} min read
-                            </span>
-                            {post.tags.length > 0 && (
-                              <span className="flex items-center gap-1.5">
-                                <Tag className="h-3 w-3" />
-                                {post.tags.slice(0, 3).join(", ")}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </article>
-                  </Link>
-                </RevealWrapper>
+              {posts.map((post) => (
+                <article
+                  key={post.id}
+                  className="rounded-xl border border-[var(--border)] bg-surface p-6 transition-colors hover:border-white/15 md:p-8"
+                >
+                  <h2 className="font-display text-xl text-[var(--text)] md:text-2xl">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="hover:text-accent"
+                    >
+                      {post.title}
+                    </Link>
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--text-2)]">
+                    {post.excerpt}
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center gap-4 font-mono text-[11px] text-[var(--text-2)]">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="size-3" aria-hidden="true" />
+                      <time dateTime={post.createdAt.toISOString()}>
+                        {formatDate(post.createdAt)}
+                      </time>
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="size-3" aria-hidden="true" />
+                      {post.readTime} min read
+                    </span>
+                    {post.tags.length > 0 && (
+                      <span className="flex items-center gap-1.5">
+                        <Tag className="size-3" aria-hidden="true" />
+                        {post.tags.slice(0, 3).join(", ")}
+                      </span>
+                    )}
+                  </div>
+                </article>
               ))}
             </div>
           )}

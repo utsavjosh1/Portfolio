@@ -25,8 +25,8 @@ function formatBlogDate(date: Date): string {
     .toUpperCase();
 }
 
-export default async function Home() {
-  const posts = await getLatestPosts(5);
+export default function Home() {
+  const posts = getLatestPosts(5);
 
   return (
     <main

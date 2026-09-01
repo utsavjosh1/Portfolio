@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 
 import { siteConfig } from "@/data/config";
-import { getPublishedPosts } from "@/lib/blog";
+import { getStaticBlogPosts } from "@/lib/blog";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getPublishedPosts();
+export default function sitemap(): MetadataRoute.Sitemap {
+  const posts = getStaticBlogPosts();
 
   return [
     {

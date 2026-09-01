@@ -8,13 +8,15 @@ import remarkGfm from "remark-gfm";
 import { JsonLd } from "@/components/json-ld";
 import Footer from "@/components/layout/Footer";
 import { siteConfig } from "@/data/config";
-import { getPostBySlug } from "@/lib/blog";
+import { getStaticBlogPostBySlug, getStaticBlogSlugs } from "@/lib/blog";
 import { generateOGImageURL } from "@/lib/og-image";
-
-export const instant = false;
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export function generateStaticParams() {
+  return getStaticBlogSlugs().map((slug) => ({ slug }));
 }
 
 function formatDate(date: Date): string {
@@ -29,7 +31,7 @@ export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = getStaticBlogPostBySlug(slug);
 
   if (!post) {
     return {
@@ -73,7 +75,7 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = getStaticBlogPostBySlug(slug);
   if (!post) notFound();
 
   const canonicalUrl = `${siteConfig.url}/blog/${post.slug}`;

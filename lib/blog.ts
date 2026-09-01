@@ -1,17 +1,9 @@
 import "server-only";
 
 import { cacheLife } from "next/cache";
-import {
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  Timestamp,
-  where,
-} from "firebase/firestore/lite";
+import type { Timestamp } from "firebase/firestore/lite";
+
 import { builtInBlogPosts } from "@/data/blog-posts";
-import { getDatabase, isFirebaseConfigured } from "@/lib/firebase";
 
 export interface BlogPost {
   id: string;
@@ -70,6 +62,10 @@ const localPosts: BlogPost[] = builtInBlogPosts.map((post) => ({
   readTime: estimateReadTime(post.content),
 }));
 
+const staticPosts = [...localPosts].sort(
+  (left, right) => right.createdAt.getTime() - left.createdAt.getTime(),
+);
+
 function mergePosts(remotePosts: BlogPost[]): BlogPost[] {
   const postsBySlug = new Map(
     remotePosts.map((post) => [post.slug, post] as const),
@@ -88,14 +84,40 @@ function clampPostCount(count: number): number {
   return Math.min(Math.max(Math.trunc(count), 1), 50);
 }
 
+export function getStaticBlogPosts(count = 50): BlogPost[] {
+  return staticPosts.slice(0, clampPostCount(count));
+}
+
+export function getStaticBlogSlugs(): string[] {
+  return staticPosts.map((post) => post.slug);
+}
+
+export function getStaticBlogPostBySlug(slug: string): BlogPost | null {
+  return staticPosts.find((post) => post.slug === slug) ?? null;
+}
+
+function isRemoteBlogConfigured(): boolean {
+  return Boolean(
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+      process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  );
+}
+
 export async function getPublishedPosts(count = 50): Promise<BlogPost[]> {
   "use cache";
   cacheLife("hours");
 
   const postCount = clampPostCount(count);
-  if (!isFirebaseConfigured()) return mergePosts([]).slice(0, postCount);
+  if (!isRemoteBlogConfigured()) return mergePosts([]).slice(0, postCount);
 
   try {
+    const [{ collection, getDocs, limit, orderBy, query, where }, { getDatabase }] =
+      await Promise.all([
+        import("firebase/firestore/lite"),
+        import("@/lib/firebase"),
+      ]);
+
     const postsQuery = query(
       collection(getDatabase(), collectionName),
       where("published", "==", true),
@@ -124,9 +146,15 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 
   const localPost = localPosts.find((post) => post.slug === slug);
   if (localPost) return localPost;
-  if (!isFirebaseConfigured()) return null;
+  if (!isRemoteBlogConfigured()) return null;
 
   try {
+    const [{ collection, getDocs, limit, query, where }, { getDatabase }] =
+      await Promise.all([
+        import("firebase/firestore/lite"),
+        import("@/lib/firebase"),
+      ]);
+
     const postQuery = query(
       collection(getDatabase(), collectionName),
       where("slug", "==", slug),
@@ -144,6 +172,6 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   }
 }
 
-export async function getLatestPosts(count = 3): Promise<BlogPost[]> {
-  return getPublishedPosts(count);
+export function getLatestPosts(count = 3): BlogPost[] {
+  return getStaticBlogPosts(count);
 }

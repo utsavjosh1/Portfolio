@@ -4,12 +4,12 @@ import { Calendar, Clock, Tag } from "lucide-react";
 
 import Footer from "@/components/layout/Footer";
 import { siteConfig } from "@/data/config";
-import { getPublishedPosts } from "@/lib/blog";
+import { getStaticBlogPosts } from "@/lib/blog";
 
 const description = `Engineering notes by ${siteConfig.name} about backend systems, software architecture, TypeScript, Go, and full-stack development.`;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const posts = await getPublishedPosts(1);
+export function generateMetadata(): Metadata {
+  const posts = getStaticBlogPosts(1);
 
   return {
     title: "Engineering Writing",
@@ -33,8 +33,8 @@ function formatDate(date: Date): string {
   }).format(date);
 }
 
-export default async function BlogPage() {
-  const posts = await getPublishedPosts();
+export default function BlogPage() {
+  const posts = getStaticBlogPosts();
 
   return (
     <>
